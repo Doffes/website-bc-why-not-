@@ -3,74 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Personal Website</title>
+    <title>Aiden Becker | Game Dev & Musician</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Outfit:wght@300;600&display=swap" rel="stylesheet">
     <style>
-        /* CSS - The Design */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+        :root {
+            --primary: #6366f1; /* Indigo accent */
+            --bg: #0f172a;      /* Deep navy */
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            background-color: #1a1a1a;
-            color: #f4f4f4;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+        }
+
+        /* Hero Section */
+        header {
+            height: 60vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 600px;
-            padding: 2rem;
-            background: #2d2d2d;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             text-align: center;
+            background: radial-gradient(circle at center, #1e1b4b 0%, var(--bg) 70%);
+            padding: 20px;
         }
 
-        h1 { color: #00d4ff; }
-        
-        .btn {
-            display: inline-block;
-            background: #00d4ff;
-            color: #1a1a1a;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            margin-top: 20px;
-            transition: transform 0.2s;
+        .hero-name {
+            font-size: clamp(3rem, 10vw, 5rem);
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
         }
 
-        .btn:hover {
-            transform: scale(1.05);
-            background: #00b8e6;
+        .hero-tagline {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            max-width: 600px;
         }
 
-        #message {
-            margin-top: 20px;
+        /* Content Grid */
+        main {
+            max-width: 1000px;
+            margin: -50px auto 100px;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin: 60px 0 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title::after {
+            content: "";
+            height: 1px;
+            background: var(--card-bg);
+            flex-grow: 1;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 30px;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        .card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        /* Music Specific */
+        .music-bar {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 15px 20px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--card-bg);
+        }
+
+        .no-contact {
+            margin-top: 40px;
             font-style: italic;
-            color: #888;
+            opacity: 0.6;
+        }
+
+        @media (max-width: 600px) {
+            header { height: 50vh; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Welcome to My Site</h1>
-        <p>I am a creator, thinker, and builder. This entire website is contained within a single HTML file!</p>
-        
-        <button class="btn" onclick="revealSurprise()">Click for a surprise</button>
-        
-        <p id="message"></p>
-    </div>
+    <header>
+        <h1 class="hero-name">Aiden Becker</h1>
+        <p class="hero-tagline">Building immersive digital experiences through code and sound.</p>
+    </header>
 
-    <script>
-        function revealSurprise() {
-            const msg = document.getElementById('message');
-            msg.innerHTML = "Success! You just triggered a JavaScript function. 🚀";
-            console.log("Button clicked!");
-        }
-    </script>
+    <main>
+        <h2 class="section-title">Game Development</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Indie Spirit</h3>
+                <p>I focus on creating free, fun, and accessible games. My philosophy is that play should be available to everyone without barriers.</p>
+            </div>
+            <div class="card">
+                <h3>Technical Skills</h3>
+                <p>Proficient in game engines and logic design, turning creative concepts into playable realities with a focus on polished mechanics.</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">Music & Audio</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Composition</h3>
+                <p>I create original soundtracks and soundscapes that enhance the emotional depth of digital environments.</p>
+            </div>
+            <div class="card" style="display: flex; flex-direction: column; justify-content: center;">
+                <div class="music-bar">Melodic Design</div>
+                <div class="music-bar">Atmospheric Synthesis</div>
+                <div class="music-bar">Sound Engineering</div>
+            </div>
+        </div>
+
+        <p class="no-contact" style="text-align: center;">
+            Focused on the craft. No contact information provided.
+        </p>
+    </main>
+
+    <footer>
+        &copy; 2026 Aiden Becker. Designed for performance and play.
+    </footer>
 
 </body>
 </html>
