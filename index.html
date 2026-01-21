@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker </title>
+    <title>Aiden Becker</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Outfit:wght@300;600&display=swap" rel="stylesheet">
@@ -14,6 +14,7 @@
             --card-bg: #1e293b;
             --text-main: #f8fafc;
             --text-dim: #94a3b8;
+            --accent-green: #10b981;
         }
 
         * {
@@ -35,7 +36,6 @@
             font-weight: 700;
         }
 
-        /* Hero Section */
         header {
             height: 60vh;
             display: flex;
@@ -61,7 +61,6 @@
             max-width: 600px;
         }
 
-        /* Content Grid */
         main {
             max-width: 1000px;
             margin: -50px auto 100px;
@@ -95,6 +94,8 @@
             border-radius: 16px;
             padding: 30px;
             transition: transform 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         .card:hover {
@@ -111,9 +112,27 @@
         .card p {
             color: var(--text-dim);
             font-size: 0.95rem;
+            margin-bottom: 20px;
         }
 
-        /* Music Specific */
+        /* The New Game Link Button */
+        .game-btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            margin-top: auto; /* Pushes button to bottom of card */
+            transition: opacity 0.2s;
+        }
+
+        .game-btn:hover {
+            opacity: 0.9;
+        }
+
         .music-bar {
             background: rgba(99, 102, 241, 0.1);
             border-left: 4px solid var(--primary);
@@ -153,12 +172,13 @@
         <h2 class="section-title">Game Development</h2>
         <div class="grid">
             <div class="card">
-                <h3>Indie Spirit</h3>
-                <p>I Make VR Games Primarily, But Recently I Have Started With HTML 2D Games! Check Out My Game DEAD ZONE At https://aiden-bs-games-deadzoneredux.vercel.app/</p>
+                <h3>DEAD ZONE</h3>
+                <p>I make VR games primarily, but recently I have started with HTML 2D games! Check out my game <strong>DEAD ZONE</strong> below.</p>
+                <a href="https://aiden-bs-games-deadzoneredux.vercel.app/" class="game-btn" target="_blank">Play Dead Zone Redux →</a>
             </div>
             <div class="card">
                 <h3>Technical Skills</h3>
-                <p>I Take Ideas Of Horror Games And Make Them VR Games!</p>
+                <p>I take ideas of horror games and turn them into immersive VR experiences with a focus on atmosphere and mechanics.</p>
             </div>
         </div>
 
@@ -166,12 +186,12 @@
         <div class="grid">
             <div class="card">
                 <h3>Composition</h3>
-                <p>I Play Guitar, Piano, (Try) To Sing, And Somewhat I Play Drums!</p>
+                <p>I play guitar, piano, drums, and I'm working on my vocals!</p>
             </div>
             <div class="card" style="display: flex; flex-direction: column; justify-content: center;">
                 <div class="music-bar">Wants To Start A Band</div>
-                <div class="music-bar"> Loves Rythm</div>
-                <div class="music-bar">Listens To Nirvana, Green Day, Bilmuri, And Gorillaz</div>
+                <div class="music-bar">Loves Rhythm</div>
+                <div class="music-bar">Influences: Nirvana, Green Day, Bilmuri, & Gorillaz</div>
             </div>
         </div>
 
