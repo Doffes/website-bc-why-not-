@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker</title>
+    <title>Aiden Becker | Developer & Musician</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Outfit:wght@300;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #6366f1; /* Indigo accent */
-            --bg: #0f172a;      /* Deep navy */
-            --card-bg: #1e293b;
+            --primary: #818cf8;
+            --secondary: #c084fc;
+            --bg: #020617;
+            --card-bg: rgba(30, 41, 59, 0.7);
             --text-main: #f8fafc;
             --text-dim: #94a3b8;
             --accent-green: #10b981;
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
         * {
@@ -26,138 +28,179 @@
         body {
             font-family: 'Outfit', sans-serif;
             background-color: var(--bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(192, 132, 252, 0.15) 0px, transparent 50%);
             color: var(--text-main);
             line-height: 1.6;
             overflow-x: hidden;
         }
 
-        h1, h2, h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 700;
+        /* Smooth reveal animation */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         header {
-            height: 60vh;
+            height: 80vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            background: radial-gradient(circle at center, #1e1b4b 0%, var(--bg) 70%);
             padding: 20px;
+            animation: fadeInUp 1s ease-out;
         }
 
         .hero-name {
-            font-size: clamp(3rem, 10vw, 5rem);
-            background: linear-gradient(to right, #818cf8, #c084fc);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3.5rem, 12vw, 6rem);
+            background: linear-gradient(to right, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 0.5rem;
+            letter-spacing: -2px;
         }
 
         .hero-tagline {
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             color: var(--text-dim);
-            max-width: 600px;
+            font-weight: 300;
+            max-width: 700px;
+            border-left: 2px solid var(--primary);
+            padding-left: 20px;
         }
 
         main {
-            max-width: 1000px;
-            margin: -50px auto 100px;
+            max-width: 1100px;
+            margin: -100px auto 100px;
             padding: 0 20px;
         }
 
         .section-title {
-            font-size: 2rem;
-            margin: 60px 0 30px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            margin: 80px 0 40px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--secondary);
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
 
         .section-title::after {
             content: "";
             height: 1px;
-            background: var(--card-bg);
+            background: linear-gradient(to right, var(--secondary), transparent);
             flex-grow: 1;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
         }
 
         .card {
             background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 30px;
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
             flex-direction: column;
+            position: relative;
+            overflow: hidden;
         }
 
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-10px);
             border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
         .card h3 {
-            color: var(--primary);
-            margin-bottom: 10px;
-            font-size: 1.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
         }
 
         .card p {
             color: var(--text-dim);
-            font-size: 0.95rem;
-            margin-bottom: 20px;
+            font-size: 1.05rem;
+            margin-bottom: 25px;
         }
 
-        /* The New Game Link Button */
         .game-btn {
             display: inline-block;
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
+            padding: 15px 30px;
+            border-radius: 12px;
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 700;
             text-align: center;
-            margin-top: auto; /* Pushes button to bottom of card */
-            transition: opacity 0.2s;
+            margin-top: auto;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .game-btn:hover {
-            opacity: 0.9;
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
         }
 
-        .music-bar {
-            background: rgba(99, 102, 241, 0.1);
-            border-left: 4px solid var(--primary);
-            padding: 15px 20px;
-            border-radius: 4px;
-            margin-bottom: 15px;
+        .music-list {
+            list-style: none;
+        }
+
+        .music-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-bottom: 12px;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .music-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .music-item::before {
+            content: "♪";
+            margin-right: 15px;
+            color: var(--secondary);
         }
 
         footer {
             text-align: center;
-            padding: 60px 20px;
+            padding: 80px 20px;
             color: var(--text-dim);
-            font-size: 0.8rem;
-            border-top: 1px solid var(--card-bg);
+            font-size: 0.9rem;
+            opacity: 0.5;
         }
 
         .no-contact {
-            margin-top: 40px;
-            font-style: italic;
-            opacity: 0.6;
+            margin: 60px 0;
+            padding: 20px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.02);
+            display: inline-block;
         }
 
+        /* Mobile Adjustments */
         @media (max-width: 600px) {
-            header { height: 50vh; }
+            header { height: 60vh; }
+            .hero-tagline { font-size: 1.1rem; }
+            .grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -165,7 +208,7 @@
 
     <header>
         <h1 class="hero-name">Aiden Becker</h1>
-        <p class="hero-tagline">"I Love Music, And Game Developing!"</p>
+        <p class="hero-tagline">Indie Game Developer & Multi-Instrumentalist</p>
     </header>
 
     <main>
@@ -173,35 +216,49 @@
         <div class="grid">
             <div class="card">
                 <h3>DEAD ZONE</h3>
-                <p>I make VR games primarily, but recently I have started with HTML 2D games! Check out my game <strong>DEAD ZONE</strong> below.</p>
-                <a href="https://aiden-bs-games-deadzoneredux.vercel.app/" class="game-btn" target="_blank">Play Dead Zone →</a>
+                <p>From immersive VR horror to fast-paced HTML5 2D games. I focus on atmosphere, mechanics, and player immersion.</p>
+                <a href="https://aiden-bs-games-deadzoneredux.vercel.app/" class="game-btn" target="_blank">Launch Dead Zone →</a>
             </div>
             <div class="card">
-                <h3>Technical Skills</h3>
-                <p>I take ideas of horror games and turn them into immersive VR experiences with a focus on atmosphere and mechanics.</p>
+                <h3>The Vision</h3>
+                <p>Specializing in VR development, I bridge the gap between terrifying horror concepts and playable reality. I love crafting environments that keep players on edge.</p>
+                <div style="color: var(--accent-green); font-weight: 600; font-size: 0.9rem;">
+                    Status: Actively Developing
+                </div>
             </div>
         </div>
 
-        <h2 class="section-title">My Love Of Music!</h2>
+        <h2 class="section-title">Musical Journey</h2>
         <div class="grid">
             <div class="card">
                 <h3>Composition</h3>
-                <p>I play guitar, piano, drums, and I'm working on my vocals!</p>
+                <p>A multi-instrumentalist background fuels my creative projects. I handle everything from the rhythm section to the melodies.</p>
+                <div class="music-list">
+                    <div class="music-item">Guitar & Piano</div>
+                    <div class="music-item">Drums & Percussion</div>
+                    <div class="music-item">Vocal Training in Progress</div>
+                </div>
             </div>
-            <div class="card" style="display: flex; flex-direction: column; justify-content: center;">
-                <div class="music-bar">Wants To Start A Band</div>
-                <div class="music-bar">Loves Rhythm</div>
-                <div class="music-bar">Influences: Nirvana, Green Day, Bilmuri, & Gorillaz</div>
+            <div class="card">
+                <h3>Influences</h3>
+                <p>My sound is built on the energy of grunge, punk-rock, and virtual alternative bands.</p>
+                <div class="music-list">
+                    <div class="music-item">Nirvana & Green Day</div>
+                    <div class="music-item">Bilmuri & Gorillaz</div>
+                    <div class="music-item">Rhythm-Focused Soundscapes</div>
+                </div>
             </div>
         </div>
 
-        <p class="no-contact" style="text-align: center;">
-            Focused on the craft. No contact information provided.
-        </p>
+        <div style="text-align: center;">
+            <p class="no-contact">
+                Currently focused on the craft. No contact information provided.
+            </p>
+        </div>
     </main>
 
     <footer>
-        &copy; 2026 Aiden Becker.
+        &copy; 2026 Aiden Becker. Built for the future of gaming.
     </footer>
 
 </body>
