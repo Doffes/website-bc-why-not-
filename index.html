@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker | Developer Portfolio</title>
+    <title>Aiden Becker </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
@@ -16,8 +16,6 @@
             --text-dim: #a1a1aa;
             --glass-border: rgba(255, 255, 255, 0.05);
             --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            --status-active: #00ff88;
-            --status-inactive: #ff4444;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,140 +39,107 @@
             backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
         }
 
-        .logo { 
-            font-family: 'Space Grotesk', sans-serif; 
-            font-weight: 700; 
-            font-size: 1.2rem; 
-            display: flex;
-            align-items: center;
-        }
-        #typing-text { min-width: 1px; }
-        .cursor {
-            display: inline-block;
-            width: 10px;
-            height: 1.2rem;
-            background-color: var(--primary);
-            margin-left: 5px;
-            animation: blink 1s step-end infinite;
-        }
-        @keyframes blink {
-            from, to { background-color: transparent; }
-            50% { background-color: var(--primary); }
-        }
-
+        .logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.2rem; }
         .pink-text { color: var(--primary); }
         .nav-links { display: flex; gap: 30px; }
-        nav a { color: var(--text-dim); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s; }
+        nav a { color: var(--text-dim); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
         nav a:hover, nav a.active { color: var(--primary); }
 
         .page { display: none; padding: 60px 8%; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.6s ease; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* MUSIC TAB STYLES */
-        .song-container { margin-bottom: 40px; background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border); }
-        .song-flex { display: flex; gap: 30px; align-items: center; }
-        .album-art { width: 100px; height: 100px; border-radius: 10px; }
-        .status-tag { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-left: 10px; vertical-align: middle; }
-        .active-band { color: var(--status-active); }
-        .inactive-band { color: var(--status-inactive); }
-        .fact-box { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border); display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
-        .fact-item h5 { color: var(--primary); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
-        .fact-item p { font-size: 0.85rem; color: var(--text-dim); }
+        /* MUSIC STYLES (Simplified for clarity) */
+        .song-container { margin-bottom: 20px; background: var(--card-bg); padding: 20px; border-radius: 15px; border: 1px solid var(--glass-border); }
 
-        audio { width: 100%; margin-top: 15px; filter: invert(1) hue-rotate(280deg) opacity(0.5); }
-
-        /* CHATBOT STYLES */
-        .chat-widget {
+        /* AI CHAT WIDGET */
+        .ai-chat-container {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 10001;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
+            bottom: 25px;
+            right: 25px;
+            z-index: 9999;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        .chat-button {
-            width: 55px;
-            height: 55px;
+        .chat-trigger {
+            width: 60px;
+            height: 60px;
             background: var(--primary);
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 20px rgba(255, 0, 127, 0.3);
+            box-shadow: 0 8px 24px rgba(255, 0, 127, 0.4);
             transition: var(--transition);
         }
 
+        .chat-trigger:hover { transform: scale(1.05) rotate(5deg); }
+
         .chat-window {
-            width: 320px;
-            height: 400px;
-            background: #0a0a0a;
-            border: 1px solid var(--primary);
-            border-radius: 15px;
-            margin-bottom: 15px;
+            width: 350px;
+            height: 500px;
+            background: #0c0c0c;
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            position: absolute;
+            bottom: 80px;
+            right: 0;
             display: none;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
         }
 
-        .chat-window.active { display: flex; animation: fadeIn 0.3s ease; }
+        .chat-window.open { display: flex; animation: slideUp 0.4s ease; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .chat-header {
-            padding: 12px;
-            background: rgba(255, 0, 127, 0.1);
+            padding: 20px;
+            background: linear-gradient(to right, rgba(255, 0, 127, 0.1), transparent);
             border-bottom: 1px solid var(--glass-border);
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--primary);
-            display: flex;
-            justify-content: space-between;
         }
 
         .chat-messages {
             flex: 1;
-            padding: 15px;
+            padding: 20px;
             overflow-y: auto;
-            font-size: 0.8rem;
             display: flex;
             flex-direction: column;
+            gap: 12px;
+        }
+
+        .bubble {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .bubble.bot { background: #1a1a1a; align-self: flex-start; color: #e4e4e7; border-bottom-left-radius: 2px; }
+        .bubble.user { background: var(--primary); align-self: flex-end; color: white; border-bottom-right-radius: 2px; }
+
+        .chat-input-area {
+            padding: 15px;
+            background: #080808;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
             gap: 10px;
         }
 
-        .msg { padding: 8px 12px; border-radius: 10px; max-width: 85%; line-height: 1.4; }
-        .msg.bot { background: #161616; color: white; align-self: flex-start; border: 1px solid var(--glass-border); }
-        .msg.user { background: var(--primary); color: white; align-self: flex-end; }
-
-        .chat-input-area {
-            padding: 10px;
-            display: flex;
-            gap: 8px;
-            background: #000;
-        }
-
-        #chat-input {
+        input#user-input {
             flex: 1;
-            background: #111;
+            background: #121212;
             border: 1px solid var(--glass-border);
             color: white;
-            padding: 6px 10px;
-            border-radius: 5px;
+            padding: 10px;
+            border-radius: 10px;
             outline: none;
-            font-size: 0.8rem;
         }
 
-        /* POPUP (Now Playing) */
-        #now-playing-popup {
-            position: fixed; bottom: 30px; left: 30px; background: #111;
-            border: 1px solid var(--primary); padding: 12px 20px; border-radius: 12px;
-            display: flex; align-items: center; gap: 15px; transform: translateX(-250%);
-            transition: var(--transition); z-index: 10000;
-        }
-        #now-playing-popup.visible { transform: translateX(0); }
-        .mini-art { width: 45px; height: 45px; border-radius: 6px; }
+        .typing { font-size: 0.7rem; color: var(--primary); margin-bottom: 5px; display: none; }
     </style>
 </head>
 <body>
@@ -182,9 +147,7 @@
     <div class="bg-glow"></div>
 
     <nav>
-        <div class="logo">
-            <span id="typing-text"></span><span class="cursor"></span>
-        </div>
+        <div class="logo">AIDEN <span class="pink-text">BECKER</span></div>
         <div class="nav-links">
             <a onclick="showPage('home')" id="nav-home">Home</a>
             <a onclick="showPage('music')" id="nav-music" class="active">Music</a>
@@ -193,182 +156,115 @@
     </nav>
 
     <div id="home" class="page">
-        <div class="hero">
-            <h1 style="font-size: 3rem; margin-bottom: 20px;">Building <span class="pink-text">Digital</span> Experiences.</h1>
-        </div>
-        <div class="grid-layout">
-            <div>
-                <h3 style="margin-bottom: 15px; color: var(--primary);">// About Me</h3>
-                <p style="color: var(--text-dim);">
-                    I am a developer focused on creating clean, functional, and aesthetically pleasing digital products. I specialize in front-end design and interactive web elements.
-                </p>
-            </div>
-        </div>
+        <h1>Welcome to the <span class="pink-text">Lab</span>.</h1>
+        <p style="margin-top:20px; color: var(--text-dim);"> Im Guessing You Got Here Through MrPullen.Com. Anyways Welcome! I Am Aiden Becker, A High Schooler Who Love Grunge, Game Developing, And Experimenting With AI!</p>
     </div>
 
     <div id="music" class="page active">
         <div class="song-container">
-            <div class="song-flex">
-                <img src="music/nirvana.jpg" class="album-art" alt="Nirvana">
-                <div style="flex:1">
-                    <h3>Smells Like Teen Spirit <span class="status-tag inactive-band">[Disbanded]</span></h3>
-                    <p style="font-size: 0.8rem; color: var(--text-dim);">Nirvana • 1991</p>
-                    <audio controls src="music/nirvana.mp3" data-title="Smells Like Teen Spirit" data-artist="Nirvana" data-art="music/nirvana.jpg"></audio>
-                </div>
-            </div>
-            <div class="fact-box">
-                <div class="fact-item"><h5>Vibe</h5><p>The definitive anthem of the 90s grunge movement.</p></div>
-                <div class="fact-item"><h5>Status</h5><p>Ended in 1994 following the death of Kurt Cobain.</p></div>
-            </div>
+            <h3>Smells Like Teen Spirit</h3>
+            <p style="color:var(--text-dim)">Nirvana - Grunge Classic</p>
         </div>
-
         <div class="song-container">
-            <div class="song-flex">
-                <img src="music/gorillaz.jpg" class="album-art" alt="Gorillaz">
-                <div style="flex:1">
-                    <h3>On Melancholy Hill <span class="status-tag active-band">[Active]</span></h3>
-                    <p style="font-size: 0.8rem; color: var(--text-dim);">Gorillaz • 2010</p>
-                    <audio controls src="music/gorillaz.mp3" data-title="On Melancholy Hill" data-artist="Gorillaz" data-art="music/gorillaz.jpg"></audio>
-                </div>
-            </div>
-            <div class="fact-box">
-                <div class="fact-item"><h5>Style</h5><p>A gentle synth-pop departure from their hip-hop roots.</p></div>
-                <div class="fact-item"><h5>Status</h5><p>Active project with rotating visual artists.</p></div>
-            </div>
-        </div>
-
-        <div class="song-container">
-            <div class="song-flex">
-                <img src="music/greenday.jpg" class="album-art" alt="Green Day">
-                <div style="flex:1">
-                    <h3>American Idiot <span class="status-tag active-band">[Active]</span></h3>
-                    <p style="font-size: 0.8rem; color: var(--text-dim);">Green Day • 2004</p>
-                    <audio controls src="music/greenday.mp3" data-title="American Idiot" data-artist="Green Day" data-art="music/greenday.jpg"></audio>
-                </div>
-            </div>
-            <div class="fact-box">
-                <div class="fact-item"><h5>Concept</h5><p>The opening track to their massive "punk rock opera" album.</p></div>
-                <div class="fact-item"><h5>Status</h5><p>Active. Still touring with the original lineup.</p></div>
-            </div>
+            <h3>More Than Hate</h3>
+            <p style="color:var(--text-dim)">Bilmuri - Post-Hardcore/Pop</p>
         </div>
     </div>
 
-    <div id="arcade" class="page">
-        <div class="arcade-frame" style="border: 1px solid var(--primary); background: #000; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden;">
-            <iframe src="game.html" style="width:100%; height:100%; border:none;"></iframe>
-        </div>
-    </div>
-
-    <div id="now-playing-popup">
-        <img id="popup-art" src="" class="mini-art">
-        <div>
-            <div id="popup-artist" style="font-size: 0.65rem; color: var(--primary); font-weight: 800; letter-spacing: 1px; text-transform: uppercase;">Artist Name</div>
-            <div id="popup-title" style="font-size: 0.9rem; font-weight: 700;">Song Title</div>
-        </div>
-    </div>
-
-    <div class="chat-widget">
+    <div class="ai-chat-container">
         <div class="chat-window" id="chat-window">
             <div class="chat-header">
-                <span>AIDEN'S PORTFOLIO BOT (Safety On)</span>
-                <span onclick="toggleChat()" style="cursor:pointer;">×</span>
+                <div style="font-weight: 700; font-size: 0.8rem; letter-spacing: 1px;">GEMINI PORTFOLIO AI</div>
+                <div style="font-size: 0.6rem; color: var(--text-dim);">Moderated for ages 13-17</div>
             </div>
-            <div class="chat-messages" id="chat-messages">
-                <div class="msg bot">Hi! I'm Aiden's assistant. I only talk about this portfolio, music, or code. How can I help?</div>
+            <div class="chat-messages" id="chat-box">
+                <div class="bubble bot">Yo! I'm Aiden's AI. Want to know about his music, his code, or just chat?</div>
             </div>
+            <div id="typing-indicator" class="typing" style="padding-left: 20px;">Gemini is thinking...</div>
             <div class="chat-input-area">
-                <input type="text" id="chat-input" placeholder="Type a message..." onkeypress="if(event.key==='Enter') sendMessage()">
-                <button onclick="sendMessage()" style="background:var(--primary); border:none; color:white; padding: 0 10px; border-radius:4px; cursor:pointer; font-weight:bold;">></button>
+                <input type="text" id="user-input" placeholder="Ask me something..." onkeypress="if(event.key==='Enter') handleChat()">
+                <button onclick="handleChat()" style="background:none; border:none; color:var(--primary); font-weight:700; cursor:pointer;">SEND</button>
             </div>
         </div>
-        <div class="chat-button" onclick="toggleChat()">
+        <div class="chat-trigger" onclick="toggleChat()">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
         </div>
     </div>
 
     <script>
-        // --- TYPING EFFECT ---
-        const text = "AIDEN BECKER";
-        const typingSpeed = 150;
-        let charIndex = 0;
-        function typeEffect() {
-            if (charIndex < text.length) {
-                document.getElementById("typing-text").textContent += text.charAt(charIndex);
-                charIndex++;
-                setTimeout(typeEffect, typingSpeed);
-            }
-        }
-        window.onload = typeEffect;
-
-        // --- NAVIGATION ---
         function showPage(p) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById(p).classList.add('active');
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            const activeLink = document.getElementById('nav-'+p);
-            if(activeLink) activeLink.classList.add('active');
+            document.getElementById('nav-'+p).classList.add('active');
         }
 
-        // --- AUDIO ---
-        const popup = document.getElementById('now-playing-popup');
-        const pTitle = document.getElementById('popup-title');
-        const pArtist = document.getElementById('popup-artist');
-        const pArt = document.getElementById('popup-art');
-
-        document.querySelectorAll('audio').forEach(audio => {
-            audio.addEventListener('play', () => {
-                document.querySelectorAll('audio').forEach(other => { if(other !== audio) other.pause(); });
-                pTitle.innerText = audio.getAttribute('data-title');
-                pArtist.innerText = audio.getAttribute('data-artist');
-                pArt.src = audio.getAttribute('data-art');
-                popup.classList.add('visible');
-            });
-            audio.addEventListener('pause', () => { popup.classList.remove('visible'); });
-        });
-
-        // --- CHATBOT LOGIC (Under-17 Restricted) ---
         function toggleChat() {
-            document.getElementById('chat-window').classList.toggle('active');
+            document.getElementById('chat-window').classList.toggle('open');
         }
 
-        function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const container = document.getElementById('chat-messages');
-            const val = input.value.trim();
-            if(!val) return;
+        async function handleChat() {
+            const input = document.getElementById('user-input');
+            const chatBox = document.getElementById('chat-box');
+            const typing = document.getElementById('typing-indicator');
+            const userText = input.value.trim();
 
-            // Add User Msg
-            const uDiv = document.createElement('div');
-            uDiv.className = 'msg user';
-            uDiv.innerText = val;
-            container.appendChild(uDiv);
+            if(!userText) return;
+
+            // 1. Display User Message
+            const uBubble = document.createElement('div');
+            uBubble.className = 'bubble user';
+            uBubble.innerText = userText;
+            chatBox.appendChild(uBubble);
             input.value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Safety & Logic Check
+            // 2. Show Typing Indicator
+            typing.style.display = 'block';
+
+            // 3. GET AI RESPONSE
+            // In a production environment, you would use:
+            // const response = await fetch('YOUR_SERVER_URL', { method: 'POST', body: JSON.stringify({text: userText}) });
+            
+            const aiResponse = await simulateGeminiResponse(userText);
+            
+            // 4. Display AI Response
             setTimeout(() => {
-                const bDiv = document.createElement('div');
-                bDiv.className = 'msg bot';
-                const lowerVal = val.toLowerCase();
+                typing.style.display = 'none';
+                const bBubble = document.createElement('div');
+                bBubble.className = 'bubble bot';
+                bBubble.innerText = aiResponse;
+                chatBox.appendChild(bBubble);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 600);
+        }
 
-                // Safety Filter
-                const blocked = ["badword1", "hate", "violence", "address", "phone"]; // Add specific blocks here
-                let isUnsafe = blocked.some(word => lowerVal.includes(word));
+        // --- THE BRAINS ---
+        // This simulates how a Large Language Model works with your specific safety restrictions.
+        async function simulateGeminiResponse(input) {
+            const cleanInput = input.toLowerCase();
 
-                if (isUnsafe) {
-                    bDiv.innerText = "I'm sorry, I am programmed to keep this chat safe and professional. Let's talk about Aiden's projects instead!";
-                } else if (lowerVal.includes("who") || lowerVal.includes("aiden")) {
-                    bDiv.innerText = "Aiden Becker is a developer who loves grunge music and building interactive web experiences!";
-                } else if (lowerVal.includes("music") || lowerVal.includes("song")) {
-                    bDiv.innerText = "Aiden's current playlist includes Nirvana, Gorillaz, and Green Day. Check the Music tab!";
-                } else if (lowerVal.includes("game") || lowerVal.includes("arcade")) {
-                    bDiv.innerText = "The Arcade features custom games Aiden built. You can play them right in your browser!";
-                } else {
-                    bDiv.innerText = "Interesting! As an assistant for a minor-friendly site, I can only provide info on Aiden's work and interests.";
-                }
+            // Safety Block
+            if (/(badword|violence|hate|adult|address|phone)/.test(cleanInput)) {
+                return "I'm designed to keep things safe and professional here. Let's talk about Aiden's projects or music instead!";
+            }
 
-                container.appendChild(bDiv);
-                container.scrollTop = container.scrollHeight;
-            }, 700);
+            // Conversational Mapping
+            if (cleanInput.includes("who are you") || cleanInput.includes("what are you")) {
+                return "I'm a Gemini-powered assistant customized to Aiden's portfolio. I know all about his dev work and his obsession with Bilmuri riffs.";
+            }
+            if (cleanInput.includes("music") || cleanInput.includes("listen")) {
+                return "Aiden is huge on Grunge and Post-Hardcore. He thinks 'Smells Like Teen Spirit' is the ultimate 90s anthem. Do you like rock or something else?";
+            }
+            if (cleanInput.includes("code") || cleanInput.includes("build")) {
+                return "He mostly uses JavaScript and CSS for the visual stuff. He loves 'glassmorphism' (that blurry, glowing effect you see on this site!).";
+            }
+            if (cleanInput.includes("hi") || cleanInput.includes("hello") || cleanInput.includes("hey")) {
+                return "Hey! Hope you're having a good day. What do you think of the site's pink aesthetic?";
+            }
+
+            // General "Intelligent" Fallback
+            return "That's a cool question. While I'm still learning, I can definitely say that Aiden's focus is on blending high-energy music vibes with clean code. Have you checked out the Arcade yet?";
         }
     </script>
 </body>
