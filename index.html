@@ -3,205 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden_OS v9.0 | Persistence</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <title>Aiden-Deck // Workstation v10</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&family=Syncopate:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #00f2ff;
-            --bg: #08090a;
-            --window: #141619;
-            --border: rgba(255, 255, 255, 0.1);
-            --text: #ffffff;
+            --glow: #00f2ff;
+            --panel: #121214;
+            --metal: #1e1e22;
+            --screen: #0a0a0c;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
-        body { font-family: 'Space Grotesk', sans-serif; background: #000; color: var(--text); height: 100vh; overflow: hidden; }
-
-        /* --- DESKTOP --- */
-        #desktop {
-            height: calc(100vh - 50px); width: 100vw; background: var(--bg);
-            background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 30px 30px;
-            position: relative; padding: 20px; display: flex; flex-direction: column; flex-wrap: wrap; gap: 10px; align-content: flex-start;
+        body { 
+            background: #050505; 
+            font-family: 'JetBrains Mono', monospace; 
+            display: flex; align-items: center; justify-content: center; 
+            height: 100vh; overflow: hidden;
+            color: #fff;
         }
 
-        .icon {
-            width: 85px; text-align: center; cursor: pointer; border-radius: 12px; padding: 10px;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid transparent; z-index: 5;
+        /* --- THE HARDWARE CHASSIS --- */
+        #deck {
+            width: 95vw; height: 85vh;
+            background: var(--panel);
+            border: 8px solid #2a2a2e;
+            border-radius: 40px;
+            box-shadow: 0 0 100px rgba(0,0,0,1), inset 0 0 20px rgba(255,255,255,0.05);
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            padding: 30px;
+            gap: 20px;
+            border-bottom-width: 20px;
         }
-        .icon:hover { background: rgba(0, 242, 255, 0.1); border-color: var(--primary); transform: translateY(-5px); }
-        .icon-img { font-size: 2.2rem; margin-bottom: 5px; display: block; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)); }
-        .icon span { font-size: 0.7rem; font-weight: 600; text-shadow: 0 2px 4px #000; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* --- WINDOWS --- */
-        .window {
-            position: absolute; width: 600px; height: 400px; background: var(--window);
-            border: 1px solid var(--border); border-radius: 12px; display: none;
-            flex-direction: column; box-shadow: 0 40px 80px rgba(0,0,0,0.8); z-index: 100;
-            backdrop-filter: blur(20px); overflow: hidden;
+        /* --- SIDE PANELS (CONTROLS) --- */
+        .module {
+            background: var(--metal);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid #333;
+            display: flex; flex-direction: column; gap: 15px;
         }
-        .win-head {
-            height: 40px; background: rgba(255,255,255,0.05); display: flex; 
-            align-items: center; padding: 0 15px; cursor: move; justify-content: space-between;
+
+        .knob-unit { text-align: center; }
+        .knob {
+            width: 60px; height: 60px; background: radial-gradient(#444, #111);
+            border-radius: 50%; margin: 10px auto; border: 2px solid #555;
+            transition: transform 0.3s; cursor: pointer;
         }
-        .win-title { font-size: 0.75rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; }
-        .win-dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; background: #ff5f56; }
-        .win-body { flex: 1; overflow-y: auto; position: relative; padding: 15px; }
+        .knob:active { transform: rotate(45deg); }
 
-        /* --- TASKBAR --- */
-        #taskbar {
-            height: 50px; background: rgba(0,0,0,0.9); position: fixed; bottom: 0; width: 100%;
-            display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
-            border-top: 1px solid var(--border); z-index: 2000;
+        /* --- CENTRAL CRT SCREEN --- */
+        #central-station {
+            background: var(--screen);
+            border-radius: 15px;
+            border: 10px solid #111;
+            position: relative;
+            overflow: hidden;
+            display: flex; flex-direction: column;
+            box-shadow: inset 0 0 50px #000;
         }
-        #clock { font-family: 'Fira Code'; font-size: 0.8rem; font-weight: bold; color: var(--primary); }
-        .start-menu { padding: 5px 15px; background: var(--primary); color: #000; border-radius: 5px; font-weight: 900; cursor: pointer; }
+        #central-station::before {
+            content: ""; position: absolute; inset: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%; pointer-events: none;
+        }
 
-        /* --- APPS --- */
-        #editor { width: 100%; height: 90%; background: #000; color: #0f0; font-family: 'Fira Code'; border: none; padding: 10px; resize: none; outline: none; }
-        .browser-top { display: flex; gap: 10px; margin-bottom: 10px; }
-        #url-bar { flex: 1; background: #222; border: 1px solid #444; color: #fff; padding: 5px 10px; border-radius: 4px; outline: none; }
-        iframe { width: 100%; height: calc(100% - 40px); border: none; background: #fff; }
+        /* --- MUSIC MODULES --- */
+        .music-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; flex: 1;
+        }
+        .album-btn {
+            background: #000; border: 1px solid #333; border-radius: 10px;
+            overflow: hidden; cursor: pointer; transition: 0.3s; position: relative;
+        }
+        .album-btn:hover { border-color: var(--glow); transform: scale(1.02); }
+        .album-btn img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+        .album-label { position: absolute; bottom: 5px; width: 100%; text-align: center; font-size: 0.6rem; font-weight: 800; color: var(--glow); }
 
-        .hidden { display: none; }
+        /* --- COMMAND INTERFACE --- */
+        #display-log { flex: 1; padding: 20px; color: var(--glow); font-size: 0.9rem; overflow-y: auto; text-shadow: 0 0 5px var(--glow); }
+        #input-area { 
+            background: #111; padding: 15px; border-top: 2px solid #222;
+            display: flex; gap: 10px; align-items: center;
+        }
+        #cmd-in { 
+            background: transparent; border: none; outline: none; color: #fff; 
+            font-family: 'JetBrains Mono'; flex: 1; font-size: 1rem;
+        }
+
+        /* --- SYSTEM LIGHTS --- */
+        .light { width: 12px; height: 12px; border-radius: 50%; background: #300; display: inline-block; margin-right: 5px; }
+        .light.active { background: #f00; box-shadow: 0 0 10px #f00; }
+        .light.blue { background: #004cff; box-shadow: 0 0 10px #004cff; }
+
+        h2 { font-family: 'Syncopate', sans-serif; font-size: 0.8rem; letter-spacing: 2px; color: #666; margin-bottom: 10px; }
     </style>
 </head>
-<body onload="loadOS()">
+<body>
 
-    <div id="desktop"></div>
-
-    <div id="taskbar">
-        <div class="start-menu" onclick="resetOS()">FACTORY RESET</div>
-        <div id="active-apps" style="display:flex; gap:10px; margin-left: 20px;"></div>
-        <div id="clock">00:00:00</div>
-    </div>
-
-    <div id="win-template" class="window">
-        <div class="win-head">
-            <span class="win-title">App</span>
-            <div class="win-dot" onclick="this.closest('.window').style.display='none'"></div>
+<div id="deck">
+    <div class="module">
+        <h2>POWER_SYSTEM</h2>
+        <div style="display:flex; align-items:center; gap:10px;">
+            <div class="light active"></div><span>CORE_LOAD</span>
         </div>
-        <div class="win-body"></div>
+        <div style="display:flex; align-items:center; gap:10px;">
+            <div class="light blue active"></div><span>AUDIO_LINK</span>
+        </div>
+        <hr style="border:0; border-top:1px solid #333; margin:10px 0;">
+        <div class="knob-unit">
+            <div class="knob" id="vol-knob" onclick="rotateKnob(this)"></div>
+            <p>VOLUME</p>
+        </div>
+        <div class="knob-unit">
+            <div class="knob" id="freq-knob" onclick="rotateKnob(this)"></div>
+            <p>BASS_BOOST</p>
+        </div>
     </div>
 
-    <script>
-        const APP_DATA = [
-            { id: 'about', name: 'About Me', icon: '👤', content: '<h1>Aiden Becker</h1><p>Welcome to v9.0.</p>' },
-            { id: 'browser', name: 'Quantum Browser', icon: '🌐', type: 'browser' },
-            { id: 'notes', name: 'Aiden Notes', icon: '📝', type: 'editor' },
-            { id: 'music', name: 'Nevermind Player', icon: '💿', content: '<h3>My Songs</h3><p>Restored 4 tracks...</p>' },
-            { id: 'terminal', name: 'Root Terminal', icon: '📟', type: 'terminal' },
-            { id: 'store', name: 'App Store', icon: '🛍️', content: '<h3>Marketplace</h3><p>All apps pre-installed in v9.</p>' },
-            { id: 'files', name: 'Explorer', icon: '📂', content: '<h3>Disk C:</h3><p>System32<br>Users<br>Nevermind_Art</p>' },
-            { id: 'settings', name: 'Settings', icon: '⚙️', content: '<h3>System Settings</h3><p>Theme: Cyanide (Locked)</p>' },
-            { id: 'calc', name: 'Calculator', icon: '🔢', content: '<input type="text" style="width:100%; padding:10px;"><p>Result: 0</p>' },
-            { id: 'calendar', name: 'Calendar', icon: '📅', content: '<h3>January 2026</h3><p>Today is Thursday 22nd.</p>' },
-            { id: 'mail', name: 'Mail', icon: '✉️', content: '<h3>Inbox (2)</h3><p>Welcome to Aiden_OS!</p>' },
-            { id: 'photos', name: 'Gallery', icon: '🖼️', content: '<p>Loading images...</p>' },
-            { id: 'clock_app', name: 'World Clock', icon: '🕒', content: '<h3>GMT +0</h3><p>New York: 13:53</p>' },
-            { id: 'weather', name: 'Weather', icon: '🌤️', content: '<h3>Novi, MI</h3><p>72°F - Mostly Sunny</p>' },
-            { id: 'news', name: 'OS News', icon: '📰', content: '<h3>Aiden_OS v9 Live!</h3><p>New saving system added.</p>' },
-            { id: 'chat', name: 'Aiden Chat', icon: '💬', content: '<h3>Global Chat</h3><p>Aiden: Hello world!</p>' },
-            { id: 'snake', name: 'Snake Pro', icon: '🐍', content: '<p>Launch game from Terminal (type "snake")</p>' },
-            { id: 'health', name: 'Sys Health', icon: '🔋', content: '<h3>Battery: 98%</h3><p>Power Source: AC</p>' },
-            { id: 'maps', name: 'Aiden Maps', icon: '🗺️', content: '<p>GPS Signal Found.</p>' },
-            { id: 'trash', name: 'Trash', icon: '🗑️', content: '<p>Empty.</p>' }
-        ];
+    <div id="central-station">
+        <div id="display-log">
+            [AIDEN-DECK v10.0 INITIALIZED]<br>
+            [STATUS: READY FOR INPUT]<br>
+            [SYSTEM: 4 AUDIO CORES DETECTED]<br><br>
+            > Type 'help' to begin.
+        </div>
+        <div id="input-area">
+            <span style="color:var(--glow)">$</span>
+            <input type="text" id="cmd-in" placeholder="ENTER COMMAND..." autofocus>
+        </div>
+    </div>
 
-        let OS_STATE = {
-            installed: APP_DATA.map(a => a.id),
-            positions: {},
-            noteBuffer: ""
-        };
+    <div class="module">
+        <h2>AUDIO_SAMPLES</h2>
+        <div class="music-grid">
+            <div class="album-btn" onclick="playSong('Nirvana - Nevermind')">
+                <img src="https://upload.wikimedia.org/wikipedia/en/b/b7/NirvanaNevermindalbumcover.jpg">
+                <div class="album-label">NIRVANA</div>
+            </div>
+            <div class="album-btn" onclick="playSong('Green Day - American Idiot')">
+                <img src="https://upload.wikimedia.org/wikipedia/en/e/ed/Green_Day_-_American_Idiot_album_cover.png">
+                <div class="album-label">GREEN DAY</div>
+            </div>
+            <div class="album-btn" onclick="playSong('Gorillaz - Plastic Beach')">
+                <img src="https://upload.wikimedia.org/wikipedia/en/d/d1/Plasticbeach452.jpg">
+                <div class="album-label">GORILLAZ</div>
+            </div>
+            <div class="album-btn" onclick="playSong('Bilmuri - Eggy Pocket')">
+                <img src="https://f4.bcbits.com/img/a2862833075_10.jpg">
+                <div class="album-label">BILMURI</div>
+            </div>
+        </div>
+        <div style="margin-top:20px; font-size:0.7rem; color:#444; border: 1px solid #222; padding:10px; border-radius:5px;">
+            NOW_PLAYING:<br>
+            <span id="np-text" style="color:#888;">IDLE...</span>
+        </div>
+    </div>
+</div>
 
-        function saveOS() {
-            localStorage.setItem('AIDEN_OS_V9', JSON.stringify(OS_STATE));
-        }
+<script>
+    const log = document.getElementById('display-log');
+    const cmdIn = document.getElementById('cmd-in');
+    const npText = document.getElementById('np-text');
+    let aCtx;
 
-        function loadOS() {
-            const saved = localStorage.getItem('AIDEN_OS_V9');
-            if (saved) OS_STATE = JSON.parse(saved);
-            renderDesktop();
-            updateClock();
-            setInterval(updateClock, 1000);
-        }
+    // --- SOUND ENGINE ---
+    function playSfx(f) {
+        if(!aCtx) aCtx = new AudioContext();
+        const o = aCtx.createOscillator(); const g = aCtx.createGain();
+        o.connect(g); g.connect(aCtx.destination);
+        o.frequency.setValueAtTime(f, aCtx.currentTime);
+        g.gain.setValueAtTime(0.05, aCtx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.01, aCtx.currentTime + 0.1);
+        o.start(); o.stop(aCtx.currentTime + 0.1);
+    }
 
-        function renderDesktop() {
-            const desk = document.getElementById('desktop');
-            desk.innerHTML = '';
-            OS_STATE.installed.forEach(appId => {
-                const app = APP_DATA.find(a => a.id === appId);
-                const div = document.createElement('div');
-                div.className = 'icon';
-                div.onclick = () => openApp(app);
-                div.innerHTML = `<span class="icon-img">${app.icon}</span><span>${app.name}</span>`;
-                desk.appendChild(div);
-            });
-        }
+    function rotateKnob(el) {
+        const currentRotation = el.style.transform ? parseInt(el.style.transform.replace('rotate(','').replace('deg)','')) : 0;
+        const newRot = currentRotation + 45;
+        el.style.transform = `rotate(${newRot}deg)`;
+        playSfx(400 + (newRot % 360));
+    }
 
-        function openApp(app) {
-            let win = document.getElementById(`win-${app.id}`);
-            if (!win) {
-                win = document.getElementById('win-template').cloneNode(true);
-                win.id = `win-${app.id}`;
-                win.querySelector('.win-title').innerText = app.name;
-                const body = win.querySelector('.win-body');
-                
-                if (app.type === 'editor') {
-                    body.innerHTML = `<textarea id="editor" oninput="OS_STATE.noteBuffer=this.value; saveOS()">${OS_STATE.noteBuffer}</textarea>`;
-                } else if (app.type === 'browser') {
-                    body.innerHTML = `
-                        <div class="browser-top">
-                            <input id="url-bar" value="https://wikipedia.org">
-                            <button onclick="document.getElementById('frame-${app.id}').src=document.getElementById('url-bar').value">Go</button>
-                        </div>
-                        <iframe id="frame-${app.id}" src="https://wikipedia.org"></iframe>`;
-                } else {
-                    body.innerHTML = app.content || 'System error: Content missing.';
-                }
+    function playSong(name) {
+        playSfx(880);
+        npText.innerText = name.toUpperCase();
+        addLog(`[AUDIO] MOUNTING TRACK: ${name}`);
+        addLog(`[AUDIO] BITRATE: 320KBPS / STATUS: STREAMING`);
+        localStorage.setItem('lastSong', name);
+    }
 
-                document.body.appendChild(win);
-                makeDraggable(win);
-            }
+    function addLog(text) {
+        const div = document.createElement('div');
+        div.innerHTML = `> ${text}`;
+        log.appendChild(div);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    // --- COMMANDS ---
+    cmdIn.addEventListener('keypress', (e) => {
+        if(e.key === 'Enter') {
+            const cmd = cmdIn.value.toLowerCase().trim();
+            addLog(`<span style="color:#fff">${cmd}</span>`);
             
-            win.style.display = 'flex';
-            win.style.zIndex = Math.floor(Date.now() / 1000);
-            
-            // Restore position if exists
-            if (OS_STATE.positions[app.id]) {
-                win.style.left = OS_STATE.positions[app.id].x + 'px';
-                win.style.top = OS_STATE.positions[app.id].y + 'px';
+            if(cmd === 'help') {
+                addLog("AVAILABLE COMMANDS: 'clear', 'about', 'status', 'hack', 'eject', 'whoami'");
+            } else if(cmd === 'about') {
+                addLog("AIDEN BECKER // v10 WORKSTATION");
+                addLog("A CREATIVE HUB FOR MUSIC AND CODE.");
+            } else if(cmd === 'status') {
+                addLog("CORE TEMP: 42°C");
+                addLog("MEMORY: 64GB / VIRTUAL: ACTIVE");
+            } else if(cmd === 'hack') {
+                addLog("<span style='color:#f00'>INITIALIZING OVERRIDE... ACCESS DENIED.</span>");
+            } else if(cmd === 'clear') {
+                log.innerHTML = '';
+            } else if(cmd === 'whoami') {
+                addLog("CURRENT USER: ROOT_AIDEN");
             } else {
-                win.style.left = '100px'; win.style.top = '100px';
+                addLog("ERROR: COMMAND NOT FOUND");
             }
+            
+            cmdIn.value = '';
+            saveHistory();
         }
+    });
 
-        function makeDraggable(el) {
-            const head = el.querySelector('.win-head');
-            head.onmousedown = (e) => {
-                el.style.zIndex = Math.floor(Date.now() / 1000);
-                let ox = e.clientX - el.offsetLeft, oy = e.clientY - el.offsetTop;
-                document.onmousemove = (e) => {
-                    let x = e.clientX - ox, y = e.clientY - oy;
-                    el.style.left = x + 'px'; el.style.top = y + 'px';
-                    const appId = el.id.replace('win-', '');
-                    OS_STATE.positions[appId] = { x, y };
-                    saveOS();
-                };
-                document.onmouseup = () => { document.onmousemove = null; };
-            };
-        }
+    // --- PERSISTENCE ---
+    function saveHistory() {
+        localStorage.setItem('deckLog', log.innerHTML);
+    }
 
-        function updateClock() {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-        }
+    window.onload = () => {
+        const savedLog = localStorage.getItem('deckLog');
+        const savedSong = localStorage.getItem('lastSong');
+        if(savedLog) log.innerHTML = savedLog;
+        if(savedSong) npText.innerText = savedSong.toUpperCase();
+        addLog("RE-ESTABLISHING UPLINK...");
+    };
+</script>
 
-        function resetOS() {
-            if (confirm("Factory Reset? All data and positions will be cleared.")) {
-                localStorage.removeItem('AIDEN_OS_V9');
-                location.reload();
-            }
-        }
-    </script>
 </body>
 </html>
