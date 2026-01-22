@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker | Developer Portfolio v14</title>
+    <title>Aiden Becker | Official Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
@@ -32,17 +32,16 @@
         .bg-glow {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at 15% 15%, var(--primary) 0%, transparent 45%);
-            z-index: -1; opacity: 0.1; transition: var(--transition);
+            z-index: -1; opacity: 0.12; transition: var(--transition);
         }
 
         nav {
             display: flex; justify-content: space-between; align-items: center;
             padding: 20px 8%; position: sticky; top: 0; z-index: 1000;
-            backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
+            backdrop-filter: blur(25px); border-bottom: 1px solid var(--glass-border);
         }
 
         .logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.2rem; display: flex; align-items: center; }
-        #typing-text { min-width: 1px; }
         .cursor { display: inline-block; width: 10px; height: 1.2rem; background-color: var(--primary); margin-left: 5px; animation: blink 1s step-end infinite; }
         @keyframes blink { from, to { background-color: transparent; } 50% { background-color: var(--primary); } }
 
@@ -54,77 +53,62 @@
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* MUSIC TAB STYLES */
-        .song-container { margin-bottom: 40px; background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border); transition: var(--transition); }
-        .song-container:hover { border-color: var(--primary); transform: translateY(-5px); }
-        .song-flex { display: flex; gap: 30px; align-items: center; }
-        .album-art { width: 100px; height: 100px; border-radius: 10px; object-fit: cover; }
-        .status-tag { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-left: 10px; vertical-align: middle; }
-        
-        .fact-box { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border); display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
-        .fact-item h5 { color: var(--primary); font-size: 0.65rem; text-transform: uppercase; margin-bottom: 5px; }
-        .fact-item p { font-size: 0.85rem; color: var(--text-dim); }
+        /* MUSIC SECTION */
+        .song-container { margin-bottom: 30px; background: var(--card-bg); padding: 25px; border-radius: 20px; border: 1px solid var(--glass-border); transition: var(--transition); }
+        .song-container:hover { border-color: var(--primary); transform: scale(1.01); }
+        .song-flex { display: flex; gap: 25px; align-items: center; }
+        .album-art { width: 90px; height: 90px; border-radius: 12px; object-fit: cover; border: 1px solid var(--glass-border); }
+        .fact-box { margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--glass-border); display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .fact-item h5 { color: var(--primary); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+        .fact-item p { font-size: 0.8rem; color: var(--text-dim); }
+        audio { width: 100%; margin-top: 15px; filter: invert(1) hue-rotate(280deg) opacity(0.4); }
 
-        audio { width: 100%; margin-top: 15px; filter: invert(1) hue-rotate(280deg) opacity(0.3); }
+        /* THEME DOTS */
+        .theme-swatch { display: flex; gap: 12px; margin-top: 20px; }
+        .swatch { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
+        .swatch:hover { transform: translateY(-3px); border-color: white; }
 
         /* ARCADE */
-        .arcade-frame {
-            background: #000; border: 2px solid var(--primary); border-radius: 20px;
-            padding: 20px; display: flex; flex-direction: column; align-items: center;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-        }
-        canvas { background: #050505; border-radius: 8px; }
+        #arcade-wrap { text-align: center; background: #000; padding: 30px; border-radius: 30px; border: 1px solid var(--primary); }
+        canvas { background: #080808; border-radius: 10px; margin: 20px 0; }
 
-        /* POPUP */
-        #now-playing-popup {
+        /* PLAYER POPUP */
+        #now-playing {
             position: fixed; bottom: 30px; right: 30px; background: #111;
-            border: 1px solid var(--primary); padding: 12px 20px; border-radius: 12px;
+            border: 1px solid var(--primary); padding: 12px 20px; border-radius: 15px;
             display: flex; align-items: center; gap: 15px; transform: translateX(250%);
-            transition: var(--transition); z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: var(--transition); z-index: 9999;
         }
-        #now-playing-popup.visible { transform: translateX(0); }
-        .mini-art { width: 45px; height: 45px; border-radius: 6px; border: 1px solid var(--glass-border); }
-
-        /* THEME CONTROLS */
-        .theme-picker { display: flex; gap: 10px; margin-top: 20px; }
-        .dot { width: 25px; height: 25px; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.1); transition: 0.2s; }
-        .dot:hover { transform: scale(1.2); }
+        #now-playing.active { transform: translateX(0); }
+        .mini-art { width: 40px; height: 40px; border-radius: 5px; }
     </style>
 </head>
 <body>
 
-    <div class="bg-glow" id="glow"></div>
+    <div class="bg-glow" id="main-glow"></div>
 
     <nav>
         <div class="logo">
-            <span id="typing-text"></span><span class="cursor"></span>
+            <span id="typing-logo"></span><span class="cursor"></span>
         </div>
         <div class="nav-links">
-            <a onclick="showPage('home')" id="nav-home">Home</a>
-            <a onclick="showPage('music')" id="nav-music" class="active">Music</a>
-            <a onclick="showPage('arcade')" id="nav-arcade">Arcade</a>
+            <a onclick="showTab('home')" id="nav-home">Home</a>
+            <a onclick="showTab('music')" id="nav-music" class="active">Music</a>
+            <a onclick="showTab('arcade')" id="nav-arcade">Arcade</a>
         </div>
     </nav>
 
     <div id="home" class="page">
-        <div class="hero">
-            <h1 style="font-size: 3.5rem; font-weight: 700;">Building <span style="color:var(--primary)">Digital</span> Experiences.</h1>
-        </div>
-        <div style="margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
-            <div>
-                <h3>// About Me</h3>
-                <p style="color: var(--text-dim); margin-top: 10px;">
-                    I am a developer focused on creating clean, functional, and aesthetically pleasing digital products. I specialize in persistent systems and interactive UI.
-                </p>
-            </div>
-            <div>
-                <h3>// System Theme</h3>
-                <div class="theme-picker">
-                    <div class="dot" style="background: #ff007f;" onclick="updateTheme('#ff007f')"></div>
-                    <div class="dot" style="background: #00f2ff;" onclick="updateTheme('#00f2ff')"></div>
-                    <div class="dot" style="background: #00ff88;" onclick="updateTheme('#00ff88')"></div>
-                    <div class="dot" style="background: #ffae00;" onclick="updateTheme('#ffae00')"></div>
-                </div>
+        <h1 style="font-size: 4rem; font-weight: 700; margin-bottom: 10px;">Aiden <span style="color:var(--primary)">Becker</span></h1>
+        <p style="color:var(--text-dim); max-width: 600px;">Developer & Sound Designer. Creating persistent digital environments with modern web technologies.</p>
+        
+        <div style="margin-top: 60px;">
+            <h3>// UI Personalization</h3>
+            <div class="theme-swatch">
+                <div class="swatch" style="background:#ff007f" onclick="changeColor('#ff007f')"></div>
+                <div class="swatch" style="background:#00f2ff" onclick="changeColor('#00f2ff')"></div>
+                <div class="swatch" style="background:#a3ff33" onclick="changeColor('#a3ff33')"></div>
+                <div class="swatch" style="background:#ffaa00" onclick="changeColor('#ffaa00')"></div>
             </div>
         </div>
     </div>
@@ -134,14 +118,36 @@
             <div class="song-flex">
                 <img src="music/nirvana.jpg" class="album-art">
                 <div style="flex:1">
-                    <h3>Smells Like Teen Spirit <span class="status-tag" style="color:var(--status-inactive)">[Disbanded]</span></h3>
-                    <p style="font-size: 0.8rem; color: var(--text-dim);">Nirvana • 1991</p>
-                    <audio controls src="music/nirvana.mp3" data-title="Smells Like Teen Spirit" data-artist="Nirvana" data-art="music/nirvana.jpg"></audio>
+                    <h3>Smells Like Teen Spirit <span style="color:var(--status-inactive); font-size:0.7rem;">[DISBANDED]</span></h3>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">Nirvana • Nevermind</p>
+                    <audio controls src="music/nirvana.mp3" data-t="Smells Like Teen Spirit" data-a="Nirvana" data-i="music/nirvana.jpg"></audio>
                 </div>
             </div>
             <div class="fact-box">
-                <div class="fact-item"><h5>Vibe</h5><p>90s grunge movement.</p></div>
-                <div class="fact-item"><h5>Status</h5><p>Ended in 1994.</p></div>
+                <div class="fact-item"><h5>Legacy</h5><p>Defined the 90s Grunge era.</p></div>
+                <div class="fact-item"><h5>Status</h5><p>Active until 1994.</p></div>
+            </div>
+        </div>
+
+        <div class="song-container">
+            <div class="song-flex">
+                <img src="music/greenday.jpg" class="album-art">
+                <div style="flex:1">
+                    <h3>American Idiot <span style="color:var(--status-active); font-size:0.7rem;">[ACTIVE]</span></h3>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">Green Day • American Idiot</p>
+                    <audio controls src="music/greenday.mp3" data-t="American Idiot" data-a="Green Day" data-i="music/greenday.jpg"></audio>
+                </div>
+            </div>
+        </div>
+
+        <div class="song-container">
+            <div class="song-flex">
+                <img src="music/gorillaz.jpg" class="album-art">
+                <div style="flex:1">
+                    <h3>On Melancholy Hill <span style="color:var(--status-active); font-size:0.7rem;">[ACTIVE]</span></h3>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">Gorillaz • Plastic Beach</p>
+                    <audio controls src="music/gorillaz.mp3" data-t="On Melancholy Hill" data-a="Gorillaz" data-i="music/gorillaz.jpg"></audio>
+                </div>
             </div>
         </div>
 
@@ -149,80 +155,75 @@
             <div class="song-flex">
                 <img src="music/bilmuri.jpg" class="album-art">
                 <div style="flex:1">
-                    <h3>More Than Hate <span class="status-tag" style="color:var(--status-active)">[Active]</span></h3>
-                    <p style="font-size: 0.8rem; color: var(--text-dim);">Bilmuri • 2020</p>
-                    <audio controls src="music/bilmuri.mp3" data-title="More Than Hate" data-artist="Bilmuri" data-art="music/bilmuri.jpg"></audio>
+                    <h3>More Than Hate <span style="color:var(--status-active); font-size:0.7rem;">[ACTIVE]</span></h3>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">Bilmuri • Eggy Pocket</p>
+                    <audio controls src="music/bilmuri.mp3" data-t="More Than Hate" data-a="Bilmuri" data-i="music/bilmuri.jpg"></audio>
                 </div>
-            </div>
-            <div class="fact-box">
-                <div class="fact-item"><h5>Style</h5><p>Heavy metal mixed with pop.</p></div>
-                <div class="fact-item"><h5>Status</h5><p>Actively touring.</p></div>
             </div>
         </div>
     </div>
 
     <div id="arcade" class="page">
-        <div class="arcade-frame">
-            <h2 style="margin-bottom: 20px;">Neon Snake v2.0</h2>
-            <canvas id="snakeGame" width="400" height="400"></canvas>
-            <div style="margin-top: 15px; font-size: 0.8rem; color: var(--text-dim);">USE ARROWS TO MOVE | SCORE: <span id="scoreVal">0</span></div>
+        <div id="arcade-wrap">
+            <h2 style="font-family:'Space Grotesk'">SYSTEM_SNAKE</h2>
+            <canvas id="snakeBox" width="400" height="400"></canvas>
+            <p style="font-size:0.8rem; color:var(--text-dim)">ARROWS TO PLAY | SCORE: <span id="curScore">0</span></p>
         </div>
     </div>
 
-    <div id="now-playing-popup">
-        <img id="popup-art" src="" class="mini-art">
+    <div id="now-playing">
+        <img id="pop-art" src="" class="mini-art">
         <div>
-            <div id="popup-artist" style="font-size: 0.65rem; color: var(--primary); font-weight: 800; text-transform: uppercase;">Artist</div>
-            <div id="popup-title" style="font-size: 0.9rem; font-weight: 700;">Song Title</div>
+            <div id="pop-artist" style="font-size: 0.6rem; color: var(--primary); font-weight: 800; text-transform: uppercase;"></div>
+            <div id="pop-title" style="font-size: 0.85rem; font-weight: 700;"></div>
         </div>
     </div>
 
     <script>
-        // --- TYPING ---
-        const text = "AIDEN BECKER";
-        let charIndex = 0;
-        function type() {
-            if (charIndex < text.length) {
-                document.getElementById("typing-text").textContent += text.charAt(charIndex);
-                charIndex++;
-                setTimeout(type, 150);
+        // Typing Logo
+        const nameText = "AIDEN BECKER";
+        let idx = 0;
+        function typeLogo() {
+            if(idx < nameText.length) {
+                document.getElementById('typing-logo').textContent += nameText.charAt(idx);
+                idx++; setTimeout(typeLogo, 150);
             }
         }
 
-        // --- THEME SAVING ---
-        function updateTheme(color) {
-            document.documentElement.style.setProperty('--primary', color);
-            localStorage.setItem('aiden_theme_color', color);
+        // Theme
+        function changeColor(c) {
+            document.documentElement.style.setProperty('--primary', c);
+            localStorage.setItem('pref_color', c);
         }
 
-        // --- NAVIGATION ---
-        function showPage(p) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.getElementById(p).classList.add('active');
+        // Tabs
+        function showTab(t) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(t).classList.add('active');
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            document.getElementById('nav-'+p).classList.add('active');
-            if(p === 'arcade') initSnake();
+            document.getElementById('nav-'+t).classList.add('active');
+            if(t === 'arcade') runSnake();
         }
 
-        // --- AUDIO ENGINE ---
-        const popup = document.getElementById('now-playing-popup');
-        document.querySelectorAll('audio').forEach(audio => {
-            audio.addEventListener('play', () => {
-                document.querySelectorAll('audio').forEach(other => { if(other !== audio) other.pause(); });
-                document.getElementById('popup-title').innerText = audio.getAttribute('data-title');
-                document.getElementById('popup-artist').innerText = audio.getAttribute('data-artist');
-                document.getElementById('popup-art').src = audio.getAttribute('data-art');
-                popup.classList.add('visible');
+        // Audio
+        const pop = document.getElementById('now-playing');
+        document.querySelectorAll('audio').forEach(aud => {
+            aud.addEventListener('play', () => {
+                document.querySelectorAll('audio').forEach(other => { if(other !== aud) other.pause(); });
+                document.getElementById('pop-title').innerText = aud.getAttribute('data-t');
+                document.getElementById('pop-artist').innerText = aud.getAttribute('data-a');
+                document.getElementById('pop-art').src = aud.getAttribute('data-i');
+                pop.classList.add('active');
             });
-            audio.addEventListener('pause', () => popup.classList.remove('visible'));
+            aud.addEventListener('pause', () => pop.classList.remove('active'));
         });
 
-        // --- SNAKE GAME ---
-        let gameInt;
-        function initSnake() {
-            const canvas = document.getElementById('snakeGame');
-            const ctx = canvas.getContext('2d');
-            let s = [{x:10, y:10}], apple = {x:15, y:15}, d = {x:1, y:0}, score = 0;
+        // Snake Game
+        let snakeClock;
+        function runSnake() {
+            const cvs = document.getElementById('snakeBox');
+            const ctx = cvs.getContext('2d');
+            let s = [{x:10, y:10}], food = {x:5, y:5}, d = {x:1, y:0}, score = 0;
 
             document.onkeydown = e => {
                 if(e.key==='ArrowUp' && d.y===0) d={x:0, y:-1};
@@ -231,28 +232,28 @@
                 if(e.key==='ArrowRight' && d.x===0) d={x:1, y:0};
             };
 
-            if(gameInt) clearInterval(gameInt);
-            gameInt = setInterval(() => {
+            if(snakeClock) clearInterval(snakeClock);
+            snakeClock = setInterval(() => {
                 let head = {x: s[0].x + d.x, y: s[0].y + d.y};
                 s.unshift(head);
-                if(head.x===apple.x && head.y===apple.y) {
-                    score++; document.getElementById('scoreVal').innerText = score;
-                    apple = {x: Math.floor(Math.random()*20), y: Math.floor(Math.random()*20)};
+                if(head.x === food.x && head.y === food.y) {
+                    score++; document.getElementById('curScore').innerText = score;
+                    food = {x: Math.floor(Math.random()*20), y: Math.floor(Math.random()*20)};
                 } else { s.pop(); }
 
-                ctx.fillStyle = '#050505'; ctx.fillRect(0,0,400,400);
+                ctx.fillStyle = '#080808'; ctx.fillRect(0,0,400,400);
                 ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary');
-                s.forEach(seg => ctx.fillRect(seg.x*20, seg.y*20, 18, 18));
-                ctx.fillStyle = '#fff'; ctx.fillRect(apple.x*20, apple.y*20, 18, 18);
+                s.forEach(part => ctx.fillRect(part.x*20, part.y*20, 18, 18));
+                ctx.fillStyle = '#fff'; ctx.fillRect(food.x*20, food.y*20, 18, 18);
 
-                if(head.x<0 || head.x>=20 || head.y<0 || head.y>=20) { s=[{x:10, y:10}]; d={x:1, y:0}; score=0; document.getElementById('scoreVal').innerText = 0; }
+                if(head.x<0 || head.x>=20 || head.y<0 || head.y>=20) { s=[{x:10, y:10}]; d={x:1, y:0}; score=0; document.getElementById('curScore').innerText = 0; }
             }, 100);
         }
 
         window.onload = () => {
-            type();
-            const savedColor = localStorage.getItem('aiden_theme_color');
-            if(savedColor) updateTheme(savedColor);
+            typeLogo();
+            const saved = localStorage.getItem('pref_color');
+            if(saved) changeColor(saved);
         };
     </script>
 </body>
