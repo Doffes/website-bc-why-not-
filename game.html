@@ -2,37 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>DEAD ZONE REDUX - Fixed & Locked</title>
+    <title>DEAD ZONE REDUX - Master Build</title>
     <style>
         :root { --neon: #ff003c; --cyan: #00f2ff; --zombie: #39ff14; --bg: #020205; }
         body { margin: 0; background: #000; color: #fff; font-family: 'Courier New', monospace; overflow: hidden; user-select: none; }
         
+        /* VHS & Transition Overlays */
         .vhs-overlay {
             position: fixed; inset: 0; pointer-events: none; z-index: 500;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
                         linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            background-size: 100% 3px, 3px 100%; opacity: 0.4;
+            background-size: 100% 3px, 3px 100%; opacity: 0.5;
         }
 
-        #ui-layer { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; z-index: 100; background: rgba(0,0,0,0.85); }
-        .menu-card { background: #050508; padding: 40px; border: 1px solid #222; width: 450px; text-align: center; border-top: 3px solid var(--neon); box-shadow: 0 20px 50px rgba(0,0,0,1); }
+        #fade-overlay {
+            position: fixed; inset: 0; background: #000; z-index: 1000;
+            pointer-events: none; opacity: 0; transition: opacity 0.8s ease;
+        }
+
+        #ui-layer { 
+            position: absolute; inset: 0; display: flex; justify-content: center; 
+            align-items: center; z-index: 100; background: rgba(0,0,0,0.85); 
+            transition: opacity 0.5s ease;
+        }
+
+        .menu-card { background: #050508; padding: 40px; border: 1px solid #222; width: 500px; text-align: center; border-top: 3px solid var(--neon); }
         
-        h1 { font-size: 32px; letter-spacing: 8px; margin: 0; text-shadow: 0 0 15px var(--neon); }
+        h1 { font-size: 38px; letter-spacing: 10px; margin: 0; text-shadow: 0 0 15px var(--neon); }
         .sub { color: var(--cyan); font-size: 10px; letter-spacing: 4px; margin-bottom: 30px; }
 
         button { 
-            width: 100%; padding: 12px; margin: 6px 0; border: 1px solid #333; 
-            background: #000; color: #fff; cursor: pointer; font-size: 11px; 
+            width: 100%; padding: 15px; margin: 8px 0; border: 1px solid #333; 
+            background: #000; color: #fff; cursor: pointer; font-size: 12px; 
             letter-spacing: 2px; text-transform: uppercase; transition: 0.2s;
         }
         button:hover:not(:disabled) { background: #fff; color: #000; box-shadow: 0 0 15px #fff; }
         button:disabled { opacity: 0.3; cursor: not-allowed; }
 
-        .demo-msg { font-size: 11px; color: var(--zombie); margin: 20px 0; line-height: 1.6; border: 1px dashed var(--zombie); padding: 10px; }
-
-        #hud { position: absolute; top: 30px; left: 30px; z-index: 50; }
+        #hud { position: absolute; top: 30px; left: 30px; z-index: 50; opacity: 0; transition: opacity 0.5s; }
+        #hud.visible { opacity: 1; }
+        
         .hp-bar { width: 200px; height: 4px; background: #111; border: 1px solid #333; margin-top: 5px;}
         .hp-fill { height: 100%; background: var(--neon); box-shadow: 0 0 10px var(--neon); transition: 0.2s; }
+
+        .demo-msg { font-size: 11px; color: var(--zombie); margin: 20px 0; border: 1px dashed var(--zombie); padding: 10px; }
 
         canvas { display: block; filter: contrast(1.1) brightness(1.1); }
         .hidden { display: none !important; }
@@ -41,43 +54,47 @@
 </head>
 <body onclick="Snd.init()">
     <div class="vhs-overlay"></div>
+    <div id="fade-overlay"></div>
     
-    <div id="hud" class="hidden">
+    <div id="hud">
         <div style="font-size: 9px; letter-spacing: 2px;">VITAL SIGNS</div>
         <div class="hp-bar"><div id="hp-fill" class="hp-fill"></div></div>
     </div>
 
     <div id="ui-layer">
-        <div id="m-main" class="menu-card">
-            <h1>DEAD ZONE</h1>
-            <div class="sub">CORE INTERFACE // V.10</div>
-            <button onclick="ui.nav('m-campaign')">Campaign</button>
-            <button onclick="ui.setMode('endless')">Endless Survival</button>
-            <button onclick="localStorage.clear(); location.reload();">Reset Data</button>
+        <div id="m-lang" class="menu-card">
+            <h1>BOOT</h1>
+            <div class="sub">SELECT LANGUAGE</div>
+            <button onclick="ui.setLang('EN')">English</button>
+            <button onclick="ui.setLang('ES')">Español</button>
+            <button onclick="ui.setLang('JA')">日本語</button>
+        </div>
+
+        <div id="m-main" class="menu-card hidden">
+            <h1 data-t="title">DEAD ZONE</h1>
+            <div class="sub">AUDIO ENHANCED // AIDEN B.</div>
+            <button onclick="ui.nav('m-campaign')" data-t="btn_campaign">Deploy</button>
+            <button onclick="ui.setMode('endless')" data-t="btn_endless">Survival</button>
+            <button onclick="localStorage.clear(); location.reload();">Reset</button>
         </div>
 
         <div id="m-campaign" class="menu-card hidden">
-            <h1>SECTORS</h1>
+            <h1 data-t="sectors">SECTORS</h1>
             <div id="campaign-grid" class="grid"></div>
-            <button onclick="ui.nav('m-main')">Return</button>
+            <button onclick="ui.nav('m-main')" data-t="back">Return</button>
         </div>
 
-        <div id="m-demo-end" class="menu-card hidden" style="border-top-color: var(--cyan)">
-            <h1 style="color:var(--cyan)">LOCKED</h1>
-            <div class="sub">ENCRYPTED DATA STREAM</div>
-            <div class="demo-msg">
-                MISSION 06-20 REQUIRE FULL VERSION.<br>
-                UPLINK WITH PORTFOLIO TERMINAL TO UNLOCK.
-            </div>
-            <button onclick="window.top.location.href='index.html#home'">Return to Home</button>
-            <button onclick="ui.nav('m-main')">Back to Menu</button>
+        <div id="m-demo-end" class="menu-card hidden">
+            <h1 style="color:var(--cyan)">DEMO END</h1>
+            <div class="demo-msg">MISSION 06-20 REQUIRE FULL UPLINK.</div>
+            <button onclick="window.top.location.href='index.html#home'">Return to Site</button>
+            <button onclick="ui.nav('m-main')">Main Menu</button>
         </div>
 
         <div id="m-class" class="menu-card hidden">
-            <h1>LOADOUT</h1>
-            <button onclick="game.launch('assault')">Assault (Rapid)</button>
-            <button onclick="game.launch('tank')">Tank (Heavy)</button>
-            <button onclick="ui.nav('m-campaign')">Cancel</button>
+            <h1 data-t="choose_class">LOADOUT</h1>
+            <button onclick="game.launch('assault')" data-t="cls_1">Assault</button>
+            <button onclick="game.launch('tank')" data-t="cls_2">Tank</button>
         </div>
     </div>
 
@@ -85,7 +102,7 @@
 
 <script>
     const Snd = {
-        ctx: null, mg: null,
+        ctx: null, mg: null, looping: false,
         init() {
             if (this.ctx) return;
             this.ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -100,34 +117,55 @@
             g.gain.linearRampToValueAtTime(0, this.ctx.currentTime + d);
             o.connect(g); g.connect(this.mg);
             o.start(); o.stop(this.ctx.currentTime + d);
+        },
+        playSfx(type) {
+            if(type==='jump') this.osc(200, 'sine', 0.2, 0.1, 400);
+            if(type==='shoot') this.osc(400, 'square', 0.1, 0.1);
+        },
+        music() {
+            if(!this.ctx || this.looping) return;
+            this.looping = true; let step = 0;
+            setInterval(() => {
+                if(game.active) {
+                    this.osc([55, 62, 58, 65][step%4], 'sawtooth', 0.2, 0.05);
+                    step++;
+                }
+            }, 200);
         }
     };
 
+    const i18n = {
+        EN: { title: "DEAD ZONE", btn_campaign: "CAMPAIGN", btn_endless: "SURVIVAL", back: "BACK", choose_class: "LOADOUT", cls_1: "ASSAULT", cls_2: "TANK", sectors: "SECTORS" },
+        ES: { title: "ZONA MUERTA", btn_campaign: "CAMPAÑA", btn_endless: "SUPERVIVENCIA", back: "VOLVER", choose_class: "CLASE", cls_1: "ASALTO", cls_2: "TANQUE", sectors: "SECTORES" },
+        JA: { title: "デッドゾーン", btn_campaign: "キャンペーン", btn_endless: "サバイバル", back: "戻る", choose_class: "ロードアウト", cls_1: "アサルト", cls_2: "タンク", sectors: "セクター" }
+    };
+
     const ui = {
-        mission: 1, demoLimit: 5, mode: 'campaign',
+        lang: 'EN', mission: 1, demoLimit: 5,
+        setLang(l) { this.lang = l; document.querySelectorAll('[data-t]').forEach(el => el.innerText = i18n[l][el.getAttribute('data-t')]); this.nav('m-main'); },
         nav(id) {
             document.querySelectorAll('.menu-card').forEach(c => c.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
+            document.getElementById('ui-layer').style.opacity = "1";
+            document.getElementById('ui-layer').classList.remove('hidden');
             if(id === 'm-campaign') this.render();
         },
         render() {
-            const container = document.getElementById('campaign-grid');
-            container.innerHTML = '';
+            const container = document.getElementById('campaign-grid'); container.innerHTML = '';
             for(let i=1; i<=20; i++) {
                 const b = document.createElement('button');
                 if(i > this.demoLimit) {
-                    b.innerText = 'LOCK';
-                    b.style.color = 'var(--neon)';
+                    b.innerText = "LOCK"; b.style.color = "var(--neon)";
                     b.onclick = () => ui.nav('m-demo-end');
                 } else {
                     b.innerText = i <= game.progress ? i : 'X';
                     b.disabled = i > game.progress;
-                    b.onclick = () => { this.mission = i; this.mode = 'campaign'; ui.nav('m-class'); };
+                    b.onclick = () => { this.mission = i; this.nav('m-class'); };
                 }
                 container.appendChild(b);
             }
         },
-        setMode(m) { this.mode = m; ui.nav('m-class'); }
+        setMode(m) { this.mode = m; this.nav('m-class'); }
     };
 
     const canvas = document.getElementById('gameCanvas');
@@ -136,128 +174,81 @@
     window.onresize = resize; resize();
 
     const game = {
-        active: false, 
-        progress: parseInt(localStorage.getItem('dz_redux_v10')) || 1,
+        active: false, progress: parseInt(localStorage.getItem('dz_redux_v10')) || 1,
         player: null, zombies: [], bullets: [], cameraX: 0, groundY: 0,
 
         launch(cls) {
-            this.active = true; 
+            this.active = true; Snd.music();
             this.groundY = canvas.height - 100;
             this.zombies = []; this.bullets = []; this.cameraX = 0;
-            const stats = cls === 'assault' ? {hp:100, dmg:2, fire:150} : {hp:200, dmg:5, fire:400};
-            this.player = { x: 200, y: this.groundY-70, vx:0, vy:0, ...stats, mHp: stats.hp, dir:1 };
+            this.player = { x: 200, y: this.groundY-70, hp: 100, vx:0, vy:0, mHp: 100, dir: 1 };
             
             document.getElementById('ui-layer').classList.add('hidden');
-            document.getElementById('hud').classList.remove('hidden');
+            document.getElementById('hud').classList.add('visible');
             this.loop();
+        },
+
+        async triggerTransition(nextMenu) {
+            this.active = false;
+            const fader = document.getElementById('fade-overlay');
+            fader.style.opacity = "1"; // Fade to black
+            
+            await new Promise(r => setTimeout(r, 800));
+            
+            document.getElementById('hud').classList.remove('visible');
+            ui.nav(nextMenu);
+            
+            await new Promise(r => setTimeout(r, 100));
+            fader.style.opacity = "0"; // Fade back in to Menu
         },
 
         update() {
             if(!this.active) return;
             const p = this.player;
-
-            // Controls
             if(keys.KeyA) { p.vx -= 1.2; p.dir = -1; }
             if(keys.KeyD) { p.vx += 1.2; p.dir = 1; }
-            if(keys.KeyW && p.y >= this.groundY - 71) { p.vy = -16; Snd.osc(200, 'sine', 0.1, 0.1); }
+            if(keys.KeyW && p.y >= this.groundY - 71) { p.vy = -16; Snd.playSfx('jump'); }
             
             p.vx *= 0.85; p.vy += 0.8; p.x += p.vx; p.y += p.vy;
             if(p.y > this.groundY - 70) { p.y = this.groundY - 70; p.vy = 0; }
-
             this.cameraX += (p.x - canvas.width/3 - this.cameraX) * 0.1;
 
-            // Shooting
-            if(keys.Space && Date.now() - (p.lastShot||0) > p.fire) {
+            if(keys.Space && Date.now() - (p.last||0) > 200) {
                 this.bullets.push({x: p.x + (p.dir*20), y: p.y+25, vx: p.dir*30});
-                p.lastShot = Date.now();
-                Snd.osc(400, 'square', 0.1, 0.1);
+                p.last = Date.now(); Snd.playSfx('shoot');
             }
 
-            // Spawn Zombies
-            if(Math.random() < 0.03) {
-                this.zombies.push({x: p.x + canvas.width, hp: 5 + ui.mission});
-            }
+            if(Math.random() < 0.02) this.zombies.push({x: p.x + 1000, hp: 5});
 
-            // Bullet Logic
-            this.bullets.forEach((b, bi) => {
+            this.bullets.forEach((b, i) => {
                 b.x += b.vx;
                 this.zombies.forEach((z, zi) => {
-                    if(Math.abs(b.x - z.x) < 40) {
-                        z.hp -= p.dmg; this.bullets.splice(bi, 1);
-                        if(z.hp <= 0) this.zombies.splice(zi, 1);
-                    }
+                    if(Math.abs(b.x - z.x) < 40) { z.hp -= 2; this.bullets.splice(i,1); if(z.hp<=0) this.zombies.splice(zi,1); }
                 });
             });
 
-            // Zombie Logic
-            this.zombies.forEach(z => {
-                z.x -= 2;
-                if(Math.abs(p.x - z.x) < 30) { p.hp -= 0.5; }
-            });
-
-            // WIN / LOSE CONDITIONS (The Fix is here)
+            // WIN / LOSE
             const goal = 2000 + (ui.mission * 1000);
-            
-            if(ui.mode === 'campaign' && p.x > goal) {
-                this.stop(); // Stop the loop!
-                if(ui.mission === ui.demoLimit) {
-                    ui.nav('m-demo-end');
-                } else {
-                    if(ui.mission === this.progress) {
-                        this.progress++;
-                        localStorage.setItem('dz_redux_v10', this.progress);
-                    }
-                    ui.nav('m-campaign');
-                }
+            if(p.x > goal) {
+                if(ui.mission === this.progress) { this.progress++; localStorage.setItem('dz_redux_v10', this.progress); }
+                this.triggerTransition(ui.mission === ui.demoLimit ? 'm-demo-end' : 'm-campaign');
             }
-
-            if(p.hp <= 0) {
-                this.stop();
-                alert("MISSION FAILED - VITALS ZERO");
-                location.reload();
-            }
-
-            document.getElementById('hp-fill').style.width = (p.hp/p.mHp*100) + '%';
+            if(p.hp <= 0) { location.reload(); }
+            document.getElementById('hp-fill').style.width = p.hp + '%';
         },
 
         draw() {
             if(!this.active) return;
             ctx.fillStyle = '#020205'; ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.save(); ctx.translate(-this.cameraX, 0);
-            
-            // Ground
-            ctx.fillStyle = '#0a0a0f'; ctx.fillRect(0, this.groundY, 10000, 100);
-            ctx.fillStyle = '#ff003c'; ctx.globalAlpha = 0.2; ctx.fillRect(0, this.groundY, 10000, 2); ctx.globalAlpha = 1;
-
-            // Player
-            ctx.fillStyle = '#fff'; ctx.shadowBlur = 15; ctx.shadowColor = '#00f2ff';
-            ctx.fillRect(this.player.x, this.player.y, 30, 70);
-
-            // Zombies
-            ctx.shadowColor = '#39ff14'; ctx.fillStyle = '#000'; ctx.strokeStyle = '#39ff14';
-            this.zombies.forEach(z => {
-                ctx.fillRect(z.x, this.groundY-70, 30, 70);
-                ctx.strokeRect(z.x, this.groundY-70, 30, 70);
-            });
-
-            // Bullets
-            ctx.fillStyle = '#00f2ff';
-            this.bullets.forEach(b => ctx.fillRect(b.x, b.y, 20, 2));
-
+            ctx.fillStyle = '#111'; ctx.fillRect(0, this.groundY, 10000, 100);
+            ctx.fillStyle = '#fff'; ctx.fillRect(this.player.x, this.player.y, 30, 70);
+            this.zombies.forEach(z => { ctx.fillStyle = '#39ff14'; ctx.fillRect(z.x, this.groundY-70, 30, 70); });
+            this.bullets.forEach(b => { ctx.fillStyle = '#00f2ff'; ctx.fillRect(b.x, b.y, 20, 2); });
             ctx.restore();
         },
 
-        stop() {
-            this.active = false;
-            document.getElementById('hud').classList.add('hidden');
-        },
-
-        loop() { 
-            if(!this.active) return; 
-            this.update(); 
-            this.draw(); 
-            requestAnimationFrame(() => this.loop()); 
-        }
+        loop() { if(this.active) { this.update(); this.draw(); requestAnimationFrame(() => this.loop()); } }
     };
 
     const keys = {}; window.onkeydown = e => keys[e.code] = true; window.onkeyup = e => keys[e.code] = false;
