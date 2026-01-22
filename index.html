@@ -27,64 +27,59 @@
             overflow-x: hidden;
         }
 
-        .bg-glow {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 0% 0%, rgba(255, 0, 127, 0.05) 0%, transparent 35%);
-            z-index: -1;
-        }
-
+        /* Navigation */
         nav {
             display: flex; justify-content: space-between; align-items: center;
             padding: 20px 8%; position: sticky; top: 0; z-index: 1000;
             backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border);
         }
-
         .logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.2rem; }
         .pink-text { color: var(--primary); }
         .nav-links { display: flex; gap: 30px; }
-        nav a {
-            color: var(--text-dim); text-decoration: none; font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer;
-        }
+        nav a { color: var(--text-dim); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; cursor: pointer; }
         nav a.active { color: var(--primary); }
 
-        .page { display: none; padding: 80px 8%; max-width: 1400px; margin: 0 auto; }
-        .page.active { display: block; animation: pageIn 0.6s ease-out; }
+        .page { display: none; padding: 60px 8%; max-width: 1200px; margin: 0 auto; }
+        .page.active { display: block; }
 
-        @keyframes pageIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .song-list { display: flex; flex-direction: column; gap: 15px; }
-        .song-row {
-            display: flex; align-items: center; background: var(--card-bg);
-            padding: 20px; border-radius: 12px; border: 1px solid var(--glass-border); gap: 20px;
+        /* Song List & Lyric Sheets */
+        .song-list { display: grid; gap: 30px; }
+        .song-card { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--glass-border); overflow: hidden; }
+        .song-header { padding: 25px; display: flex; align-items: center; gap: 20px; border-bottom: 1px solid var(--glass-border); }
+        .album-art { width: 80px; height: 80px; border-radius: 8px; }
+        
+        .lyric-sheet {
+            height: 150px; overflow-y: auto; padding: 20px;
+            background: rgba(0,0,0,0.3); font-size: 0.9rem; color: var(--text-dim);
+            line-height: 1.8; scrollbar-width: thin;
         }
+        audio { width: 100%; height: 40px; filter: invert(1) hue-rotate(270deg); margin-top: 10px; }
 
-        .album-art { width: 60px; height: 60px; border-radius: 4px; object-fit: cover; }
-        .song-meta { flex-grow: 1; }
-        audio { height: 35px; filter: invert(1) hue-rotate(270deg) brightness(1.5); }
+        /* Arcade */
+        .arcade-container { background:#000; aspect-ratio: 16/9; border-radius: 12px; border: 1px solid var(--glass-border); overflow:hidden; }
 
-        /* --- KARAOKE MODAL --- */
+        /* Karaoke Modal */
         #lyrics-modal {
             position: fixed; inset: 0; background: rgba(0,0,0,0.98);
-            z-index: 10001; display: none; flex-direction: column; align-items: center; padding: 40px 20px;
+            z-index: 10001; display: none; flex-direction: column; align-items: center;
         }
-
-        .modal-lyrics {
-            width: 100%; max-width: 900px; flex-grow: 1; overflow-y: auto;
-            text-align: center; padding: 30vh 0; scrollbar-width: none;
-            mask-image: linear-gradient(to bottom, transparent, black 25%, black 75%, transparent);
+        .modal-lyrics-area {
+            flex-grow: 1; width: 100%; overflow-y: auto; text-align: center;
+            padding: 40vh 0; scrollbar-width: none;
+            mask-image: linear-gradient(to bottom, transparent, black 40%, black 60%, transparent);
         }
-        .modal-lyrics::-webkit-scrollbar { display: none; }
-
         .lyric-line {
-            font-size: clamp(1.5rem, 5vw, 2.5rem); font-weight: 700;
-            margin: 45px 0; color: rgba(255, 255, 255, 0.05);
-            transition: all 0.25s ease; font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.8rem, 6vw, 3rem); font-weight: 700; margin: 50px 0;
+            color: rgba(255, 255, 255, 0.05); transition: all 0.2s ease;
         }
         .lyric-line.active { color: var(--karaoke-yellow); transform: scale(1.1); text-shadow: 0 0 30px rgba(255,255,0,0.5); }
 
-        .progress-container { width: 100%; max-width: 600px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin: 20px 0; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--primary); width: 0%; box-shadow: 0 0 10px var(--primary); }
+        /* Offset Controls */
+        .sync-controls {
+            padding: 20px; display: flex; gap: 15px; align-items: center;
+            background: #111; border-top: 1px solid var(--glass-border); width: 100%; justify-content: center;
+        }
+        .sync-btn { background: #222; border: 1px solid var(--primary); color: white; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
 
         #now-playing-popup {
             position: fixed; bottom: 30px; right: 30px; background: #111;
@@ -93,87 +88,120 @@
             transition: var(--transition); z-index: 10000; cursor: pointer;
         }
         #now-playing-popup.visible { transform: translateX(0); }
-        .mini-art { width: 45px; height: 45px; border-radius: 6px; }
-        .close-modal { position: absolute; top: 30px; right: 30px; background: rgba(255,255,255,0.1); border: none; color: white; padding: 10px 20px; border-radius: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="bg-glow"></div>
-
     <nav>
         <div class="logo">AIDEN BECKER<span class="pink-text">_</span></div>
         <div class="nav-links">
-            <a onclick="showPage('home')" id="nav-home" class="active">Portfolio</a>
+            <a onclick="showPage('home')" id="nav-home" class="active">Dev</a>
             <a onclick="showPage('music')" id="nav-music">Music</a>
             <a onclick="showPage('arcade')" id="nav-arcade">Arcade</a>
         </div>
     </nav>
 
     <div id="home" class="page active">
-        <h1>Creative <span class="pink-text">Developer</span> & Musician.</h1>
+        <h1>Dev <span class="pink-text">Portfolio</span></h1>
+        <p>Precision audio synchronization project.</p>
     </div>
 
     <div id="music" class="page">
         <div class="song-list">
-            <div class="song-row">
-                <img src="music/nirvana.jpg" class="album-art">
-                <div class="song-meta"><h4>Smells Like Teen Spirit</h4><p>Nirvana</p></div>
-                <audio controls src="music/nirvana.mp3" 
-                    data-title="Smells Like Teen Spirit" data-artist="Nirvana" data-album="Nevermind" data-art="music/nirvana.jpg"
-                    data-lyrics='[{"t":0,"l":"(Intro)"},{"t":8.35,"l":"Load up on guns"},{"t":10.65,"l":"Bring your friends"},{"t":13.00,"l":"It is fun to lose and to pretend"},{"t":17.80,"l":"She is over-bored and self-assured"},{"t":22.45,"l":"Oh no, I know a dirty word"},{"t":27.20,"l":"Hello, hello, hello, how low?"},{"t":31.95,"l":"Hello, hello, hello, how low?"},{"t":36.75,"l":"With the lights out, it is less dangerous"},{"t":41.45,"l":"Here we are now, entertain us"},{"t":46.20,"l":"I feel stupid and contagious"},{"t":50.95,"l":"Here we are now, entertain us"},{"t":55.75,"l":"A mulatto, an albino"},{"t":58.10,"l":"A mosquito, my libido"},{"t":60.50,"l":"Yay!"}]'></audio>
+            <div class="song-card">
+                <div class="song-header">
+                    <img src="music/nirvana.jpg" class="album-art">
+                    <div style="flex:1">
+                        <h3>Smells Like Teen Spirit</h3>
+                        <audio controls src="music/nirvana.mp3" 
+                            data-title="Smells Like Teen Spirit" data-art="music/nirvana.jpg"
+                            data-lyrics='[{"t":8.3,"l":"Load up on guns"},{"t":10.7,"l":"Bring your friends"},{"t":13.0,"l":"It is fun to lose and to pretend"},{"t":17.8,"l":"She is over-bored and self-assured"},{"t":22.5,"l":"Oh no, I know a dirty word"},{"t":27.2,"l":"Hello, hello, hello, how low?"}]'></audio>
+                    </div>
+                </div>
+                <div class="lyric-sheet">
+                    Load up on guns, bring your friends<br>
+                    It's fun to lose and to pretend<br>
+                    She's over-bored and self-assured<br>
+                    Oh no, I know a dirty word...
+                </div>
             </div>
 
-            <div class="song-row">
-                <img src="music/gorillaz.jpg" class="album-art">
-                <div class="song-meta"><h4>On Melancholy Hill</h4><p>Gorillaz</p></div>
-                <audio controls src="music/gorillaz.mp3" 
-                    data-title="On Melancholy Hill" data-artist="Gorillaz" data-album="Plastic Beach" data-art="music/gorillaz.jpg"
-                    data-lyrics='[{"t":0,"l":"(Intro)"},{"t":16.85,"l":"Up on melancholy hill"},{"t":20.75,"l":"There is a plastic tree"},{"t":24.85,"l":"Are you here with me?"},{"t":28.95,"l":"Just looking out on the day of another dream"},{"t":36.95,"l":"Well, you cannot get what you want"},{"t":40.95,"l":"But you can get me"},{"t":44.95,"l":"So let us set up and go"},{"t":48.95,"l":"Cause you are my medicine"},{"t":51.90,"l":"When you are close to me"}]'></audio>
+            <div class="song-card">
+                <div class="song-header">
+                    <img src="music/gorillaz.jpg" class="album-art">
+                    <div style="flex:1">
+                        <h3>On Melancholy Hill</h3>
+                        <audio controls src="music/gorillaz.mp3" 
+                            data-title="On Melancholy Hill" data-art="music/gorillaz.jpg"
+                            data-lyrics='[{"t":16.8,"l":"Up on melancholy hill"},{"t":20.7,"l":"There is a plastic tree"},{"t":24.8,"l":"Are you here with me?"},{"t":28.9,"l":"Just looking out on the day of another dream"}]'></audio>
+                    </div>
+                </div>
+                <div class="lyric-sheet">
+                    Up on melancholy hill<br>
+                    There's a plastic tree<br>
+                    Are you here with me?<br>
+                    Just looking out on the day of another dream...
+                </div>
             </div>
 
-            <div class="song-row">
-                <img src="music/greenday.jpg" class="album-art">
-                <div class="song-meta"><h4>American Idiot</h4><p>Green Day</p></div>
-                <audio controls src="music/greenday.mp3" 
-                    data-title="American Idiot" data-artist="Green Day" data-album="American Idiot" data-art="music/greenday.jpg"
-                    data-lyrics='[{"t":0,"l":"(Intro)"},{"t":11.12,"l":"Don’t wanna be an American idiot"},{"t":15.05,"l":"Don’t want a nation under the new media"},{"t":19.05,"l":"And can you hear the sound of hysteria?"},{"t":22.95,"l":"The subliminal mind-f*** America"},{"t":27.15,"l":"Welcome to a new kind of tension"},{"t":30.95,"l":"All across the alien nation"},{"t":34.85,"l":"Where everything is not meant to be okay"},{"t":38.75,"l":"In television dreams of tomorrow"},{"t":42.50,"l":"We are not the ones who are meant to follow"},{"t":46.45,"l":"For that is enough to argue"}]'></audio>
+            <div class="song-card">
+                <div class="song-header">
+                    <img src="music/greenday.jpg" class="album-art">
+                    <div style="flex:1">
+                        <h3>American Idiot</h3>
+                        <audio controls src="music/greenday.mp3" 
+                            data-title="American Idiot" data-art="music/greenday.jpg"
+                            data-lyrics='[{"t":11.1,"l":"Don’t wanna be an American idiot"},{"t":15.0,"l":"Don’t want a nation under the new media"},{"t":19.0,"l":"And can you hear the sound of hysteria?"},{"t":22.9,"l":"The subliminal mind-f*** America"}]'></audio>
+                    </div>
+                </div>
+                <div class="lyric-sheet">
+                    Don't wanna be an American idiot<br>
+                    Don't want a nation under the new media<br>
+                    And can you hear the sound of hysteria?<br>
+                    The subliminal mind-f*** America...
+                </div>
             </div>
         </div>
     </div>
 
     <div id="arcade" class="page">
-        <h2 style="margin-bottom: 20px;">Arcade <span class="pink-text">Demo</span></h2>
-        <div style="background:#000; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border);">
+        <div class="arcade-container">
             <iframe src="game.html" style="width:100%; height:100%; border:none;"></iframe>
         </div>
     </div>
 
     <div id="now-playing-popup" onclick="openLyrics()">
-        <img id="popup-art" src="" class="mini-art">
+        <img id="popup-art" src="" class="mini-art" style="width:40px; height:40px; border-radius:4px;">
         <div>
-            <div style="font-size: 0.6rem; color: var(--primary); font-weight: 800; letter-spacing: 1px;">KARAOKE ACTIVE</div>
+            <div style="font-size: 0.6rem; color: var(--primary); font-weight: 800;">OPEN KARAOKE</div>
             <div id="popup-title" style="font-size: 0.9rem; font-weight: 700;">Title</div>
         </div>
     </div>
 
     <div id="lyrics-modal">
-        <button class="close-modal" onclick="closeLyrics()">BACK TO SITE</button>
-        <div id="modal-lyrics" class="modal-lyrics"></div>
-        <div class="progress-container"><div id="progress-fill" class="progress-fill"></div></div>
+        <div style="padding: 20px; width: 100%; display: flex; justify-content: space-between;">
+            <span id="current-offset" style="color: var(--primary); font-size: 0.8rem;">Offset: 0.0s</span>
+            <button onclick="closeLyrics()" style="color:white; background:none; border:none; cursor:pointer;">CLOSE</button>
+        </div>
+        <div id="modal-lyrics" class="modal-lyrics-area"></div>
+        <div class="sync-controls">
+            <span style="font-size: 0.7rem; color: var(--text-dim);">TWEAK SYNC:</span>
+            <button class="sync-btn" onclick="adjustOffset(-0.1)">-0.1s</button>
+            <button class="sync-btn" onclick="adjustOffset(0.1)">+0.1s</button>
+        </div>
     </div>
 
     <script>
+        let currentAudio = null;
+        let lyricData = [];
+        let globalOffset = 0;
+
         function showPage(p) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById(p).classList.add('active');
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            const link = document.getElementById('nav-' + p);
-            if(link) link.classList.add('active');
+            document.getElementById('nav-'+p).classList.add('active');
         }
-
-        let currentAudio = null;
-        let lyricData = [];
 
         document.querySelectorAll('audio').forEach(audio => {
             audio.addEventListener('play', () => {
@@ -188,14 +216,13 @@
 
             audio.addEventListener('timeupdate', () => {
                 if (currentAudio === audio) {
-                    const idx = lyricData.findLastIndex(l => audio.currentTime >= l.t);
+                    const idx = lyricData.findLastIndex(l => (audio.currentTime + globalOffset) >= l.t);
                     document.querySelectorAll('.lyric-line').forEach(l => l.classList.remove('active'));
                     const active = document.getElementById(`line-${idx}`);
                     if(active) {
                         active.classList.add('active');
                         active.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
-                    document.getElementById('progress-fill').style.width = (audio.currentTime / audio.duration * 100) + '%';
                 }
             });
         });
@@ -210,8 +237,13 @@
             });
         }
 
-        function openLyrics() { document.getElementById('lyrics-modal').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
-        function closeLyrics() { document.getElementById('lyrics-modal').style.display = 'none'; document.body.style.overflow = 'auto'; }
+        function adjustOffset(amt) {
+            globalOffset += amt;
+            document.getElementById('current-offset').innerText = `Offset: ${globalOffset.toFixed(1)}s`;
+        }
+
+        function openLyrics() { document.getElementById('lyrics-modal').style.display = 'flex'; }
+        function closeLyrics() { document.getElementById('lyrics-modal').style.display = 'none'; }
     </script>
 </body>
 </html>
