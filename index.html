@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker | Dev & Music</title>
+    <title>Aiden Becker </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
@@ -145,7 +145,6 @@
             border: none;
             cursor: pointer;
         }
-        .btn-launch:hover { filter: brightness(1.2); }
 
         .song-list { display: flex; flex-direction: column; gap: 12px; }
         .song-row {
@@ -186,24 +185,74 @@
             filter: invert(1) hue-rotate(270deg) brightness(1.5);
         }
 
+        /* --- UPDATED NOTIFICATION --- */
         #now-playing-popup {
             position: fixed;
             bottom: 30px; right: 30px;
-            background: #1a1a1a;
-            border: 1px solid var(--primary);
-            padding: 10px 20px;
-            border-radius: 12px;
+            background: #111;
+            border: 1px solid var(--glass-border);
+            padding: 15px 25px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            transform: translateX(200%);
+            gap: 20px;
+            transform: translateX(250%);
             transition: var(--transition);
             z-index: 10000;
+            cursor: pointer;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            min-width: 280px;
+        }
+
+        #now-playing-popup:hover {
+            border-color: var(--primary);
+            background: #1a1a1a;
+            transform: translateY(-5px);
         }
 
         #now-playing-popup.visible { transform: translateX(0); }
-        .mini-art { width: 40px; height: 40px; border-radius: 50%; animation: spin 4s linear infinite; }
-        @keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+        .mini-art { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
+
+        /* --- LYRICS MODAL --- */
+        #lyrics-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(20px);
+            z-index: 10001;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .modal-content {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            animation: pageIn 0.5s ease;
+        }
+
+        .modal-lyrics {
+            margin-top: 30px;
+            max-height: 50vh;
+            overflow-y: auto;
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            white-space: pre-line;
+            padding: 0 20px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
 
         footer { text-align: center; padding: 80px 0; color: var(--text-dim); font-size: 0.7rem; letter-spacing: 2px; }
         .badge-group { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
@@ -241,26 +290,13 @@
             <div class="card">
                 <span class="tag">Project</span>
                 <h3 style="font-family: 'Space Grotesk'; font-size: 1.5rem; margin-bottom: 10px;">DEAD ZONE</h3>
-                <p style="color: var(--text-dim); margin-bottom: 20px;">A survival thing focused on 3D spatial audio and immersive mechanics. Play the demo in the browser.</p>
+                <p style="color: var(--text-dim); margin-bottom: 20px;">A survival thing focused on 3D spatial audio and immersive mechanics.</p>
                 <button onclick="showPage('arcade')" class="btn-launch">Play Demo</button>
             </div>
-
             <div class="card">
                 <span class="tag">Who</span>
                 <h3 style="font-family: 'Space Grotesk'; font-size: 1.5rem; margin-bottom: 10px;">Aiden Becker</h3>
-                <p style="color: var(--text-dim); margin-bottom: 25px;">I'm a high schooler. I make stuff on Unity and write music when I'm bored. This is where I keep it all.</p>
-              </div>
-
-            <div class="card">
-                <span class="tag">Tools</span>
-                <h3 style="font-family: 'Space Grotesk'; font-size: 1.5rem; margin-bottom: 10px;">The Stack</h3>
-                <p style="color: var(--text-dim);">The stuff I actually use to build things.</p>
-                <div class="badge-group">
-                    <span class="badge">UNITY</span>
-                    <span class="badge">C#</span>
-                    <span class="badge">SCRATCH</span>
-                    <span class="badge">HTML/CSS</span>
-                </div>
+                <p style="color: var(--text-dim); margin-bottom: 25px;">I'm a high schooler. I make stuff on Unity and write music when I'm bored.</p>
             </div>
         </div>
     </div>
@@ -275,11 +311,6 @@
                 <iframe src="game.html" id="gameFrame"></iframe>
             </div>
         </div>
-        <div style="text-align: center; margin-top: 30px;">
-            <p style="color: var(--text-dim); font-size: 0.7rem; letter-spacing: 2px;">
-                W/A/S/D TO MOVE &bull; SPACE TO JUMP
-            </p>
-        </div>
     </div>
 
     <div id="music" class="page">
@@ -287,9 +318,6 @@
             <span class="tag">Archive</span>
             <h1>Music <span class="pink-text">Vault</span></h1>
         </div>
-                            <div class="song-description">
-                        Music And Bands I Listen To
-                    <div>
 
         <div class="song-list">
             <div class="song-row">
@@ -299,10 +327,15 @@
                     <p>Nirvana</p>
                     <div class="song-description">
                         <span class="band-members">Kurt Cobain, Krist Novoselic, Dave Grohl</span>
-                        I Love The Vocals Of Kurt. The Guitar Tone Is So Unique, And Really Hard To Recreate.
+                        The Guitar Tone Is So Unique, And Really Hard To Recreate.
                     </div>
                 </div>
-                <audio controls src="music/nirvana.mp3" data-title="Smells Like Teen Spirit" data-art="music/nirvana.jpg"></audio>
+                <audio controls src="music/nirvana.mp3" 
+                    data-title="Smells Like Teen Spirit" 
+                    data-artist="Nirvana"
+                    data-album="Nevermind"
+                    data-lyrics="Load up on guns, bring your friends&#10;It's fun to lose and to pretend&#10;She's over-bored and self-assured&#10;Oh no, I know a dirty word"
+                    data-art="music/nirvana.jpg"></audio>
             </div>
 
             <div class="song-row">
@@ -312,32 +345,35 @@
                     <p>Gorillaz</p>
                     <div class="song-description">
                         <span class="band-members">Damon Albarn, And Jamie Houlett</span>
-                        I Love This Song Because Its So... Relaxing And Nostalgic. The Music Is Insane, And Completley Random Per Alblum.
+                        Relaxing And Nostalgic.
                     </div>
                 </div>
-                <audio controls src="music/gorillaz.mp3" data-title="On Melancholy Hill" data-art="music/gorillaz.jpg"></audio>
-            </div>
-
-            <div class="song-row">
-                <img src="music/greenday.jpg" class="album-art" alt="Green Day">
-                <div class="song-meta">
-                    <h4>American Idiot</h4>
-                    <p>Green Day</p>
-                    <div class="song-description">
-                        <span class="band-members">Billie Joe Armstrong, Mike Dirnt, Tré Cool</span>
-                        Very Classic Song. I Wasnt Around When It Was Made, But I Enjoy The Guitar Riff, And How Simple The Song's Power Chords Are.
-                    </div>
-                </div>
-                <audio controls src="music/greenday.mp3" data-title="American Idiot" data-art="music/greenday.jpg"></audio>
+                <audio controls src="music/gorillaz.mp3" 
+                    data-title="On Melancholy Hill" 
+                    data-artist="Gorillaz"
+                    data-album="Plastic Beach"
+                    data-lyrics="Up on melancholy hill&#10;There's a plastic tree&#10;Are you here with me?&#10;Just looking out on the day&#10;Of another dream"
+                    data-art="music/gorillaz.jpg"></audio>
             </div>
         </div>
     </div>
 
-    <div id="now-playing-popup">
+    <div id="now-playing-popup" onclick="openLyrics()">
         <img id="popup-art" src="" class="mini-art">
-        <div>
-            <div style="font-size: 0.6rem; color: var(--primary); font-weight: 800;">PLAYING</div>
-            <div id="popup-title" style="font-size: 0.8rem; font-weight: 600;">Song Title</div>
+        <div style="flex-grow:1">
+            <div style="font-size: 0.6rem; color: var(--primary); font-weight: 800; letter-spacing: 1px;">CLICK FOR LYRICS</div>
+            <div id="popup-title" style="font-size: 0.9rem; font-weight: 700;">Song Title</div>
+            <div id="popup-artist" style="font-size: 0.75rem; color: var(--text-dim);">Artist Name</div>
+        </div>
+    </div>
+
+    <div id="lyrics-modal">
+        <button class="close-modal" onclick="closeLyrics()">&times;</button>
+        <div class="modal-content">
+            <img id="modal-art" src="" style="width: 120px; height: 120px; border-radius: 12px; margin-bottom: 20px;">
+            <h2 id="modal-title" style="font-family: 'Space Grotesk'; font-size: 2rem;">Song Title</h2>
+            <p id="modal-meta" style="color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 0.8rem;"></p>
+            <div id="modal-lyrics" class="modal-lyrics"></div>
         </div>
     </div>
 
@@ -357,33 +393,52 @@
 
         const audios = Array.from(document.querySelectorAll('audio'));
         const popup = document.getElementById('now-playing-popup');
-        const pTitle = document.getElementById('popup-title');
-        const pArt = document.getElementById('popup-art');
+        let currentAudio = null;
 
         audios.forEach((audio, index) => {
             audio.addEventListener('play', () => {
+                currentAudio = audio;
                 audios.forEach(other => { if(other !== audio) other.pause(); });
-                pTitle.innerText = audio.getAttribute('data-title');
-                pArt.src = audio.getAttribute('data-art');
+                
+                // Update Popup
+                document.getElementById('popup-title').innerText = audio.getAttribute('data-title');
+                document.getElementById('popup-artist').innerText = audio.getAttribute('data-artist');
+                document.getElementById('popup-art').src = audio.getAttribute('data-art');
+                
                 popup.classList.add('visible');
             });
 
-            audio.addEventListener('ended', () => {
-                popup.classList.remove('visible');
-                // Play next song logic
-                let nextIndex = index + 1;
-                if (nextIndex >= audios.length) nextIndex = 0; // Loop back to first
-                audios[nextIndex].currentTime = 0;
-                audios[nextIndex].play();
-            });
-
             audio.addEventListener('pause', () => {
-                // Only hide popup if the audio actually stopped (not just ended)
                 if (audio.currentTime !== audio.duration) {
                     popup.classList.remove('visible');
                 }
             });
+
+            audio.addEventListener('ended', () => {
+                popup.classList.remove('visible');
+                let nextIndex = (index + 1) % audios.length;
+                audios[nextIndex].currentTime = 0;
+                audios[nextIndex].play();
+            });
         });
+
+        function openLyrics() {
+            if(!currentAudio) return;
+            
+            document.getElementById('modal-art').src = currentAudio.getAttribute('data-art');
+            document.getElementById('modal-title').innerText = currentAudio.getAttribute('data-title');
+            document.getElementById('modal-meta').innerText = 
+                `${currentAudio.getAttribute('data-artist')} • ${currentAudio.getAttribute('data-album')}`;
+            document.getElementById('modal-lyrics').innerText = currentAudio.getAttribute('data-lyrics');
+            
+            document.getElementById('lyrics-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Stop scrolling
+        }
+
+        function closeLyrics() {
+            document.getElementById('lyrics-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
     </script>
 </body>
 </html>
