@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker </title>
+    <title>Aiden Becker | Developer Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
@@ -41,7 +41,7 @@
             backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
         }
 
-        /* TYPING EFFECT STYLES */
+        /* TYPING LOGO STYLES */
         .logo { 
             font-family: 'Space Grotesk', sans-serif; 
             font-weight: 700; 
@@ -49,7 +49,7 @@
             display: flex;
             align-items: center;
         }
-        #typing-text { min-width: 1px; } /* Prevents layout shift */
+        #typing-text { min-width: 1px; }
         .cursor {
             display: inline-block;
             width: 10px;
@@ -58,7 +58,6 @@
             margin-left: 5px;
             animation: blink 1s step-end infinite;
         }
-
         @keyframes blink {
             from, to { background-color: transparent; }
             50% { background-color: var(--primary); }
@@ -73,11 +72,7 @@
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Home/About Styles */
-        .hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.5rem, 8vw, 4.5rem); line-height: 1; margin-bottom: 30px; }
-        .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; }
-
-        /* Music & Facts Styles */
+        /* MUSIC TAB STYLES */
         .song-container { margin-bottom: 40px; background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border); }
         .song-flex { display: flex; gap: 30px; align-items: center; }
         .album-art { width: 100px; height: 100px; border-radius: 10px; }
@@ -90,7 +85,7 @@
 
         audio { width: 100%; margin-top: 15px; filter: invert(1) hue-rotate(280deg) opacity(0.5); }
 
-        /* NOTIFICATION POPUP */
+        /* POPUP */
         #now-playing-popup {
             position: fixed; bottom: 30px; right: 30px; background: #111;
             border: 1px solid var(--primary); padding: 12px 20px; border-radius: 12px;
@@ -110,13 +105,13 @@
             <span id="typing-text"></span><span class="cursor"></span>
         </div>
         <div class="nav-links">
-            <a onclick="showPage('home')" id="nav-home" class="active">Home</a>
-            <a onclick="showPage('music')" id="nav-music">Music</a>
+            <a onclick="showPage('home')" id="nav-home">Home</a>
+            <a onclick="showPage('music')" id="nav-music" class="active">Music</a>
             <a onclick="showPage('arcade')" id="nav-arcade">Arcade</a>
         </div>
     </nav>
 
-    <div id="home" class="page active">
+    <div id="home" class="page">
         <div class="hero">
             <h1>Building <span class="pink-text">Digital</span> Experiences.</h1>
         </div>
@@ -124,17 +119,14 @@
             <div>
                 <h3 style="margin-bottom: 15px;">// About Me</h3>
                 <p style="color: var(--text-dim);">
-                    I am a developer focused on creating clean, functional, and aesthetically pleasing digital products. My background combines technical engineering with a passion for high-fidelity audio and interactive media.
+                    I am a developer focused on creating clean, functional, and aesthetically pleasing digital products.
                 </p>
-            </div>
-            <div style="background: rgba(255,255,255,0.02); padding: 25px; border-radius: 15px; border: 1px solid var(--glass-border);">
-                <h4 style="margin-bottom: 10px;">Technical Focus</h4>
-                <p style="font-size: 0.9rem; color: var(--text-dim);">Currently exploring the intersection of web technologies and real-time audio processing.</p>
             </div>
         </div>
     </div>
 
-    <div id="music" class="page">
+    <div id="music" class="page active">
+        
         <div class="song-container">
             <div class="song-flex">
                 <img src="music/nirvana.jpg" class="album-art">
@@ -146,7 +138,37 @@
             </div>
             <div class="fact-box">
                 <div class="fact-item"><h5>Vibe</h5><p>The definitive anthem of the 90s grunge movement.</p></div>
-                <div class="fact-item"><h5>Status Info</h5><p>The band ended in 1994 following the death of frontman Kurt Cobain.</p></div>
+                <div class="fact-item"><h5>Status</h5><p>Ended in 1994 following the death of Kurt Cobain.</p></div>
+            </div>
+        </div>
+
+        <div class="song-container">
+            <div class="song-flex">
+                <img src="music/gorillaz.jpg" class="album-art">
+                <div style="flex:1">
+                    <h3>On Melancholy Hill <span class="status-tag active-band">[Active]</span></h3>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">Gorillaz • 2010</p>
+                    <audio controls src="music/gorillaz.mp3" data-title="On Melancholy Hill" data-artist="Gorillaz" data-art="music/gorillaz.jpg"></audio>
+                </div>
+            </div>
+            <div class="fact-box">
+                <div class="fact-item"><h5>Style</h5><p>A gentle synth-pop departure from their hip-hop roots.</p></div>
+                <div class="fact-item"><h5>Status</h5><p>Active. Damon Albarn continues to lead the project with rotating visual artists.</p></div>
+            </div>
+        </div>
+
+        <div class="song-container">
+            <div class="song-flex">
+                <img src="music/greenday.jpg" class="album-art">
+                <div style="flex:1">
+                    <h3>American Idiot <span class="status-tag active-band">[Active]</span></h3>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">Green Day • 2004</p>
+                    <audio controls src="music/greenday.mp3" data-title="American Idiot" data-artist="Green Day" data-art="music/greenday.jpg"></audio>
+                </div>
+            </div>
+            <div class="fact-box">
+                <div class="fact-item"><h5>Concept</h5><p>The opening track to their massive "punk rock opera" album.</p></div>
+                <div class="fact-item"><h5>Status</h5><p>Active. Still touring and releasing albums with the original 1990 lineup.</p></div>
             </div>
         </div>
 
@@ -160,8 +182,8 @@
                 </div>
             </div>
             <div class="fact-box">
-                <div class="fact-item"><h5>Favorite Track</h5><p>I enjoy the heavy metal aspect! It's amazing how he blends saxophone with heavy guitars.</p></div>
-                <div class="fact-item"><h5>Status Info</h5><p>Highly active. Johnny Franck is currently at the height of his "thicc" era.</p></div>
+                <div class="fact-item"><h5>Personal Favorite</h5><p>I enjoy the heavy metal aspect mixed with the "random" band energy.</p></div>
+                <div class="fact-item"><h5>Status</h5><p>Active. Johnny Franck is constantly releasing new tracks in his signature style.</p></div>
             </div>
         </div>
     </div>
@@ -185,7 +207,6 @@
         const text = "AIDEN BECKER";
         const typingSpeed = 150;
         let charIndex = 0;
-
         function typeEffect() {
             if (charIndex < text.length) {
                 document.getElementById("typing-text").textContent += text.charAt(charIndex);
@@ -193,7 +214,6 @@
                 setTimeout(typeEffect, typingSpeed);
             }
         }
-
         window.onload = typeEffect;
 
         // --- NAVIGATION ---
@@ -205,7 +225,7 @@
             if(activeLink) activeLink.classList.add('active');
         }
 
-        // --- AUDIO POPUP ---
+        // --- AUDIO ---
         const popup = document.getElementById('now-playing-popup');
         const pTitle = document.getElementById('popup-title');
         const pArtist = document.getElementById('popup-artist');
