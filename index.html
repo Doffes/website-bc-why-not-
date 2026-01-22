@@ -30,7 +30,6 @@
             overflow-x: hidden;
         }
 
-        /* Animated Background */
         .bg-glow {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -40,7 +39,6 @@
             z-index: -1;
         }
 
-        /* Navigation */
         nav {
             display: flex;
             justify-content: center;
@@ -64,6 +62,7 @@
             letter-spacing: 2px;
             transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             position: relative;
+            cursor: pointer;
         }
 
         nav a.active { color: var(--primary); }
@@ -76,7 +75,6 @@
         }
         nav a:hover::after, nav a.active::after { width: 100%; }
 
-        /* Typography & Layout */
         .page { display: none; padding: 60px 20px; max-width: 1200px; margin: 0 auto; animation: pageIn 0.8s ease-out; }
         .page.active { display: block; }
 
@@ -98,7 +96,6 @@
 
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 30px; }
         
-        /* Modern Cards */
         .card, .song-card {
             background: var(--card-bg);
             border: 1px solid var(--glass-border);
@@ -114,6 +111,20 @@
             box-shadow: 0 20px 40px -10px var(--neon-shadow);
         }
 
+        /* Arcade/Game Styles */
+        .game-wrapper {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            max-height: 70vh;
+            background: #000;
+            border-radius: 24px;
+            border: 2px solid var(--primary);
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(129, 140, 248, 0.3);
+        }
+
+        iframe { width: 100%; height: 100%; border: none; }
+
         .btn-launch {
             display: inline-flex;
             align-items: center;
@@ -126,10 +137,11 @@
             font-weight: 700;
             font-size: 0.9rem;
             transition: 0.3s;
+            cursor: pointer;
+            border: none;
         }
         .btn-launch:hover { background: var(--secondary); transform: scale(1.05); }
 
-        /* Music Cards Upgrade */
         .song-card { padding: 25px; gap: 20px; }
         .song-info { display: flex; align-items: center; gap: 20px; }
         
@@ -149,11 +161,9 @@
             border-radius: 30px;
         }
 
-        /* Floating Player */
         #now-playing-popup {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 30px; right: 30px;
             background: rgba(15, 23, 42, 0.9);
             border: 1px solid var(--primary);
             padding: 12px 25px 12px 12px;
@@ -191,8 +201,9 @@
     <div class="bg-glow"></div>
 
     <nav>
-        <a href="#" id="nav-home" onclick="showPage('home')" class="active">Portfolio</a>
-        <a href="#" id="nav-music" onclick="showPage('music')">Music Vault</a>
+        <a id="nav-home" onclick="showPage('home')" class="active">Portfolio</a>
+        <a id="nav-arcade" onclick="showPage('arcade')">Arcade</a>
+        <a id="nav-music" onclick="showPage('music')">Music Vault</a>
     </nav>
 
     <div id="home" class="page active">
@@ -204,14 +215,29 @@
             <div class="card">
                 <div style="color: var(--secondary); font-weight: 700; margin-bottom: 5px;">PROJECT 01</div>
                 <h3 style="font-family: 'Space Grotesk'; font-size: 1.8rem; margin-bottom: 15px;">DEAD ZONE</h3>
-                <p>A survival experience built for VR. Focused on immersive mechanics, 3D spatial audio, and terrifying atmospheres that push the limits of standalone hardware.</p>
-                <a href="https://aiden-bs-games-deadzoneredux.vercel.app/" target="_blank" class="btn-launch">Launch Mission →</a>
+                <p>A survival experience focused on immersive mechanics and 3D spatial audio. Play the demo directly in your browser.</p>
+                <button onclick="showPage('arcade')" class="btn-launch">Play Demo →</button>
             </div>
             <div class="card">
                 <div style="color: var(--primary); font-weight: 700; margin-bottom: 5px;">CAPABILITIES</div>
                 <h3 style="font-family: 'Space Grotesk'; font-size: 1.8rem; margin-bottom: 15px;">Technical Core</h3>
-                <p>Specializing in Unity engine, C# optimization, and responsive HTML5 game design. Passionate about blending rhythm mechanics with narrative gameplay.</p>
+                <p>Specializing in Unity engine, C# optimization, and responsive HTML5 game design.</p>
             </div>
+        </div>
+    </div>
+
+    <div id="arcade" class="page">
+        <div class="hero">
+            <h1>Arcade</h1>
+            <p style="color: var(--text-dim);">Live Mission Terminal</p>
+        </div>
+        <div class="game-wrapper">
+            <iframe src="game.html" id="gameFrame"></iframe>
+        </div>
+        <div style="text-align: center; margin-top: 30px;">
+            <p style="color: var(--text-dim); font-family: 'Space Grotesk'; letter-spacing: 1px;">
+                CONTROLS: [W/A/D] MOVE/JUMP | [SPACE] FIRE
+            </p>
         </div>
     </div>
 
@@ -243,17 +269,6 @@
                 </div>
                 <audio controls src="music/gorillaz.mp3" data-title="Melancholy Hill" data-art="music/gorillaz.jpg"></audio>
             </div>
-
-            <div class="song-card">
-                <div class="song-info">
-                    <img src="music/greenday.jpg" class="album-art" alt="Green Day">
-                    <div class="song-details">
-                        <h4>American Idiot</h4>
-                        <p>Green Day</p>
-                    </div>
-                </div>
-                <audio controls src="music/greenday.mp3" data-title="American Idiot" data-art="music/greenday.jpg"></audio>
-            </div>
         </div>
     </div>
 
@@ -275,8 +290,11 @@
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
+            
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            document.getElementById('nav-' + pageId).classList.add('active');
+            const activeNav = document.getElementById('nav-' + pageId);
+            if(activeNav) activeNav.classList.add('active');
+            
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
