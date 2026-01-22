@@ -3,293 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden_OS | v3.0 Ultimate</title>
+    <title>Aiden_OS | Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #00f2ff; /* Nirvana Blue Default */
+            --primary: #00f2ff; /* Nirvana Blue */
             --secondary: #003366;
-            --bg: #050505;
-            --card: rgba(20, 20, 20, 0.7);
+            --bg: #020202;
+            --card: rgba(20, 20, 20, 0.8);
             --border: rgba(255, 255, 255, 0.1);
             --text: #ffffff;
+            --sidebar-w: 100px;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; cursor: none; } /* Custom cursor active */
-        body {
-            font-family: 'Space Grotesk', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            height: 100vh;
-            overflow: hidden;
-            transition: background 0.5s ease;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; cursor: crosshair; }
+        body { font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; }
 
-        /* --- BACKGROUND LAYERS --- */
-        #matrix-canvas { position: fixed; inset: 0; z-index: -2; opacity: 0; transition: 2s; pointer-events: none; }
-        .glow-point {
-            position: fixed; width: 400px; height: 400px;
-            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
-            border-radius: 50%; opacity: 0.15; pointer-events: none; z-index: -1;
-            transform: translate(-50%, -50%);
+        /* --- BOOT / LOGIN SCREEN --- */
+        #boot-loader {
+            position: fixed; inset: 0; background: #000; z-index: 10000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 1s ease;
         }
-
-        /* --- CUSTOM CURSOR --- */
-        #cursor {
-            position: fixed; width: 20px; height: 20px; border: 2px solid var(--primary);
-            border-radius: 50%; pointer-events: none; z-index: 99999;
-            transition: transform 0.1s ease, width 0.3s, height 0.3s;
-        }
-
-        /* --- TOP NAV (OS BAR) --- */
-        nav {
-            height: 60px; background: rgba(0,0,0,0.8); backdrop-filter: blur(15px);
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 20px; border-bottom: 1px solid var(--border); z-index: 1000;
-        }
-        .nav-links { display: flex; gap: 10px; }
-        .nav-btn {
-            background: transparent; border: 1px solid transparent; color: #888;
-            padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 0.9rem;
-            transition: 0.3s;
-        }
-        .nav-btn:hover, .nav-btn.active { color: var(--primary); border-color: var(--border); background: rgba(255,255,255,0.05); }
-
-        /* --- DESKTOP AREA --- */
-        #desktop {
-            height: calc(100vh - 100px); padding: 30px; overflow-y: auto;
-            display: flex; flex-direction: column; gap: 20px;
-        }
-        .page { display: none; animation: system-boot 0.5s ease; }
-        .page.active { display: block; }
-        @keyframes system-boot { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-
-        /* --- CARDS & INTERACTIVES --- */
-        .glass-card {
-            background: var(--card); backdrop-filter: blur(10px);
-            border: 1px solid var(--border); padding: 25px; border-radius: 15px;
-            transition: 0.3s; position: relative;
-        }
-        .glass-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .login-box { text-align: center; background: #0a0a0a; padding: 40px; border: 1px solid var(--border); border-radius: 20px; }
+        .avatar { width: 80px; height: 80px; background: var(--primary); border-radius: 50%; margin: 0 auto 20px; box-shadow: 0 0 20px var(--primary); }
+        .login-input { background: #111; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; width: 200px; text-align: center; outline: none; font-family: 'Fira Code'; }
         
-        /* Draggable Icons */
-        .icon { width: 80px; text-align: center; cursor: grab; position: absolute; }
-        .icon img { width: 50px; display: block; margin: 0 auto 5px; filter: drop-shadow(0 0 5px var(--primary)); }
-        .icon span { font-size: 0.7rem; font-weight: bold; }
+        /* --- OS LAYOUT --- */
+        #os-interface { display: none; height: 100vh; grid-template-rows: 60px 1fr 40px; }
+        
+        /* Sidebar Icons (Not blocking text) */
+        .sidebar { width: var(--sidebar-w); background: rgba(0,0,0,0.5); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 20px 0; gap: 30px; }
+        .desktop-icon { width: 60px; text-align: center; font-size: 0.7rem; transition: 0.3s; padding: 10px; border-radius: 10px; }
+        .desktop-icon:hover { background: rgba(255,255,255,0.05); }
+        .desktop-icon div { font-size: 2rem; margin-bottom: 5px; }
 
-        /* --- TERMINAL WINDOW --- */
-        #terminal {
-            position: absolute; width: 450px; background: #000;
-            border: 1px solid var(--primary); border-radius: 8px; z-index: 500;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8); display: none;
+        /* Main Viewport */
+        nav { grid-column: 1 / 3; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; border-bottom: 1px solid var(--border); background: rgba(5,5,5,0.8); backdrop-filter: blur(10px); }
+        #main-display { display: flex; overflow: hidden; }
+        #content-area { flex: 1; padding: 40px; overflow-y: auto; position: relative; }
+
+        /* Pages */
+        .page { display: none; animation: fadeIn 0.5s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Interactive Trashable Cards */
+        .draggable-project {
+            background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 12px;
+            margin-bottom: 15px; width: 300px; cursor: grab; transition: transform 0.2s;
         }
-        .term-header { background: #111; padding: 10px; cursor: move; display: flex; justify-content: space-between; }
-        .term-body { height: 250px; padding: 15px; font-family: 'Fira Code', monospace; font-size: 0.8rem; overflow-y: auto; color: var(--primary); }
-        .term-input { background: transparent; border: none; width: 100%; color: #fff; padding: 10px; border-top: 1px solid #222; outline: none; }
+        .draggable-project:active { cursor: grabbing; transform: scale(0.95); opacity: 0.7; }
 
-        /* --- MUSIC PLAYER --- */
-        .visualizer { display: flex; gap: 3px; align-items: flex-end; height: 20px; }
-        .v-bar { width: 3px; background: var(--primary); height: 5px; }
+        /* Music Cards */
+        .music-item { background: #111; padding: 15px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; border-left: 4px solid var(--primary); }
+        .play-btn { background: var(--primary); color: #000; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; }
 
-        /* --- FOOTER STATUS BAR --- */
-        footer {
-            height: 40px; background: rgba(0,0,0,0.9); border-top: 1px solid var(--border);
-            position: fixed; bottom: 0; width: 100%; display: flex; align-items: center;
-            padding: 0 20px; font-family: 'Fira Code'; font-size: 0.7rem; color: #666; justify-content: space-between;
-        }
+        footer { display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: #000; border-top: 1px solid var(--border); font-size: 0.7rem; color: #555; font-family: 'Fira Code'; }
     </style>
 </head>
-<body oncontextmenu="return false">
+<body>
 
-    <canvas id="matrix-canvas"></canvas>
-    <div id="cursor"></div>
-    <div class="glow-point" id="mouse-glow"></div>
-
-    <nav>
-        <div class="logo">AIDEN_OS <span style="font-size: 0.6rem; vertical-align: middle; color:var(--primary)">v3.0</span></div>
-        <div class="nav-links">
-            <button class="nav-btn active" onclick="openPage('home', this)">Home</button>
-            <button class="nav-btn" onclick="openPage('music', this)">Music</button>
-            <button class="nav-btn" onclick="openPage('themes', this)">Themes</button>
-            <button class="nav-btn" onclick="toggleTerm()">Terminal</button>
+    <div id="boot-loader">
+        <div class="login-box">
+            <div class="avatar"></div>
+            <h2 style="margin-bottom: 10px;">AIDEN_USER</h2>
+            <p style="font-size: 0.7rem; color: #555; margin-bottom: 20px;">SYSTEM STATUS: SECURE</p>
+            <input type="password" class="login-input" id="pw" placeholder="Enter Password" onkeypress="handleLogin(event)">
+            <p style="margin-top: 15px; font-size: 0.6rem; opacity: 0.5;">Hint: Just press Enter</p>
         </div>
-        <div style="display: flex; gap: 20px; align-items: center;">
-            <div id="wifi" style="color:var(--primary)">📶 High</div>
+    </div>
+
+    <div id="os-interface">
+        <nav>
+            <div style="font-weight: 700; letter-spacing: 2px;">AIDEN_<span style="color:var(--primary)">OS</span></div>
+            <div style="display: flex; gap: 20px;">
+                <button onclick="showPage('home')" style="background:transparent; border:none; color:#fff; font-weight:700;">HOME</button>
+                <button onclick="showPage('music')" style="background:transparent; border:none; color:#fff; font-weight:700;">MUSIC</button>
+                <button onclick="showPage('themes')" style="background:transparent; border:none; color:#fff; font-weight:700;">THEMES</button>
+            </div>
             <div id="clock">00:00:00</div>
-        </div>
-    </nav>
+        </nav>
 
-    <main id="desktop">
-        <div id="home" class="page active">
-            <h1 id="glitch-title" style="font-size: 4rem; margin-bottom: 20px;">Welcome, <span style="color:var(--primary)">Developer</span></h1>
-            <div class="glass-card" style="max-width: 600px;">
-                <p>Aiden_OS is a simulated environment built for high-performance creativity. Drag icons, play music, or inject custom CSS via themes.</p>
-                <div style="margin-top: 20px; display:flex; gap: 10px;">
-                    <button class="nav-btn" onclick="alert('Kernel Reset...')">System Reboot</button>
-                    <button class="nav-btn" onclick="toggleRain()">Toggle Ambient Rain</button>
+        <div id="main-display">
+            <div class="sidebar">
+                <div class="desktop-icon" draggable="true" ondragstart="drag(event)" id="icon-proj">
+                    <div>📂</div><span>Files</span>
+                </div>
+                <div class="desktop-icon" ondragover="allowDrop(event)" ondrop="drop(event)" id="trash-can">
+                    <div>🗑️</div><span>Trash</span>
                 </div>
             </div>
-            
-            <div class="icon" style="top:200px; left:50px;" draggable="true">
-                <div style="font-size: 2rem;">📂</div>
-                <span>Projects</span>
+
+            <div id="content-area">
+                <div id="home" class="page active">
+                    <h1 style="font-size: 3.5rem;">SYSTEM_READY</h1>
+                    <p style="color: #888; margin-top: 10px; max-width: 500px;">Welcome back, Aiden. Drag unwanted project files from the list below into the trash can to clear storage.</p>
+                    
+                    <div style="margin-top: 40px;" id="project-bin">
+                        <h3>Available Projects</h3>
+                        <div class="draggable-project" draggable="true" ondragstart="drag(event)" id="file-1">
+                            <strong>Project_Alpha.exe</strong><br><small>Game Dev Build</small>
+                        </div>
+                        <div class="draggable-project" draggable="true" ondragstart="drag(event)" id="file-2">
+                            <strong>Music_Track_Final.wav</strong><br><small>Audio Production</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="music" class="page">
+                    <h1>Audio Library</h1>
+                    <div style="margin-top: 20px;">
+                        <div class="music-item">
+                            <div><strong>Smells Like Teen Spirit</strong><br><small>Nirvana</small></div>
+                            <button class="play-btn" onclick="playMusic('Nirvana')">PLAY</button>
+                        </div>
+                        <div class="music-item">
+                            <div><strong>On Melancholy Hill</strong><br><small>Gorillaz</small></div>
+                            <button class="play-btn" onclick="playMusic('Gorillaz')">PLAY</button>
+                        </div>
+                        <div class="music-item">
+                            <div><strong>American Idiot</strong><br><small>Green Day</small></div>
+                            <button class="play-btn" onclick="playMusic('Green Day')">PLAY</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="themes" class="page">
+                    <h1>Appearance Settings</h1>
+                    <div id="theme-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 20px;"></div>
+                </div>
             </div>
-            <div class="icon" style="top:300px; left:50px;" draggable="true">
-                <div style="font-size: 2rem;">🗑️</div>
-                <span>Trash</span>
-            </div>
         </div>
 
-        <div id="themes" class="page">
-            <h2>Interface Customization</h2>
-            <div id="theme-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 20px;"></div>
-        </div>
-
-        <div id="music" class="page">
-            <h2>Audio Engine</h2>
-            <div id="song-list" style="margin-top: 20px;"></div>
-        </div>
-
-        <div id="terminal">
-            <div class="term-header"><span>aiden_kernel.exe</span><span onclick="toggleTerm()" style="color:red; cursor:pointer">✖</span></div>
-            <div class="term-body" id="term-out">System Boot Complete...<br>Type 'help' for commands.</div>
-            <input type="text" class="term-input" id="term-in" onkeypress="handleCmd(event)" placeholder="root@aiden_os:~#">
-        </div>
-    </main>
-
-    <footer>
-        <div style="display:flex; align-items:center; gap:15px;">
-            <div class="visualizer" id="viz"></div>
-            <span id="status">STATUS: OPTIMAL</span>
-        </div>
-        <div>CPU: 12% | RAM: 1.2GB / 16GB | BATTERY: 98%</div>
-    </footer>
+        <footer>
+            <div>AIDEN_KERNEL_v3.5</div>
+            <div id="system-status">ALL SYSTEMS OPERATIONAL</div>
+            <div>STORAGE: 88% FREE</div>
+        </footer>
+    </div>
 
     <script>
-        // --- 1. CORE OS LOGIC ---
-        const cursor = document.getElementById('cursor');
-        const glow = document.getElementById('mouse-glow');
-        
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            glow.style.left = e.clientX + 'px';
-            glow.style.top = e.clientY + 'px';
-        });
-
-        document.addEventListener('mousedown', () => cursor.style.transform = 'scale(0.8)');
-        document.addEventListener('mouseup', () => cursor.style.transform = 'scale(1)');
-
-        function openPage(id, btn) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            btn.classList.add('active');
-            log(`Mapsd to ${id}`);
-        }
-
-        // --- 2. TERMINAL & LOGS ---
-        function toggleTerm() {
-            const t = document.getElementById('terminal');
-            t.style.display = t.style.display === 'block' ? 'none' : 'block';
-        }
-
-        function log(msg) {
-            const out = document.getElementById('term-out');
-            out.innerHTML += `<br><span style="color:#666">[${new Date().toLocaleTimeString()}]</span> ${msg}`;
-            out.scrollTop = out.scrollHeight;
-        }
-
-        function handleCmd(e) {
+        // --- BOOT LOGIC ---
+        function handleLogin(e) {
             if(e.key === 'Enter') {
-                const val = e.target.value.toLowerCase();
-                log(`> ${val}`);
-                if(val === 'help') log("Commands: help, clear, matrix, reboot, whoami");
-                else if(val === 'matrix') { setTheme(themes[1]); log("Injected Matrix Kernel."); }
-                else if(val === 'clear') document.getElementById('term-out').innerHTML = "";
-                e.target.value = "";
+                document.getElementById('boot-loader').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('boot-loader').style.display = 'none';
+                    document.getElementById('os-interface').style.display = 'grid';
+                    notify("User Logged In");
+                }, 1000);
             }
         }
 
-        // --- 3. THEME ENGINE (30 THEMES) ---
+        // --- NAVIGATION ---
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        // --- DRAG AND DROP (TRASH SYSTEM) ---
+        function allowDrop(ev) { ev.preventDefault(); }
+        function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            var el = document.getElementById(data);
+            if(el.className === 'draggable-project') {
+                el.style.display = "none";
+                notify("File moved to trash.");
+                document.getElementById('system-status').innerText = "CLEANING STORAGE...";
+                setTimeout(() => { document.getElementById('system-status').innerText = "OPTIMAL"; }, 2000);
+            }
+        }
+
+        // --- THEMES ---
         const themes = [
-            { n: "Nevermind", p: "#00f2ff", s: "#003366" },
-            { n: "Matrix", p: "#00ff41", s: "#001a00", m: true },
-            { n: "Cyberpunk", p: "#f3ec19", s: "#2b2b2b" },
-            { n: "Vaporwave", p: "#ff71ce", s: "#01cdfe" },
-            { n: "Blood Moon", p: "#ff0000", s: "#1a0000" },
-            { n: "Emerald", p: "#50ffb1", s: "#004020" },
-            { n: "Gold Rush", p: "#ffcc00", s: "#332200" },
-            { n: "Deep Sea", p: "#0088ff", s: "#001133" },
-            { n: "Toxic", p: "#adff2f", s: "#112200" },
-            { n: "Sakura", p: "#ffb7c5", s: "#4d0026" },
-            { n: "Midnight", p: "#6a5acd", s: "#191970" },
-            { n: "Pumpkin", p: "#ff7518", s: "#221100" },
-            { n: "Arctic", p: "#e0ffff", s: "#008b8b" },
-            { n: "Rust", p: "#b7410e", s: "#2e1505" },
-            { n: "Ghost", p: "#ffffff", s: "#444444" },
-            { n: "Lava", p: "#ff4500", s: "#4b0000" },
-            { n: "Blueprint", p: "#aaccff", s: "#003399" },
-            { n: "Neon Green", p: "#39ff14", s: "#051a02" },
-            { n: "Barbie", p: "#ff69b4", s: "#8b008b" },
-            { n: "Espresso", p: "#6f4e37", s: "#211a14" }
-            // ... truncated for space but functional
+            { n: "Nevermind Blue", p: "#00f2ff", s: "#003366" },
+            { n: "Matrix Green", p: "#00ff41", s: "#001a00" },
+            { n: "Cyber Pink", p: "#ff007f", s: "#330022" },
+            { n: "Lava Red", p: "#ff4400", s: "#220000" }
         ];
 
         const grid = document.getElementById('theme-grid');
         themes.forEach(t => {
             const d = document.createElement('div');
-            d.className = 'glass-card';
-            d.style.textAlign = 'center';
-            d.innerHTML = `<div style="height:20px; background:${t.p}; border-radius:4px; margin-bottom:10px;"></div>${t.n}`;
-            d.onclick = () => setTheme(t);
+            d.style.cssText = "background:#111; padding:15px; border-radius:10px; border:1px solid #333; text-align:center; cursor:pointer";
+            d.innerHTML = `<div style="height:20px; background:${t.p}; border-radius:5px; margin-bottom:10px;"></div>${t.n}`;
+            d.onclick = () => {
+                document.documentElement.style.setProperty('--primary', t.p);
+                notify("Theme injected: " + t.n);
+            };
             grid.appendChild(d);
         });
 
-        function setTheme(t) {
-            document.documentElement.style.setProperty('--primary', t.p);
-            document.documentElement.style.setProperty('--secondary', t.s);
-            document.getElementById('matrix-canvas').style.opacity = t.m ? "0.4" : "0";
-            log(`Theme changed to ${t.n}`);
+        // --- HELPERS ---
+        function notify(msg) {
+            document.getElementById('system-status').innerText = "SYSTEM: " + msg.toUpperCase();
         }
 
-        // --- 4. AUDIO & VISUALS ---
-        function updateClock() {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+        function playMusic(track) {
+            notify("Playing " + track);
         }
-        setInterval(updateClock, 1000);
 
-        // Visualizer Sim
-        const viz = document.getElementById('viz');
-        for(let i=0; i<10; i++) {
-            const b = document.createElement('div'); b.className = 'v-bar';
-            viz.appendChild(b);
-        }
         setInterval(() => {
-            document.querySelectorAll('.v-bar').forEach(b => {
-                b.style.height = Math.random() * 20 + 'px';
-            });
-        }, 150);
-
-        // --- 5. MATRIX RAIN ENGINE ---
-        const canvas = document.getElementById('matrix-canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        const columns = Math.floor(canvas.width / 20);
-        const drops = Array(columns).fill(1);
-        function drawMatrix() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#0f0"; ctx.font = "20px monospace";
-            drops.forEach((y, i) => {
-                const text = String.fromCharCode(Math.random() * 128);
-                ctx.fillText(text, i * 20, y * 20);
-                if (y * 20 > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
-            });
-        }
-        setInterval(drawMatrix, 50);
-
-        log("Aiden_OS Kernel Loaded Successfully.");
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+        }, 1000);
     </script>
 </body>
 </html>
