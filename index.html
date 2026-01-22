@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker</title>
+    <title>Aiden Becker | Creative Developer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Outfit:wght@300;600&display=swap" rel="stylesheet">
@@ -12,10 +12,11 @@
             --primary: #818cf8;
             --secondary: #c084fc;
             --bg: #020617;
-            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-bg: rgba(15, 23, 42, 0.6);
             --text-main: #f8fafc;
             --text-dim: #94a3b8;
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --neon-shadow: rgba(129, 140, 248, 0.2);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -23,13 +24,20 @@
         body {
             font-family: 'Outfit', sans-serif;
             background-color: var(--bg);
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(192, 132, 252, 0.15) 0px, transparent 50%);
             color: var(--text-main);
             line-height: 1.6;
             min-height: 100vh;
             overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-glow {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(192, 132, 252, 0.1) 0%, transparent 40%);
+            z-index: -1;
         }
 
         /* Navigation */
@@ -37,11 +45,12 @@
             display: flex;
             justify-content: center;
             gap: 40px;
-            padding: 25px;
+            padding: 20px;
             position: sticky;
             top: 0;
             z-index: 1000;
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border);
         }
 
@@ -50,121 +59,136 @@
             text-decoration: none;
             font-family: 'Space Grotesk', sans-serif;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 2px;
-            transition: all 0.3s;
+            transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
         }
 
-        nav a:hover, nav a.active {
-            color: var(--primary);
-            text-shadow: 0 0 10px rgba(129, 140, 248, 0.5);
+        nav a.active { color: var(--primary); }
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px; left: 0; width: 0%; height: 2px;
+            background: var(--primary);
+            transition: 0.3s;
         }
+        nav a:hover::after, nav a.active::after { width: 100%; }
 
-        /* Page Management */
-        .page { display: none; padding: 40px 20px; max-width: 1100px; margin: 0 auto; animation: fadeInUp 0.6s ease-out; }
+        /* Typography & Layout */
+        .page { display: none; padding: 60px 20px; max-width: 1200px; margin: 0 auto; animation: pageIn 0.8s ease-out; }
         .page.active { display: block; }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes pageIn {
+            from { opacity: 0; transform: translateY(10px); filter: blur(5px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
 
-        .hero { text-align: center; padding: 60px 0; }
-        .hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.5rem, 8vw, 4rem); margin-bottom: 10px; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero { text-align: center; padding: 80px 0 40px; }
+        .hero h1 { 
+            font-family: 'Space Grotesk', sans-serif; 
+            font-size: clamp(3rem, 10vw, 5rem); 
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, #fff 30%, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
 
-        /* Grid & Cards */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin-top: 30px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 30px; }
         
-        .card {
+        /* Modern Cards */
+        .card, .song-card {
             background: var(--card-bg);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 30px;
-            transition: all 0.3s ease;
-        }
-        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
-
-        /* Music Specific Styles */
-        .song-card {
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            border-radius: 24px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .song-info { display: flex; align-items: center; gap: 15px; }
+        .card:hover { 
+            transform: translateY(-10px); 
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px -10px var(--neon-shadow);
+        }
+
+        .btn-launch {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 25px;
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .btn-launch:hover { background: var(--secondary); transform: scale(1.05); }
+
+        /* Music Cards Upgrade */
+        .song-card { padding: 25px; gap: 20px; }
+        .song-info { display: flex; align-items: center; gap: 20px; }
         
         .album-art { 
-            width: 70px; height: 70px; 
-            border-radius: 12px; 
-            object-fit: cover; 
-            background: #1e293b;
-            border: 1px solid var(--glass-border);
+            width: 80px; height: 80px; 
+            border-radius: 16px; 
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .song-details h4 { font-family: 'Space Grotesk', sans-serif; color: #fff; margin-bottom: 2px; }
-        .song-details p { color: var(--text-dim); font-size: 0.85rem; }
-
+        .song-details h4 { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; color: #fff; }
+        
         audio {
             width: 100%;
-            height: 35px;
-            filter: invert(100%) hue-rotate(180deg) brightness(1.5);
-            opacity: 0.7;
-            transition: opacity 0.3s;
+            height: 40px;
+            filter: invert(1) hue-rotate(180deg) brightness(1.8);
+            border-radius: 30px;
         }
-        audio:hover { opacity: 1; }
 
-        /* NOW PLAYING NOTIFICATION */
+        /* Floating Player */
         #now-playing-popup {
             position: fixed;
-            bottom: 25px;
-            right: 25px;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(20px);
+            bottom: 30px;
+            right: 30px;
+            background: rgba(15, 23, 42, 0.9);
             border: 1px solid var(--primary);
-            padding: 12px 20px;
-            border-radius: 60px;
+            padding: 12px 25px 12px 12px;
+            border-radius: 100px;
             display: flex;
             align-items: center;
             gap: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-            transform: translateX(150%);
-            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.8);
+            transform: translateY(200px);
+            transition: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
             z-index: 10000;
         }
 
-        #now-playing-popup.visible { transform: translateX(0); }
+        #now-playing-popup.visible { transform: translateY(0); }
 
-        .record-container { position: relative; width: 50px; height: 50px; }
-        
-        .record-img {
-            width: 100%; height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #111;
-            animation: spin 4s linear infinite;
-            animation-play-state: paused;
+        .record-container { width: 45px; height: 45px; position: relative; }
+        .record-img { 
+            width: 100%; height: 100%; border-radius: 50%; 
+            border: 2px solid var(--primary);
+            animation: spin 5s linear infinite; animation-play-state: paused;
         }
-
         #now-playing-popup.visible .record-img { animation-play-state: running; }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        .now-info h5 { color: var(--primary); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
-        .now-info p { color: white; font-size: 0.9rem; font-weight: 600; white-space: nowrap; }
+        .now-info h5 { color: var(--primary); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: -2px;}
+        .now-info p { color: white; font-size: 0.95rem; font-weight: 600; }
 
-        footer { text-align: center; padding: 60px; color: var(--text-dim); font-size: 0.8rem; opacity: 0.6; }
+        footer { text-align: center; padding: 100px 20px; color: var(--text-dim); font-size: 0.8rem; letter-spacing: 1px; }
 
     </style>
 </head>
 <body>
+
+    <div class="bg-glow"></div>
 
     <nav>
         <a href="#" id="nav-home" onclick="showPage('home')" class="active">Portfolio</a>
@@ -174,17 +198,19 @@
     <div id="home" class="page active">
         <div class="hero">
             <h1>Aiden Becker</h1>
-            <p>Game Developer & Multi-Instrumentalist</p>
+            <p style="color: var(--text-dim); font-size: 1.1rem;">Engineering Virtual Worlds & Sonic Landscapes</p>
         </div>
         <div class="grid">
             <div class="card">
-                <h3 style="color: var(--secondary); margin-bottom: 10px;">DEAD ZONE</h3>
-                <p>A survival experience built for VR. Focused on immersive mechanics and terrifying atmospheres.</p>
-                <a href="https://aiden-bs-games-deadzoneredux.vercel.app/" target="_blank" style="display:inline-block; margin-top:20px; color: var(--primary); text-decoration:none; font-weight:bold;">Launch Mission →</a>
+                <div style="color: var(--secondary); font-weight: 700; margin-bottom: 5px;">PROJECT 01</div>
+                <h3 style="font-family: 'Space Grotesk'; font-size: 1.8rem; margin-bottom: 15px;">DEAD ZONE</h3>
+                <p>A survival experience built for VR. Focused on immersive mechanics, 3D spatial audio, and terrifying atmospheres that push the limits of standalone hardware.</p>
+                <a href="https://aiden-bs-games-deadzoneredux.vercel.app/" target="_blank" class="btn-launch">Launch Mission →</a>
             </div>
             <div class="card">
-                <h3 style="color: var(--secondary); margin-bottom: 10px;">Technical Skills</h3>
-                <p>Specializing in Unity, C#, and HTML5 game design. Passionate about rhythm mechanics and 3D spatial audio.</p>
+                <div style="color: var(--primary); font-weight: 700; margin-bottom: 5px;">CAPABILITIES</div>
+                <h3 style="font-family: 'Space Grotesk'; font-size: 1.8rem; margin-bottom: 15px;">Technical Core</h3>
+                <p>Specializing in Unity engine, C# optimization, and responsive HTML5 game design. Passionate about blending rhythm mechanics with narrative gameplay.</p>
             </div>
         </div>
     </div>
@@ -192,56 +218,41 @@
     <div id="music" class="page">
         <div class="hero">
             <h1>Music Vault</h1>
-            <p>Artists that fuel my development sessions.</p>
+            <p style="color: var(--text-dim);">The playlist behind the code.</p>
         </div>
 
         <div class="grid">
             <div class="song-card">
                 <div class="song-info">
-                    <img src="music/nirvana.jpg" class="album-art" alt="Cover">
+                    <img src="music/nirvana.jpg" class="album-art" alt="Nirvana">
                     <div class="song-details">
                         <h4>Smells Like Teen Spirit</h4>
                         <p>Nirvana</p>
                     </div>
                 </div>
-                <audio controls 
-                       src="music/nirvana.mp3" 
-                       data-title="Smells Like Teen Spirit" 
-                       data-artist="Nirvana" 
-                       data-art="music/nirvana.jpg">
-                </audio>
+                <audio controls src="music/nirvana.mp3" data-title="Teen Spirit" data-art="music/nirvana.jpg"></audio>
             </div>
 
             <div class="song-card">
                 <div class="song-info">
-                    <img src="music/gorillaz.jpg" class="album-art" alt="Cover">
+                    <img src="music/gorillaz.jpg" class="album-art" alt="Gorillaz">
                     <div class="song-details">
-                        <h4></h4>Melancholy Hill</h4>
+                        <h4>Melancholy Hill</h4>
                         <p>Gorillaz</p>
                     </div>
                 </div>
-                <audio controls 
-                       src="music/gorillaz.mp3" 
-                       data-title="Melancholy Hill" 
-                       data-artist="Gorillaz" 
-                       data-art="music/gorillaz.jpg">
-                </audio>
+                <audio controls src="music/gorillaz.mp3" data-title="Melancholy Hill" data-art="music/gorillaz.jpg"></audio>
             </div>
 
             <div class="song-card">
                 <div class="song-info">
-                    <img src="music/greenday.jpg" class="album-art" alt="Cover">
+                    <img src="music/greenday.jpg" class="album-art" alt="Green Day">
                     <div class="song-details">
                         <h4>American Idiot</h4>
                         <p>Green Day</p>
                     </div>
                 </div>
-                <audio controls 
-                       src="music/greenday.mp3" 
-                       data-title="American Idiot" 
-                       data-artist="Green Day" 
-                       data-art="music/greenday.jpg">
-                </audio>
+                <audio controls src="music/greenday.mp3" data-title="American Idiot" data-art="music/greenday.jpg"></audio>
             </div>
         </div>
     </div>
@@ -251,26 +262,24 @@
             <img id="popup-art" src="" class="record-img">
         </div>
         <div class="now-info">
-            <h5>Now Playing</h5>
+            <h5>Currently Spinning</h5>
             <p id="popup-title">Song Title</p>
         </div>
     </div>
 
     <footer>
-        &copy; 2026 Aiden Becker &bull; Stay Creative.
+        &copy; 2026 AIDEN BECKER &bull; <span style="color: var(--primary)">MADE WITH PASSION</span>
     </footer>
 
     <script>
-        // Page Switching
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
             document.getElementById('nav-' + pageId).classList.add('active');
-            window.scrollTo(0,0);
+            window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
-        // Music Logic
         const audios = document.querySelectorAll('audio');
         const popup = document.getElementById('now-playing-popup');
         const pTitle = document.getElementById('popup-title');
@@ -278,22 +287,13 @@
 
         audios.forEach(audio => {
             audio.addEventListener('play', () => {
-                // Pause others
                 audios.forEach(other => { if(other !== audio) other.pause(); });
-                
-                // Update and Show Notification
                 pTitle.innerText = audio.getAttribute('data-title');
                 pArt.src = audio.getAttribute('data-art');
                 popup.classList.add('visible');
             });
-
-            audio.addEventListener('pause', () => {
-                popup.classList.remove('visible');
-            });
-
-            audio.addEventListener('ended', () => {
-                popup.classList.remove('visible');
-            });
+            audio.addEventListener('pause', () => popup.classList.remove('visible'));
+            audio.addEventListener('ended', () => popup.classList.remove('visible'));
         });
     </script>
 </body>
