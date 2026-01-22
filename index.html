@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker | Developer Portfolio</title>
+    <title>Aiden Becker </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&family=Space+Grotesk:wght@300;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ff007f;
@@ -67,28 +67,33 @@
         .fact-item p { font-size: 0.85rem; color: var(--text-dim); }
         audio { width: 100%; margin-top: 15px; filter: invert(1) hue-rotate(280deg) opacity(0.5); }
 
+        /* TERMINAL STYLES (Replacement for Chatbot) */
+        .term-widget { position: fixed; bottom: 30px; right: 30px; z-index: 10001; }
+        .term-btn { width: 60px; height: 60px; background: #000; border: 2px solid var(--primary); border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--primary); transition: var(--transition); box-shadow: 0 0 20px rgba(255, 0, 127, 0.2); }
+        .term-btn:hover { background: var(--primary); color: white; box-shadow: 0 0 30px rgba(255, 0, 127, 0.5); }
+        
+        .term-window { 
+            position: absolute; bottom: 80px; right: 0; width: 400px; height: 300px; 
+            background: rgba(5, 5, 5, 0.95); border: 1px solid var(--primary); border-radius: 8px;
+            display: none; flex-direction: column; overflow: hidden; backdrop-filter: blur(10px);
+            font-family: 'Fira Code', monospace; font-size: 0.8rem; box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+        }
+        .term-window.active { display: flex; animation: fadeIn 0.2s ease; }
+        .term-header { padding: 8px 15px; background: #111; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-dim); }
+        .term-body { flex: 1; padding: 15px; overflow-y: auto; color: #00ff88; }
+        .term-input-line { display: flex; gap: 8px; padding: 10px 15px; border-top: 1px solid var(--glass-border); }
+        .term-input-line span { color: var(--primary); }
+        #term-input { background: transparent; border: none; color: white; flex: 1; outline: none; font-family: 'Fira Code', monospace; }
+
         /* NOW PLAYING POPUP */
         #now-playing-popup {
             position: fixed; bottom: 30px; left: 30px; background: #111;
             border: 1px solid var(--primary); padding: 12px 20px; border-radius: 12px;
             display: flex; align-items: center; gap: 15px; transform: translateX(-250%);
-            transition: var(--transition); z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: var(--transition); z-index: 10000;
         }
         #now-playing-popup.visible { transform: translateX(0); }
-        .mini-art { width: 45px; height: 45px; border-radius: 6px; border: 1px solid var(--glass-border); }
-
-        /* AI CHATBOX */
-        .chat-widget { position: fixed; bottom: 30px; right: 30px; z-index: 10001; display: flex; flex-direction: column; align-items: flex-end; }
-        .chat-button { width: 60px; height: 60px; background: var(--primary); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(255, 0, 127, 0.3); transition: var(--transition); }
-        .chat-window { width: 320px; height: 450px; background: #080808; border: 1px solid var(--glass-border); border-radius: 20px; margin-bottom: 15px; display: none; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
-        .chat-window.active { display: flex; animation: fadeIn 0.3s ease; }
-        .chat-header { background: rgba(255, 0, 127, 0.1); padding: 15px; border-bottom: 1px solid var(--glass-border); color: var(--primary); font-weight: 700; font-size: 0.8rem; }
-        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; font-size: 0.85rem; }
-        .msg { padding: 10px 14px; border-radius: 15px; max-width: 85%; line-height: 1.4; }
-        .msg.bot { background: #1a1a1a; align-self: flex-start; color: #fff; border-bottom-left-radius: 2px; }
-        .msg.user { background: var(--primary); align-self: flex-end; color: #fff; border-bottom-right-radius: 2px; }
-        .chat-input-area { padding: 12px; border-top: 1px solid var(--glass-border); display: flex; gap: 8px; }
-        #chat-input { flex: 1; background: #000; border: 1px solid var(--glass-border); color: #fff; padding: 8px 12px; border-radius: 8px; outline: none; }
+        .mini-art { width: 45px; height: 45px; border-radius: 6px; }
     </style>
 </head>
 <body>
@@ -106,7 +111,7 @@
 
     <div id="home" class="page">
         <h1>Building <span class="pink-text">Digital</span> Experiences.</h1>
-        <p style="color: var(--text-dim); margin-top: 20px;">I'm a developer focused on clean, functional design.</p>
+        <p style="color: var(--text-dim); margin-top: 20px;">A Developer focused on performance and neon aesthetics.</p>
     </div>
 
     <div id="music" class="page active">
@@ -114,29 +119,9 @@
             <div class="song-flex">
                 <img src="music/nirvana.jpg" class="album-art">
                 <div style="flex:1">
-                    <h3>Smells Like Teen Spirit <span class="status-tag inactive-band">[Disbanded]</span></h3>
-                    <p style="font-size: 0.8rem; color: var(--text-dim);">Nirvana • 1991</p>
+                    <h3>Smells Like Teen Spirit</h3>
                     <audio controls src="music/nirvana.mp3" data-title="Smells Like Teen Spirit" data-artist="Nirvana" data-art="music/nirvana.jpg"></audio>
                 </div>
-            </div>
-            <div class="fact-box">
-                <div class="fact-item"><h5>Vibe</h5><p>The definitive anthem of the 90s grunge movement.</p></div>
-                <div class="fact-item"><h5>Status</h5><p>Ended in 1994.</p></div>
-            </div>
-        </div>
-
-        <div class="song-container">
-            <div class="song-flex">
-                <img src="music/bilmuri.jpg" class="album-art">
-                <div style="flex:1">
-                    <h3>More Than Hate <span class="status-tag active-band">[Active]</span></h3>
-                    <p style="font-size: 0.8rem; color: var(--text-dim);">Bilmuri • 2020</p>
-                    <audio controls src="music/bilmuri.mp3" data-title="More Than Hate" data-artist="Bilmuri" data-art="music/bilmuri.jpg"></audio>
-                </div>
-            </div>
-            <div class="fact-box">
-                <div class="fact-item"><h5>Vibe</h5><p>Heavy riffs meets pop-infused energy.</p></div>
-                <div class="fact-item"><h5>Status</h5><p>Active and releasing new tracks.</p></div>
             </div>
         </div>
     </div>
@@ -147,32 +132,32 @@
         </div>
     </div>
 
+    <div class="term-widget">
+        <div class="term-window" id="term-window">
+            <div class="term-header"><span>aiden_terminal.exe</span><span>v1.0.4</span></div>
+            <div class="term-body" id="term-body">
+                Welcome. Type 'help' to see commands.
+            </div>
+            <div class="term-input-line">
+                <span>></span>
+                <input type="text" id="term-input" autofocus onkeypress="if(event.key==='Enter') runCmd()">
+            </div>
+        </div>
+        <button class="term-btn" onclick="toggleTerm()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+        </button>
+    </div>
+
     <div id="now-playing-popup">
         <img id="popup-art" src="" class="mini-art">
         <div>
-            <div id="popup-artist" style="font-size: 0.6rem; color: var(--primary); font-weight: 800; text-transform: uppercase;">Artist Name</div>
+            <div id="popup-artist" style="font-size: 0.6rem; color: var(--primary); font-weight: 800;">Artist Name</div>
             <div id="popup-title" style="font-size: 0.85rem; font-weight: 700;">Song Title</div>
         </div>
     </div>
 
-    <div class="chat-widget">
-        <div class="chat-window" id="chat-window">
-            <div class="chat-header">AIDEN'S ASSISTANT</div>
-            <div class="chat-messages" id="chat-messages">
-                <div class="msg bot">Hey! I'm Aiden's AI. What's on your mind? We can talk about code, music, or just chill.</div>
-            </div>
-            <div class="chat-input-area">
-                <input type="text" id="chat-input" placeholder="Say something..." onkeypress="if(event.key==='Enter') sendMessage()">
-                <button onclick="sendMessage()" style="background:none; border:none; color:var(--primary); font-weight:bold; cursor:pointer;">SEND</button>
-            </div>
-        </div>
-        <div class="chat-button" onclick="toggleChat()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-        </div>
-    </div>
-
     <script>
-        // --- LOGO TYPING ---
+        // NAVIGATION & LOGO
         const text = "AIDEN BECKER";
         let charIndex = 0;
         function typeEffect() {
@@ -184,7 +169,6 @@
         }
         window.onload = typeEffect;
 
-        // --- NAVIGATION ---
         function showPage(p) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById(p).classList.add('active');
@@ -192,7 +176,34 @@
             document.getElementById('nav-'+p).classList.add('active');
         }
 
-        // --- AUDIO PLAYER ---
+        // TERMINAL LOGIC
+        function toggleTerm() { 
+            const win = document.getElementById('term-window');
+            win.classList.toggle('active');
+            if(win.classList.contains('active')) document.getElementById('term-input').focus();
+        }
+
+        function runCmd() {
+            const input = document.getElementById('term-input');
+            const body = document.getElementById('term-body');
+            const cmd = input.value.toLowerCase().trim();
+            input.value = "";
+
+            let response = "";
+            if (cmd === 'help') response = "Available: about, music, arcade, clear, theme, exit";
+            else if (cmd === 'about') response = "Aiden Becker: Frontend Developer. Loves grunge and clean UI.";
+            else if (cmd === 'music') response = "Current stack: Nirvana, Bilmuri, Green Day, Gorillaz.";
+            else if (cmd === 'arcade') response = "Loading arcade engine... Check the Arcade tab to play.";
+            else if (cmd === 'clear') { body.innerHTML = ""; return; }
+            else if (cmd === 'exit') { toggleTerm(); return; }
+            else if (cmd === 'theme') { document.documentElement.style.setProperty('--primary', '#00ff88'); response = "Theme set to: MATRIX GREEN"; }
+            else response = `Command not found: ${cmd}`;
+
+            body.innerHTML += `<div style="color:white; margin-top:5px;">> ${cmd}</div><div style="color:var(--primary);">${response}</div>`;
+            body.scrollTop = body.scrollHeight;
+        }
+
+        // AUDIO PLAYER
         const popup = document.getElementById('now-playing-popup');
         document.querySelectorAll('audio').forEach(audio => {
             audio.addEventListener('play', () => {
@@ -204,56 +215,6 @@
             });
             audio.addEventListener('pause', () => popup.classList.remove('visible'));
         });
-
-        // --- CHAT LOGIC ---
-        let chatContext = "none"; 
-
-        function toggleChat() { document.getElementById('chat-window').classList.toggle('active'); }
-
-        function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const box = document.getElementById('chat-messages');
-            const msg = input.value.trim();
-            if(!msg) return;
-
-            // User msg
-            box.innerHTML += `<div class="msg user">${msg}</div>`;
-            input.value = "";
-            box.scrollTop = box.scrollHeight;
-
-            setTimeout(() => {
-                const response = getChatResponse(msg.toLowerCase());
-                box.innerHTML += `<div class="msg bot">${response}</div>`;
-                box.scrollTop = box.scrollHeight;
-            }, 600);
-        }
-
-        function getChatResponse(input) {
-            // Cuss Filter
-            const badWords = ["cuss1", "cuss2", "badword"]; // Add actual words here
-            if (badWords.some(w => input.includes(w))) return "Whoa, let's keep the vibes clean! I don't use that kind of language.";
-
-            // Dynamic Responses
-            if (input.includes("hello") || input.includes("hi") || input.includes("hey")) return "Hey! I'm just hanging out in the code. How's your day going?";
-            if (input.includes("who are you")) return "I'm Aiden's digital sidekick. I help people navigate his portfolio and talk about music.";
-            if (input.includes("music") || input.includes("songs")) {
-                chatContext = "music";
-                return "Aiden is really into Bilmuri and Nirvana. Do you like rock, or are you more into something else?";
-            }
-            if (input.includes("favorite") && chatContext === "music") return "Right now, it's definitely 'More Than Hate'. The riff is insane. What's your favorite track?";
-            if (input.includes("code") || input.includes("build")) return "This site uses CSS variables and JS for all the smooth transitions. Aiden likes the 'Neon Glass' look.";
-            if (input.includes("arcade") || input.includes("game")) return "The arcade is where the fun happens. Most of those are built with Logic and HTML5 Canvas!";
-            if (input.includes("cool") || input.includes("awesome") || input.includes("nice")) return "Glad you think so! Aiden put a lot of work into the aesthetic.";
-            
-            // Random Conversational Fillers
-            const fillers = [
-                "That's interesting! Tell me more.",
-                "I get that. It's all about the digital experience, right?",
-                "Totally. By the way, have you tried the Arcade tab yet?",
-                "Interesting point. Aiden always says design is just as important as the code."
-            ];
-            return fillers[Math.floor(Math.random() * fillers.length)];
-        }
     </script>
 </body>
 </html>
