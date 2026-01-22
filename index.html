@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker </title>
+    <title>Aiden Becker | Dev & Music</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
@@ -71,18 +71,17 @@
 
         .modal-lyrics {
             width: 100%; max-width: 900px; flex-grow: 1; overflow-y: auto;
-            text-align: center; padding: 25vh 0; scrollbar-width: none;
-            mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
+            text-align: center; padding: 30vh 0; scrollbar-width: none;
+            mask-image: linear-gradient(to bottom, transparent, black 25%, black 75%, transparent);
         }
         .modal-lyrics::-webkit-scrollbar { display: none; }
 
         .lyric-line {
             font-size: clamp(1.5rem, 5vw, 2.5rem); font-weight: 700;
-            margin: 40px 0; color: rgba(255, 255, 255, 0.08);
-            transition: all 0.4s ease; font-family: 'Space Grotesk', sans-serif;
-            cursor: pointer;
+            margin: 45px 0; color: rgba(255, 255, 255, 0.05);
+            transition: all 0.25s ease; font-family: 'Space Grotesk', sans-serif;
         }
-        .lyric-line.active { color: var(--karaoke-yellow); transform: scale(1.1); text-shadow: 0 0 30px rgba(255,255,0,0.4); }
+        .lyric-line.active { color: var(--karaoke-yellow); transform: scale(1.1); text-shadow: 0 0 30px rgba(255,255,0,0.5); }
 
         .progress-container { width: 100%; max-width: 600px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin: 20px 0; overflow: hidden; }
         .progress-fill { height: 100%; background: var(--primary); width: 0%; box-shadow: 0 0 10px var(--primary); }
@@ -113,7 +112,6 @@
 
     <div id="home" class="page active">
         <h1>Creative <span class="pink-text">Developer</span> & Musician.</h1>
-        <p style="color: var(--text-dim); margin-top: 20px;">Precise Karaoke Sync Enabled.</p>
     </div>
 
     <div id="music" class="page">
@@ -123,7 +121,7 @@
                 <div class="song-meta"><h4>Smells Like Teen Spirit</h4><p>Nirvana</p></div>
                 <audio controls src="music/nirvana.mp3" 
                     data-title="Smells Like Teen Spirit" data-artist="Nirvana" data-album="Nevermind" data-art="music/nirvana.jpg"
-                    data-lyrics='[{"t":0,"l":"(Guitar Riff)"},{"t":8.3,"l":"Load up on guns"},{"t":10.7,"l":"Bring your friends"},{"t":13.0,"l":"It is fun to lose and to pretend"},{"t":17.7,"l":"She is over-bored and self-assured"},{"t":22.5,"l":"Oh no, I know a dirty word"},{"t":27.2,"l":"Hello, hello, hello, how low?"},{"t":32.0,"l":"Hello, hello, hello, how low?"},{"t":36.7,"l":"With the lights out, it is less dangerous"},{"t":41.4,"l":"Here we are now, entertain us"},{"t":46.2,"l":"I feel stupid and contagious"},{"t":51.0,"l":"Here we are now, entertain us"}]'></audio>
+                    data-lyrics='[{"t":0,"l":"(Intro)"},{"t":8.35,"l":"Load up on guns"},{"t":10.65,"l":"Bring your friends"},{"t":13.00,"l":"It is fun to lose and to pretend"},{"t":17.80,"l":"She is over-bored and self-assured"},{"t":22.45,"l":"Oh no, I know a dirty word"},{"t":27.20,"l":"Hello, hello, hello, how low?"},{"t":31.95,"l":"Hello, hello, hello, how low?"},{"t":36.75,"l":"With the lights out, it is less dangerous"},{"t":41.45,"l":"Here we are now, entertain us"},{"t":46.20,"l":"I feel stupid and contagious"},{"t":50.95,"l":"Here we are now, entertain us"},{"t":55.75,"l":"A mulatto, an albino"},{"t":58.10,"l":"A mosquito, my libido"},{"t":60.50,"l":"Yay!"}]'></audio>
             </div>
 
             <div class="song-row">
@@ -131,7 +129,7 @@
                 <div class="song-meta"><h4>On Melancholy Hill</h4><p>Gorillaz</p></div>
                 <audio controls src="music/gorillaz.mp3" 
                     data-title="On Melancholy Hill" data-artist="Gorillaz" data-album="Plastic Beach" data-art="music/gorillaz.jpg"
-                    data-lyrics='[{"t":0,"l":"(Synth Intro)"},{"t":16.7,"l":"Up on melancholy hill"},{"t":20.6,"l":"There is a plastic tree"},{"t":24.7,"l":"Are you here with me?"},{"t":28.7,"l":"Just looking out on the day of another dream"},{"t":36.8,"l":"Well, you cannot get what you want"},{"t":40.8,"l":"But you can get me"}]'></audio>
+                    data-lyrics='[{"t":0,"l":"(Intro)"},{"t":16.85,"l":"Up on melancholy hill"},{"t":20.75,"l":"There is a plastic tree"},{"t":24.85,"l":"Are you here with me?"},{"t":28.95,"l":"Just looking out on the day of another dream"},{"t":36.95,"l":"Well, you cannot get what you want"},{"t":40.95,"l":"But you can get me"},{"t":44.95,"l":"So let us set up and go"},{"t":48.95,"l":"Cause you are my medicine"},{"t":51.90,"l":"When you are close to me"}]'></audio>
             </div>
 
             <div class="song-row">
@@ -139,7 +137,7 @@
                 <div class="song-meta"><h4>American Idiot</h4><p>Green Day</p></div>
                 <audio controls src="music/greenday.mp3" 
                     data-title="American Idiot" data-artist="Green Day" data-album="American Idiot" data-art="music/greenday.jpg"
-                    data-lyrics='[{"t":0,"l":"(Guitar Intro)"},{"t":11.2,"l":"Don’t wanna be an American idiot"},{"t":15.0,"l":"Don’t want a nation under the new media"},{"t":19.0,"l":"And can you hear the sound of hysteria?"},{"t":22.8,"l":"The subliminal mind-f*** America"}]'></audio>
+                    data-lyrics='[{"t":0,"l":"(Intro)"},{"t":11.12,"l":"Don’t wanna be an American idiot"},{"t":15.05,"l":"Don’t want a nation under the new media"},{"t":19.05,"l":"And can you hear the sound of hysteria?"},{"t":22.95,"l":"The subliminal mind-f*** America"},{"t":27.15,"l":"Welcome to a new kind of tension"},{"t":30.95,"l":"All across the alien nation"},{"t":34.85,"l":"Where everything is not meant to be okay"},{"t":38.75,"l":"In television dreams of tomorrow"},{"t":42.50,"l":"We are not the ones who are meant to follow"},{"t":46.45,"l":"For that is enough to argue"}]'></audio>
             </div>
         </div>
     </div>
@@ -154,7 +152,7 @@
     <div id="now-playing-popup" onclick="openLyrics()">
         <img id="popup-art" src="" class="mini-art">
         <div>
-            <div style="font-size: 0.6rem; color: var(--primary); font-weight: 800;">SING ALONG</div>
+            <div style="font-size: 0.6rem; color: var(--primary); font-weight: 800; letter-spacing: 1px;">KARAOKE ACTIVE</div>
             <div id="popup-title" style="font-size: 0.9rem; font-weight: 700;">Title</div>
         </div>
     </div>
@@ -208,7 +206,6 @@
             lyricData.forEach((l, i) => {
                 const div = document.createElement('div');
                 div.className = 'lyric-line'; div.id = `line-${i}`; div.innerText = l.l;
-                div.onclick = () => { currentAudio.currentTime = l.t; };
                 container.appendChild(div);
             });
         }
