@@ -15,15 +15,10 @@
             --card-bg: rgba(30, 41, 59, 0.7);
             --text-main: #f8fafc;
             --text-dim: #94a3b8;
-            --accent-green: #10b981;
             --glass-border: rgba(255, 255, 255, 0.1);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Outfit', sans-serif;
@@ -33,233 +28,214 @@
                 radial-gradient(at 100% 100%, rgba(192, 132, 252, 0.15) 0px, transparent 50%);
             color: var(--text-main);
             line-height: 1.6;
-            overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        /* Smooth reveal animation */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
         }
 
+        nav a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover { color: var(--secondary); }
+
+        /* Pages */
+        .page { display: none; animation: fadeIn 0.5s ease-out; }
+        .page.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Hero & Content */
         header {
-            height: 80vh;
+            height: 40vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 20px;
-            animation: fadeInUp 1s ease-out;
         }
 
         .hero-name {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(3.5rem, 12vw, 6rem);
+            font-size: clamp(2.5rem, 8vw, 4rem);
             background: linear-gradient(to right, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
-            letter-spacing: -2px;
         }
 
-        .hero-tagline {
-            font-size: 1.5rem;
-            color: var(--text-dim);
-            font-weight: 300;
-            max-width: 700px;
-            border-left: 2px solid var(--primary);
-            padding-left: 20px;
-        }
-
-        main {
-            max-width: 1100px;
-            margin: -100px auto 100px;
-            padding: 0 20px;
-        }
+        main { max-width: 1000px; margin: 0 auto; padding: 20px; }
 
         .section-title {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.8rem;
-            margin: 80px 0 40px;
-            text-transform: uppercase;
-            letter-spacing: 4px;
+            margin: 40px 0 20px;
             color: var(--secondary);
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
         }
 
-        .section-title::after {
-            content: "";
-            height: 1px;
-            background: linear-gradient(to right, var(--secondary), transparent);
-            flex-grow: 1;
+        .section-title::after { content: ""; height: 1px; background: var(--glass-border); flex-grow: 1; }
+
+        /* Audio Player Styling */
+        .music-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 20px;
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
+        .upload-zone {
+            border: 2px dashed var(--primary);
+            padding: 20px;
+            text-align: center;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            cursor: pointer;
+            transition: background 0.3s;
         }
 
+        .upload-zone:hover { background: rgba(99, 102, 241, 0.1); }
+
+        #fileInput { display: none; }
+
+        .song-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255,255,255,0.05);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        audio {
+            height: 35px;
+            filter: invert(100%) hue-rotate(180deg) brightness(1.5); /* Makes standard player look better on dark */
+        }
+
+        /* Original Card Styles */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
         .card {
             background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 40px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-
-        .card h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            color: #fff;
-            margin-bottom: 15px;
-            font-size: 1.8rem;
-        }
-
-        .card p {
-            color: var(--text-dim);
-            font-size: 1.05rem;
-            margin-bottom: 25px;
+            border-radius: 20px;
+            padding: 30px;
         }
 
         .game-btn {
             display: inline-block;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: var(--primary);
             color: white;
-            padding: 15px 30px;
-            border-radius: 12px;
+            padding: 12px 24px;
+            border-radius: 10px;
             text-decoration: none;
-            font-weight: 700;
-            text-align: center;
-            margin-top: auto;
-            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 20px;
         }
 
-        .game-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
-        }
-
-        .music-list {
-            list-style: none;
-        }
-
-        .music-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--glass-border);
-            padding: 12px 20px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            transition: background 0.3s;
-        }
-
-        .music-item:hover {
-            background: rgba(99, 102, 241, 0.1);
-        }
-
-        .music-item::before {
-            content: "♪";
-            margin-right: 15px;
-            color: var(--secondary);
-        }
-
-        footer {
-            text-align: center;
-            padding: 80px 20px;
-            color: var(--text-dim);
-            font-size: 0.9rem;
-            opacity: 0.5;
-        }
-
-        .no-contact {
-            margin: 60px 0;
-            padding: 20px;
-            border-radius: 50px;
-            background: rgba(255, 255, 255, 0.02);
-            display: inline-block;
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 600px) {
-            header { height: 60vh; }
-            .hero-tagline { font-size: 1.1rem; }
-            .grid { grid-template-columns: 1fr; }
-        }
+        footer { text-align: center; padding: 60px; opacity: 0.5; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1 class="hero-name">Aiden Becker</h1>
-        <p class="hero-tagline">Indie Game Developer & Multi-Instrumentalist</p>
-    </header>
+    <nav>
+        <a href="#" onclick="showPage('home')">Home</a>
+        <a href="#" onclick="showPage('music-page')">Favorites & Player</a>
+    </nav>
 
-    <main>
-        <h2 class="section-title">Game Development</h2>
-        <div class="grid">
-            <div class="card">
-                <h3>DEAD ZONE</h3>
-                <p>From immersive VR horror to fast-paced HTML5 2D games. I focus on atmosphere, mechanics, and player immersion.</p>
-                <a href="https://aiden-bs-games-deadzoneredux.vercel.app/" class="game-btn" target="_blank">Launch Dead Zone →</a>
-            </div>
-            <div class="card">
-                <h3>The Vision</h3>
-                <p>Specializing in VR development, I bridge the gap between terrifying horror concepts and playable reality. I love crafting environments that keep players on edge.</p>
-                <div style="color: var(--accent-yellow); font-weight: 600; font-size: 0.9rem;">
-                    Status: Kinda
+    <div id="home" class="page active">
+        <header>
+            <h1 class="hero-name">Aiden Becker</h1>
+            <p style="color: var(--text-dim)">Game Developer & Musician</p>
+        </header>
+        <main>
+            <h2 class="section-title">Latest Work</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>DEAD ZONE</h3>
+                    <p>VR Horror and 2D HTML games.</p>
+                    <a href="https://aiden-bs-games-deadzoneredux.vercel.app/" class="game-btn" target="_blank">Play Game →</a>
+                </div>
+                <div class="card">
+                    <h3>Skills</h3>
+                    <p>C#, Unity, HTML5, Sound Design.</p>
                 </div>
             </div>
-        </div>
+        </main>
+    </div>
 
-        <h2 class="section-title">Musical Journey</h2>
-        <div class="grid">
-            <div class="card">
-                <h3>Composition</h3>
-                <p>A multi-instrumentalist background fuels my creative projects. I handle everything from the rhythm section to the melodies.</p>
-                <div class="music-list">
-                    <div class="music-item">Guitar & Piano</div>
-                    <div class="music-item">Drums & Percussion</div>
-                    <div class="music-item">Vocal Training in Progress</div>
+    <div id="music-page" class="page">
+        <header>
+            <h1 class="hero-name">My Favorites</h1>
+            <p style="color: var(--text-dim)">Upload and listen to the tracks that inspire me.</p>
+        </header>
+        <main>
+            <div class="music-card">
+                <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+                    <p>Click to Upload MP3s from Nirvana, Gorillaz, etc.</p>
+                    <input type="file" id="fileInput" accept="audio/mp3" multiple onchange="handleFiles(this.files)">
+                </div>
+
+                <div id="playlist">
+                    <p id="empty-msg" style="text-align: center; color: var(--text-dim);">No songs added yet.</p>
                 </div>
             </div>
-            <div class="card">
-                <h3>Influences</h3>
-                <p>My sound is built on the energy of grunge, punk-rock, and virtual alternative bands.</p>
-                <div class="music-list">
-                    <div class="music-item">Nirvana & Green Day</div>
-                    <div class="music-item">Bilmuri & Gorillaz</div>
-                    <div class="music-item">Rhythm-Focused Soundscapes</div>
-                </div>
-            </div>
-        </div>
-
-        <div style="text-align: center;">
-            <p class="no-contact">
-                I Dont Really Want To Be Contacted
-            </p>
-        </div>
-    </main>
+        </main>
+    </div>
 
     <footer>
         &copy; 2026 Aiden Becker.
     </footer>
 
+    <script>
+        // Page Switching Logic
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        // Audio Handling Logic
+        function handleFiles(files) {
+            const playlist = document.getElementById('playlist');
+            const emptyMsg = document.getElementById('empty-msg');
+            
+            if (files.length > 0) emptyMsg.style.display = 'none';
+
+            Array.from(files).forEach(file => {
+                const songItem = document.createElement('div');
+                songItem.className = 'song-item';
+                
+                const fileURL = URL.createObjectURL(file);
+                
+                songItem.innerHTML = `
+                    <div class="song-info">
+                        <strong>${file.name.replace('.mp3', '')}</strong>
+                    </div>
+                    <audio controls src="${fileURL}"></audio>
+                `;
+                
+                playlist.appendChild(songItem);
+            });
+        }
+    </script>
 </body>
 </html>
