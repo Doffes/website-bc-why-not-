@@ -24,11 +24,12 @@
             background-color: var(--bg);
             color: var(--text-main);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .bg-glow {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 10% 10%, rgba(255, 0, 127, 0.07) 0%, transparent 40%);
+            background: radial-gradient(circle at 15% 15%, rgba(255, 0, 127, 0.08) 0%, transparent 45%);
             z-index: -1;
         }
 
@@ -39,36 +40,32 @@
         }
 
         .logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.2rem; letter-spacing: -1px; }
+        .pink-text { color: var(--primary); }
         .nav-links { display: flex; gap: 30px; }
         nav a { color: var(--text-dim); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s; }
         nav a:hover, nav a.active { color: var(--primary); }
 
-        .page { display: none; padding: 80px 8%; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.8s ease; }
+        .page { display: none; padding: 60px 8%; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.6s ease; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Home Styles */
-        .hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: 4rem; line-height: 1; margin-bottom: 20px; }
-        .about-section { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 60px; }
-        .tech-pill { background: #1a1a1a; padding: 6px 15px; border-radius: 20px; font-size: 0.8rem; border: 1px solid var(--glass-border); display: inline-block; margin: 5px; }
+        /* Home/About Styles */
+        .hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.5rem, 8vw, 4.5rem); line-height: 1; margin-bottom: 30px; }
+        .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; }
+        .tech-pill { background: #1a1a1a; padding: 6px 15px; border-radius: 20px; font-size: 0.75rem; border: 1px solid var(--glass-border); display: inline-block; margin: 5px; color: var(--primary); }
 
-        /* Music Styles */
-        .song-container { margin-bottom: 80px; }
-        .song-meta { display: flex; align-items: center; gap: 30px; margin-bottom: 30px; }
-        .album-art { width: 120px; height: 120px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .lyric-display {
-            background: #0a0a0a; border: 1px solid var(--glass-border);
-            border-radius: 16px; padding: 40px; height: 300px; overflow-y: auto;
-            mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
-            scrollbar-width: none;
-        }
-        .lyric-line { font-size: 1.8rem; font-weight: 700; color: #222; transition: 0.3s; margin: 20px 0; cursor: pointer; }
-        .lyric-line.active { color: #fff; text-shadow: 0 0 20px var(--primary); transform: scale(1.05); }
+        /* Music & Facts Styles */
+        .song-container { margin-bottom: 60px; background: var(--card-bg); padding: 40px; border-radius: 24px; border: 1px solid var(--glass-border); }
+        .song-flex { display: flex; gap: 40px; align-items: flex-start; }
+        .album-art { width: 150px; height: 150px; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .fact-box { margin-top: 25px; padding-top: 25px; border-top: 1px solid var(--glass-border); display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .fact-item h5 { color: var(--primary); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
+        .fact-item p { font-size: 0.9rem; color: var(--text-dim); }
 
-        /* Arcade Styles */
-        .game-frame { background: #000; border: 1px solid var(--primary); aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; }
+        audio { width: 100%; margin-top: 20px; filter: invert(1) hue-rotate(280deg) opacity(0.6); }
 
-        audio { width: 100%; margin-top: 20px; filter: invert(1) hue-rotate(280deg); opacity: 0.8; }
+        /* Arcade */
+        .arcade-frame { border: 1px solid var(--primary); background: #000; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; box-shadow: 0 0 50px rgba(255, 0, 127, 0.1); }
     </style>
 </head>
 <body>
@@ -86,76 +83,82 @@
 
     <div id="home" class="page active">
         <div class="hero">
-            <h1>Building worlds through <span class="pink-text">code</span> and <span class="pink-text">sound</span>.</h1>
+            <h1>Creative <span class="pink-text">Engineer</span> & Digital Architect.</h1>
         </div>
         
-        <div class="about-section">
+        <div class="grid-layout">
             <div>
-                <h3 style="color: var(--primary); margin-bottom: 15px;">// About Me</h3>
-                <p style="color: var(--text-dim);">I am a developer and audio enthusiast based in the digital frontier. My work bridges the gap between interactive gameplay and immersive soundscapes. Whether I'm debugging C# scripts or mixing synthesizers, I focus on precision and atmosphere.</p>
-                <div style="margin-top: 30px;">
-                    <div class="tech-pill">Unity 3D</div>
-                    <div class="tech-pill">C#</div>
-                    <div class="tech-pill">Ableton Live</div>
-                    <div class="tech-pill">JavaScript</div>
-                    <div class="tech-pill">UI/UX Design</div>
-                </div>
+                <h3 style="margin-bottom: 15px;">// About Me</h3>
+                <p style="color: var(--text-dim); margin-bottom: 20px;">
+                    I specialize in bridging the gap between complex code and immersive sensory experiences. With a background in both software development and sound design, I build tools and games that prioritize atmosphere and technical precision.
+                </p>
+                <div class="tech-pill">C# / .NET</div>
+                <div class="tech-pill">Unity Engine</div>
+                <div class="tech-pill">JavaScript / React</div>
+                <div class="tech-pill">Digital Signal Processing</div>
             </div>
-            <div style="background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 30px;">
-                <h3 style="margin-bottom: 15px;">Currently Working On</h3>
-                <ul style="list-style: none; color: var(--text-dim);">
-                    <li style="margin-bottom: 10px;">▹ Interactive Lyric Synchronization Engine</li>
-                    <li style="margin-bottom: 10px;">▹ Procedural Sound Generator for Indie Games</li>
-                    <li style="margin-bottom: 10px;">▹ Arcade Demo Platform</li>
-                </ul>
+            <div style="background: rgba(255,255,255,0.02); padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border);">
+                <h4 style="margin-bottom: 10px;">The Mission</h4>
+                <p style="font-size: 0.9rem; color: var(--text-dim);">
+                    To create interactive media where the audio isn't just an afterthought, but a core component of the user's logic and navigation.
+                </p>
             </div>
         </div>
     </div>
 
     <div id="music" class="page">
         <div class="song-container">
-            <div class="song-meta">
+            <div class="song-flex">
                 <img src="music/nirvana.jpg" class="album-art">
-                <div>
-                    <h2 style="font-size: 2rem;">Smells Like Teen Spirit</h2>
-                    <p style="color: var(--primary);">NIRVANA // NEVERMIND</p>
-                    <audio id="audio-nirvana" controls src="music/nirvana.mp3" 
-                        data-lyrics='[{"t":8.3,"l":"Load up on guns"},{"t":10.7,"l":"Bring your friends"},{"t":13.0,"l":"Its fun to lose and to pretend"},{"t":17.8,"l":"She is over-bored and self-assured"},{"t":22.5,"l":"Oh no, I know a dirty word"},{"t":27.2,"l":"Hello, hello, hello, how low?"}]'></audio>
+                <div style="flex:1">
+                    <h2 style="font-size: 2.2rem; font-family: 'Space Grotesk';">Smells Like Teen Spirit</h2>
+                    <p style="color: var(--text-dim);">Nirvana • Nevermind (1991)</p>
+                    <audio controls src="music/nirvana.mp3"></audio>
                 </div>
             </div>
-            <div id="lyrics-nirvana" class="lyric-display"></div>
+            <div class="fact-box">
+                <div class="fact-item"><h5>Production Info</h5><p>Recorded at Sound City Studios. Produced by Butch Vig.</p></div>
+                <div class="fact-item"><h5>Key Signature</h5><p>F Minor. Known for the iconic 4-chord progression.</p></div>
+                <div class="fact-item"><h5>Impact</h5><p>Widely credited with bringing Grunge to the mainstream.</p></div>
+            </div>
         </div>
 
         <div class="song-container">
-            <div class="song-meta">
+            <div class="song-flex">
                 <img src="music/gorillaz.jpg" class="album-art">
-                <div>
-                    <h2 style="font-size: 2rem;">On Melancholy Hill</h2>
-                    <p style="color: var(--primary);">GORILLAZ // PLASTIC BEACH</p>
-                    <audio id="audio-gorillaz" controls src="music/gorillaz.mp3" 
-                        data-lyrics='[{"t":16.8,"l":"Up on melancholy hill"},{"t":20.7,"l":"There is a plastic tree"},{"t":24.8,"l":"Are you here with me?"},{"t":28.9,"l":"Just looking out on the day of another dream"}]'></audio>
+                <div style="flex:1">
+                    <h2 style="font-size: 2.2rem; font-family: 'Space Grotesk';">On Melancholy Hill</h2>
+                    <p style="color: var(--text-dim);">Gorillaz • Plastic Beach (2010)</p>
+                    <audio controls src="music/gorillaz.mp3"></audio>
                 </div>
             </div>
-            <div id="lyrics-gorillaz" class="lyric-display"></div>
+            <div class="fact-box">
+                <div class="fact-item"><h5>Sound Design</h5><p>Heavy use of the Korg Gadget and vintage Casio synthesizers.</p></div>
+                <div class="fact-item"><h5>Songwriting</h5><p>Written by Damon Albarn during the "The Good, the Bad & the Queen" era.</p></div>
+                <div class="fact-item"><h5>Genre</h5><p>Synth-pop with elements of electronic melancholy.</p></div>
+            </div>
         </div>
 
         <div class="song-container">
-            <div class="song-meta">
+            <div class="song-flex">
                 <img src="music/greenday.jpg" class="album-art">
-                <div>
-                    <h2 style="font-size: 2rem;">American Idiot</h2>
-                    <p style="color: var(--primary);">GREEN DAY // AMERICAN IDIOT</p>
-                    <audio id="audio-greenday" controls src="music/greenday.mp3" 
-                        data-lyrics='[{"t":11.1,"l":"Don’t wanna be an American idiot"},{"t":15.0,"l":"Don’t want a nation under the new media"},{"t":19.0,"l":"And can you hear the sound of hysteria?"},{"t":22.9,"l":"The subliminal mind-f*** America"}]'></audio>
+                <div style="flex:1">
+                    <h2 style="font-size: 2.2rem; font-family: 'Space Grotesk';">American Idiot</h2>
+                    <p style="color: var(--text-dim);">Green Day • American Idiot (2004)</p>
+                    <audio controls src="music/greenday.mp3"></audio>
                 </div>
             </div>
-            <div id="lyrics-greenday" class="lyric-display"></div>
+            <div class="fact-box">
+                <div class="fact-item"><h5>Concept</h5><p>The title track of a "Punk Rock Opera" concept album.</p></div>
+                <div class="fact-item"><h5>Recording</h5><p>Recorded at Studio 880 in Oakland, California.</p></div>
+                <div class="fact-item"><h5>Acclaim</h5><p>Nominated for four Grammy Awards, including Record of the Year.</p></div>
+            </div>
         </div>
     </div>
 
     <div id="arcade" class="page">
-        <h2 style="margin-bottom: 20px;">The Arcade <span class="pink-text">Playroom</span></h2>
-        <div class="game-frame">
+        <h2 style="margin-bottom: 25px;">Live <span class="pink-text">Arcade</span> Demo</h2>
+        <div class="arcade-frame">
             <iframe src="game.html" style="width:100%; height:100%; border:none;"></iframe>
         </div>
     </div>
@@ -165,36 +168,17 @@
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById(p).classList.add('active');
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            document.getElementById('nav-'+p).classList.add('active');
+            const activeLink = document.getElementById('nav-'+p);
+            if(activeLink) activeLink.classList.add('active');
             window.scrollTo(0,0);
         }
 
-        // Handle Dynamic Lyric Rendering for all songs
+        // Auto-pause other tracks
         document.querySelectorAll('audio').forEach(audio => {
-            const songId = audio.id.split('-')[1];
-            const display = document.getElementById('lyrics-' + songId);
-            const data = JSON.parse(audio.getAttribute('data-lyrics'));
-
-            // Initial Render
-            data.forEach((line, i) => {
-                const div = document.createElement('div');
-                div.className = 'lyric-line';
-                div.id = `line-${songId}-${i}`;
-                div.innerText = line.l;
-                div.onclick = () => { audio.currentTime = line.t; };
-                display.appendChild(div);
-            });
-
-            audio.addEventListener('timeupdate', () => {
-                const current = audio.currentTime;
-                const idx = data.findLastIndex(l => current >= l.t);
-                
-                display.querySelectorAll('.lyric-line').forEach(l => l.classList.remove('active'));
-                const activeLine = document.getElementById(`line-${songId}-${idx}`);
-                if (activeLine) {
-                    activeLine.classList.add('active');
-                    activeLine.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
+            audio.addEventListener('play', () => {
+                document.querySelectorAll('audio').forEach(other => {
+                    if(other !== audio) other.pause();
+                });
             });
         });
     </script>
