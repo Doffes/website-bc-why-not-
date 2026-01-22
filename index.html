@@ -3,106 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden_OS | v6.0 Terminal</title>
+    <title>Aiden_OS v7.0 | The Network Update</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #00f2ff;
-            --bg: #030305;
-            --window: #111115;
-            --border: rgba(255, 255, 255, 0.1);
+            --bg: #030406;
+            --window: #121418;
+            --border: rgba(255, 255, 255, 0.08);
             --text: #ffffff;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
         body { font-family: 'Space Grotesk', sans-serif; background: #000; color: var(--text); height: 100vh; overflow: hidden; }
 
-        /* --- BOOT SEQUENCE --- */
-        #boot-screen {
-            position: fixed; inset: 0; background: #000; z-index: 10000;
-            display: flex; flex-direction: column; justify-content: center; padding: 50px;
-            font-family: 'Fira Code', monospace; color: #aaa; font-size: 0.9rem;
-        }
-        .boot-line { margin-bottom: 5px; opacity: 0; }
-        .boot-anim { animation: lineIn 0.1s forwards; }
-        @keyframes lineIn { to { opacity: 1; } }
-
         /* --- DESKTOP --- */
         #desktop {
             height: calc(100vh - 45px); width: 100vw; background: var(--bg);
-            position: relative; padding: 20px; display: flex; flex-direction: column; flex-wrap: wrap; gap: 20px; align-content: flex-start;
+            position: relative; padding: 30px; display: flex; flex-direction: column; flex-wrap: wrap; gap: 20px; align-content: flex-start;
         }
 
         .icon {
-            width: 80px; text-align: center; cursor: pointer; border-radius: 8px; padding: 10px;
+            width: 85px; text-align: center; cursor: pointer; border-radius: 12px; padding: 12px;
             transition: 0.2s; border: 1px solid transparent;
         }
-        .icon:hover { background: rgba(255,255,255,0.1); border-color: var(--primary); }
-        .icon-img { font-size: 2.5rem; margin-bottom: 5px; display: block; }
-        .icon span { font-size: 0.7rem; font-weight: bold; }
+        .icon:hover { background: rgba(255,255,255,0.08); border-color: var(--primary); }
+        .icon-img { font-size: 2.2rem; margin-bottom: 8px; display: block; }
+        .icon span { font-size: 0.7rem; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
         /* --- WINDOWS --- */
         .window {
-            position: absolute; width: 650px; height: 450px; background: var(--window);
-            border: 1px solid var(--border); border-radius: 10px; display: none;
-            flex-direction: column; box-shadow: 0 30px 60px rgba(0,0,0,0.7); z-index: 100;
-            backdrop-filter: blur(10px);
+            position: absolute; width: 700px; height: 480px; background: var(--window);
+            border: 1px solid var(--border); border-radius: 12px; display: none;
+            flex-direction: column; box-shadow: 0 40px 100px rgba(0,0,0,0.8); z-index: 100;
+            backdrop-filter: blur(20px);
         }
         .win-head {
-            height: 38px; background: rgba(255,255,255,0.05); display: flex; 
+            height: 40px; background: rgba(255,255,255,0.04); display: flex; 
             align-items: center; padding: 0 15px; cursor: move; justify-content: space-between;
         }
-        .win-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .win-title { font-size: 0.7rem; font-weight: 900; letter-spacing: 1.5px; color: var(--primary); }
         .win-btns { display: flex; gap: 8px; }
-        .win-dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; }
+        .win-dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; border: 1px solid rgba(0,0,0,0.1); }
         .dot-red { background: #ff5f56; }
 
         .win-body { flex: 1; padding: 20px; overflow-y: auto; }
 
-        /* --- MUSIC PLAYER --- */
-        .track-card {
-            display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.03);
-            padding: 12px; border-radius: 8px; margin-bottom: 10px; border: 1px solid transparent;
-            transition: 0.3s;
-        }
-        .track-card:hover { border-color: var(--primary); background: rgba(0,242,255,0.05); }
-        .album-art { width: 50px; height: 50px; border-radius: 4px; object-fit: cover; }
-        audio { filter: invert(1); height: 30px; flex: 1; }
+        /* --- BROWSER --- */
+        #browser-nav { display: flex; gap: 10px; background: #222; padding: 10px; border-radius: 8px 8px 0 0; }
+        #browser-url { background: #000; border: 1px solid #444; color: #fff; padding: 5px 15px; flex: 1; border-radius: 20px; font-size: 0.8rem; outline: none; }
+        #browser-content { background: #fff; color: #000; height: 320px; border-radius: 0 0 8px 8px; padding: 20px; overflow-y: auto; }
 
-        /* --- TERMINAL --- */
-        #term-log { font-family: 'Fira Code'; font-size: 0.85rem; color: #00ff41; height: 300px; overflow-y: auto; }
-        .term-input-wrap { display: flex; gap: 10px; margin-top: 10px; font-family: 'Fira Code'; color: var(--primary); }
-        #term-in { background: none; border: none; outline: none; color: #fff; flex: 1; }
+        /* --- THEMES --- */
+        .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; }
+        .theme-card { background: #1a1c22; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #333; cursor: pointer; transition: 0.2s; }
+        .theme-card:hover { border-color: var(--primary); transform: translateY(-2px); }
 
         /* --- TASKBAR --- */
         #taskbar {
-            height: 45px; background: rgba(0,0,0,0.9); position: fixed; bottom: 0; width: 100%;
+            height: 45px; background: rgba(0,0,0,0.95); position: fixed; bottom: 0; width: 100%;
             display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
             border-top: 1px solid var(--border); z-index: 1000;
         }
-        #clock { font-family: 'Fira Code'; font-size: 0.8rem; font-weight: bold; color: var(--primary); }
+        #clock { font-family: 'Fira Code'; font-size: 0.85rem; font-weight: 700; color: var(--primary); cursor: pointer; }
 
-        .hidden { display: none; }
+        /* --- MUSIC PLAYER --- */
+        .track-card { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; margin-bottom: 10px; }
+        .album-art { width: 45px; height: 45px; border-radius: 4px; }
+        audio { filter: invert(1); height: 30px; flex: 1; }
+
+        /* --- CODE EDITOR --- */
+        #editor { background: #000; color: #fff; font-family: 'Fira Code'; border: none; width: 100%; height: 100%; resize: none; outline: none; }
     </style>
 </head>
-<body onclick="startAudioContext()">
-
-    <div id="boot-screen">
-        <div id="boot-log"></div>
-    </div>
+<body onclick="if(aCtx) aCtx.resume();">
 
     <div id="desktop">
         <div class="icon" onclick="openWin('win-about')">
-            <span class="icon-img">📄</span><span>About_Me.txt</span>
+            <span class="icon-img">👤</span><span>About_Me</span>
         </div>
         <div class="icon" onclick="openWin('win-music')">
-            <span class="icon-img">📻</span><span>My Favorite Songs</span>
+            <span class="icon-img">💿</span><span>My Songs</span>
+        </div>
+        <div class="icon" onclick="openWin('win-browser')">
+            <span class="icon-img">🌏</span><span>Aiden-Net</span>
         </div>
         <div class="icon" onclick="openWin('win-terminal')">
             <span class="icon-img">📟</span><span>Terminal</span>
         </div>
-        <div class="icon" onclick="openWin('win-explorer')">
-            <span class="icon-img">📂</span><span>Explorer</span>
+        <div class="icon" onclick="openWin('win-editor')">
+            <span class="icon-img">📝</span><span>Aiden-Edit</span>
         </div>
         <div class="icon" onclick="openWin('win-themes')">
             <span class="icon-img">🎨</span><span>Themes</span>
@@ -111,114 +101,119 @@
 
     <div id="win-about" class="window">
         <div class="win-head" onmousedown="drag(event, 'win-about')">
-            <span class="win-title">Bio // About_Me</span>
+            <span class="win-title">PROFILE // INFO</span>
             <div class="win-btns"><div class="win-dot dot-red" onclick="closeWin('win-about')"></div></div>
         </div>
         <div class="win-body">
-            <h1 style="color:var(--primary)">AIDEN BECKER</h1>
-            <p style="margin-top:15px; line-height:1.6; color:#ccc;">System Administrator & Creative Developer. This terminal is a direct link to the Aiden_OS Kernel v6.0.</p>
-            <p style="margin-top:10px; color:#666;">Note: This file is read-only and protected by the kernel.</p>
+            <h2>Aiden Becker</h2>
+            <p style="color:var(--primary); font-size: 0.8rem; margin: 10px 0;">FULL STACK CREATIVE ENGINEER</p>
+            <p style="color:#aaa; line-height:1.6;">Welcome to the 7th iteration of my custom OS. This environment is built entirely in HTML/JS.</p>
+        </div>
+    </div>
+
+    <div id="win-browser" class="window" style="width: 800px; height: 500px;">
+        <div class="win-head" onmousedown="drag(event, 'win-browser')">
+            <span class="win-title">AIDEN-NET BROWSER v1.0</span>
+            <div class="win-btns"><div class="win-dot dot-red" onclick="closeWin('win-browser')"></div></div>
+        </div>
+        <div class="win-body" style="padding:0;">
+            <div id="browser-nav">
+                <button style="background:none; border:none; color:#fff; cursor:pointer;">◀</button>
+                <input type="text" id="browser-url" value="aiden.com" onkeypress="if(event.key==='Enter') navigate()">
+            </div>
+            <div id="browser-content">
+                <h1>Welcome to the Net</h1>
+                <p>Try typing: <b>music.os</b> or <b>news.os</b> in the URL bar.</p>
+            </div>
         </div>
     </div>
 
     <div id="win-music" class="window">
         <div class="win-head" onmousedown="drag(event, 'win-music')">
-            <span class="win-title">My Favorite Songs</span>
+            <span class="win-title">FAVORITE SONGS</span>
             <div class="win-btns"><div class="win-dot dot-red" onclick="closeWin('win-music')"></div></div>
         </div>
         <div class="win-body" id="music-list"></div>
     </div>
 
-    <div id="win-terminal" class="window">
-        <div class="win-head" onmousedown="drag(event, 'win-terminal')">
-            <span class="win-title">Aiden-Bash // v6.0</span>
-            <div class="win-btns"><div class="win-dot dot-red" onclick="closeWin('win-terminal')"></div></div>
+    <div id="win-editor" class="window">
+        <div class="win-head" onmousedown="drag(event, 'win-editor')">
+            <span class="win-title">AIDEN-EDIT</span>
+            <div class="win-btns"><div class="win-dot dot-red" onclick="closeWin('win-editor')"></div></div>
         </div>
         <div class="win-body" style="background:#000;">
-            <div id="term-log"></div>
-            <div class="term-input-wrap">
-                <span>$ root:</span>
-                <input type="text" id="term-in" autofocus>
-            </div>
-        </div>
-    </div>
-
-    <div id="win-explorer" class="window">
-        <div class="win-head" onmousedown="drag(event, 'win-explorer')">
-            <span class="win-title">File Explorer</span>
-            <div class="win-btns"><div class="win-dot dot-red" onclick="closeWin('win-explorer')"></div></div>
-        </div>
-        <div class="win-body">
-            <div id="file-grid" style="display:grid; grid-template-columns: repeat(4, 1fr); gap:20px;">
-                <div class="icon" style="width:100%" onclick="alert('System Folder: Documents - Access Denied')">
-                    <span class="icon-img">📁</span><span>Documents</span>
-                </div>
-                <div class="icon" style="width:100%" onclick="alert('Opening System Logs...')">
-                    <span class="icon-img">📄</span><span>Sys_Logs</span>
-                </div>
-                <div class="icon" style="width:100%" onclick="window.open('https://google.com')">
-                    <span class="icon-img">🌐</span><span>Web_Link</span>
-                </div>
-            </div>
+            <textarea id="editor" placeholder="// Write code or notes here..."></textarea>
         </div>
     </div>
 
     <div id="win-themes" class="window">
         <div class="win-head" onmousedown="drag(event, 'win-themes')">
-            <span class="win-title">Personalize</span>
+            <span class="win-title">SYSTEM THEMES</span>
             <div class="win-btns"><div class="win-dot dot-red" onclick="closeWin('win-themes')"></div></div>
         </div>
         <div class="win-body">
-            <div id="theme-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap:10px;"></div>
+            <div class="theme-grid" id="theme-grid"></div>
+        </div>
+    </div>
+
+    <div id="win-terminal" class="window">
+        <div class="win-head" onmousedown="drag(event, 'win-terminal')">
+            <span class="win-title">ROOT@AIDEN: ~</span>
+            <div class="win-btns"><div class="win-dot dot-red" onclick="closeWin('win-terminal')"></div></div>
+        </div>
+        <div class="win-body" style="background:#000; font-family:'Fira Code'; color:#0f0;">
+            <div id="term-out">AIDEN_OS KERNEL v7.0.0</div>
+            <input type="text" id="term-in" style="background:none; border:none; color:#fff; outline:none; width:100%;" placeholder="Type 'help'...">
         </div>
     </div>
 
     <div id="taskbar">
-        <div style="font-weight:900; color:var(--primary); font-size:0.9rem;">AIDEN_OS</div>
-        <div id="clock">00:00:00</div>
+        <div style="font-weight:900; letter-spacing:1px;">AIDEN_<span style="color:var(--primary)">OS</span></div>
+        <div id="clock" onclick="alert('Date: ' + new Date().toDateString())">00:00:00</div>
     </div>
 
     <script>
-        // --- BOOT SYSTEM ---
-        const bootLines = [
-            "AIDEN_OS BIOS v6.0.21", "CPU: Intel Core i9-12900K @ 3.20GHz", "Memory Check: 64GB OK",
-            "Initializing Kernel...", "Loading My_Favorite_Songs.module", "Mounting /root/aiden",
-            "Checking Network Integrity...", "SUCCESS.", "READY. PRESS ANY KEY TO START."
-        ];
-        
-        const bootLog = document.getElementById('boot-log');
-        let lineIdx = 0;
-        function runBoot() {
-            if(lineIdx < bootLines.length) {
-                const p = document.createElement('div');
-                p.className = 'boot-line boot-anim';
-                p.innerText = "> " + bootLines[lineIdx];
-                bootLog.appendChild(p);
-                lineIdx++;
-                setTimeout(runBoot, 150);
-            } else {
-                document.getElementById('boot-screen').onclick = () => {
-                    document.getElementById('boot-screen').style.display = 'none';
-                    playSound(440);
-                }
-            }
+        let aCtx;
+        function playSfx(f) {
+            if(!aCtx) aCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const o = aCtx.createOscillator(); const g = aCtx.createGain();
+            o.connect(g); g.connect(aCtx.destination);
+            o.frequency.setValueAtTime(f, aCtx.currentTime);
+            g.gain.setValueAtTime(0.05, aCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, aCtx.currentTime + 0.1);
+            o.start(); o.stop(aCtx.currentTime + 0.1);
         }
-        runBoot();
 
-        // --- WINDOWS ---
+        // --- NAVIGATION ---
         function openWin(id) { 
-            const w = document.getElementById(id); 
-            w.style.display = 'flex'; 
-            w.style.zIndex = Math.floor(Date.now()/1000);
-            playSound(660);
+            const w = document.getElementById(id);
+            w.style.display = 'flex';
+            w.style.zIndex = Math.floor(Date.now() / 1000);
+            playSfx(600);
         }
-        function closeWin(id) { document.getElementById(id).style.display = 'none'; playSound(220); }
+        function closeWin(id) { document.getElementById(id).style.display = 'none'; playSfx(300); }
 
         function drag(e, id) {
             const w = document.getElementById(id);
             let ox = e.clientX - w.offsetLeft, oy = e.clientY - w.offsetTop;
-            document.onmousemove = (e) => { w.style.left = (e.clientX - ox)+'px'; w.style.top = (e.clientY - oy)+'px'; };
+            document.onmousemove = (e) => { w.style.left = (e.clientX-ox)+'px'; w.style.top = (e.clientY-oy)+'px'; };
             document.onmouseup = () => { document.onmousemove = null; };
+        }
+
+        // --- BROWSER ENGINE ---
+        function navigate() {
+            const url = document.getElementById('browser-url').value.toLowerCase();
+            const content = document.getElementById('browser-content');
+            playSfx(800);
+            if(url === 'music.os') {
+                content.innerHTML = "<h2>Trending on Music.os</h2><ul><li>Nevermind - Nirvana</li><li>Plastic Beach - Gorillaz</li><li>American Idiot - Green Day</li></ul>";
+            } else if(url === 'news.os') {
+                content.innerHTML = "<h2>Aiden_OS News</h2><p>V7.0 released today! Features include a working browser and 40 themes.</p>";
+            } else if(url === 'aiden.com') {
+                content.innerHTML = "<h1>Aiden Becker</h1><p>Portfolio landing page. Hire me for cool UI builds.</p>";
+            } else {
+                content.innerHTML = "<h1>404 Not Found</h1><p>The domain " + url + " is not registered on Aiden-Net.</p>";
+            }
         }
 
         // --- MUSIC ---
@@ -226,7 +221,7 @@
             { t: "Smells Like Teen Spirit", a: "Nirvana", f: "music/nirvana.mp3", i: "https://upload.wikimedia.org/wikipedia/en/b/b7/NirvanaNevermindalbumcover.jpg" },
             { t: "On Melancholy Hill", a: "Gorillaz", f: "music/gorillaz.mp3", i: "https://upload.wikimedia.org/wikipedia/en/d/d1/Plasticbeach452.jpg" },
             { t: "American Idiot", a: "Green Day", f: "music/greenday.mp3", i: "https://upload.wikimedia.org/wikipedia/en/e/ed/Green_Day_-_American_Idiot_album_cover.png" },
-            { t: "Seven Nation Army", a: "The White Stripes", f: "music/stripes.mp3", i: "https://upload.wikimedia.org/wikipedia/en/7/7b/The_White_Stripes_-_Elephant.png" }
+            { t: "Elephant", a: "Tame Impala", f: "music/tame.mp3", i: "https://upload.wikimedia.org/wikipedia/en/1/11/Tame_Impala_Lonerism_Cover.jpeg" }
         ];
         const mList = document.getElementById('music-list');
         songs.forEach(s => {
@@ -235,61 +230,26 @@
             mList.appendChild(d);
         });
 
-        // --- THEMES ---
-        const themes = [
-            {n:"Cyanide (Nirvana)", c:"#00f2ff"}, {n:"Vaporwave", c:"#ff71ce"}, {n:"Matrix", c:"#00ff41"}, 
-            {n:"Blood Moon", c:"#ff0000"}, {n:"Amber Gold", c:"#ffcc00"}, {n:"Midnight", c:"#4444ff"}
+        // --- THEMES (40+) ---
+        const themeList = [
+            {n:"Nevermind", c:"#00f2ff"}, {n:"Matrix", c:"#00ff41"}, {n:"Vaporwave", c:"#ff71ce"}, 
+            {n:"Dracula", c:"#bd93f9"}, {n:"Nord", c:"#88c0d0"}, {n:"Fire", c:"#ff4500"}, 
+            {n:"Midnight", c:"#111155"}, {n:"Amber", c:"#ffb000"}, {n:"Forest", c:"#228b22"},
+            {n:"Blood", c:"#8b0000"}, {n:"Ghost", c:"#f8f8f2"}, {n:"Toxic", c:"#adff2f"},
+            {n:"Rose", c:"#e0115f"}, {n:"Teal", c:"#008080"}, {n:"Sky", c:"#87ceeb"},
+            {n:"Deep Space", c:"#000022"}, {n:"Sunset", c:"#fd5e53"}, {n:"Mint", c:"#98ff98"},
+            {n:"Gold", c:"#ffd700"}, {n:"Slate", c:"#708090"}, {n:"Neon", c:"#39ff14"},
+            {n:"Royal", c:"#4169e1"}, {n:"Coffee", c:"#6f4e37"}, {n:"Cyber", c:"#f3ec19"},
+            {n:"Bones", c:"#dadada"}, {n:"Sea", c:"#2e8b57"}, {n:"Plum", c:"#dda0dd"},
+            {n:"Lava", c:"#cf1020"}, {n:"Clay", c:"#b22222"}, {n:"Emerald", c:"#50fa7b"}
         ];
         const tGrid = document.getElementById('theme-grid');
-        themes.forEach(t => {
-            const d = document.createElement('div'); d.className = 'icon'; d.style.width = '100%';
-            d.innerHTML = `<div style="height:30px; background:${t.c}; border-radius:4px; margin-bottom:5px;"></div><span>${t.n}</span>`;
-            d.onclick = () => { document.documentElement.style.setProperty('--primary', t.c); playSound(880); };
-            tGrid.appendChild(d);
+        themeList.forEach(t => {
+            const c = document.createElement('div'); c.className = 'theme-card';
+            c.innerHTML = `<div style="background:${t.c}; height:15px; border-radius:3px; margin-bottom:5px;"></div><span style="font-size:0.6rem;">${t.n}</span>`;
+            c.onclick = () => { document.documentElement.style.setProperty('--primary', t.c); playSfx(1000); };
+            tGrid.appendChild(c);
         });
-
-        // --- TERMINAL ---
-        const tIn = document.getElementById('term-in');
-        const tLog = document.getElementById('term-log');
-        tIn.onkeypress = (e) => {
-            if(e.key === 'Enter') {
-                const cmd = tIn.value.toLowerCase().trim();
-                const out = document.createElement('div');
-                out.style.margin = "5px 0";
-                
-                if(cmd === 'help') out.innerText = "COMMANDS: ls, clear, help, whoami, hack, matrix, weather, date, system, shutdown, secret, theme";
-                else if(cmd === 'ls') out.innerText = "About_Me.txt  /Music  /Explorer  /System32";
-                else if(cmd === 'hack') out.innerText = "ACCESSING MAINframe... [OK]\nBYPASSING FIREWALL... [OK]\nUSER DATA DOWNLOADED.";
-                else if(cmd === 'matrix') {
-                    out.innerText = "WAKE UP, ALICE. THE MATRIX HAS YOU.";
-                    document.documentElement.style.setProperty('--primary', '#00ff41');
-                }
-                else if(cmd === 'whoami') out.innerText = "You are the Superuser 'Aiden'. Authority Level: 10.";
-                else if(cmd === 'weather') out.innerText = "Weather in Aiden_OS: 72°F and 100% chance of Code.";
-                else if(cmd === 'date') out.innerText = new Date().toString();
-                else if(cmd === 'shutdown') { out.innerText = "System Shutting Down..."; setTimeout(()=>location.reload(), 1000); }
-                else if(cmd === 'secret') out.innerText = "Try clicking the trash bin 5 times... just kidding, it's not made yet.";
-                else if(cmd === 'clear') { tLog.innerHTML = ''; tIn.value = ''; return; }
-                else out.innerText = "ERROR: COMMAND NOT RECOGNIZED. TYPE 'HELP'.";
-                
-                tLog.appendChild(out);
-                tIn.value = '';
-                tLog.scrollTop = tLog.scrollHeight;
-            }
-        };
-
-        // --- UTILS ---
-        let aCtx;
-        function playSound(f) {
-            if(!aCtx) aCtx = new AudioContext();
-            const o = aCtx.createOscillator(); const g = aCtx.createGain();
-            o.connect(g); g.connect(aCtx.destination);
-            o.frequency.setValueAtTime(f, aCtx.currentTime);
-            g.gain.setValueAtTime(0.05, aCtx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.01, aCtx.currentTime + 0.1);
-            o.start(); o.stop(aCtx.currentTime + 0.1);
-        }
-        function startAudioContext() { if(aCtx && aCtx.state === 'suspended') aCtx.resume(); }
 
         setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
     </script>
