@@ -1,1 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aiden Becker | v14 Masterpiece</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff007f;
+            --bg: #050505;
+            --card-bg: #0f0f0f;
+            --text-main: #ffffff;
+            --text-dim: #a1a1aa;
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --status-active: #00ff88;
+            --status-inactive: #ff4444;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .bg-glow {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 15% 15%, var(--primary) 0%, transparent 45%);
+            opacity: 0.15;
+            z-index: -1;
+            transition: var(--transition);
+        }
+
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 8%; position: sticky; top: 0; z-index: 1000;
+            backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.2rem; display: flex; align-items: center; }
+        .cursor { display: inline-block; width: 10px; height: 1.2rem; background-color: var(--primary); margin-left: 5px; animation: blink 1s step-end infinite; }
+        @keyframes blink { from, to { background-color: transparent; } 50% { background-color: var(--primary); } }
+
+        .nav-links { display: flex; gap: 30px; }
+        nav a { color: var(--text-dim); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s; }
+        nav a:hover, nav a.active { color: var(--primary); }
+
+        .page { display: none; padding: 60px 8%; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.6s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* MUSIC */
+        .song-container { margin-bottom: 40px; background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border); transition: var(--transition); }
+        .song-container:hover { border-color: var(--primary); transform: scale(1.01); }
+        .song-flex { display: flex; gap: 30px; align-items: center; }
+        .album-art { width: 100px; height: 100px; border-radius: 10px; object-fit: cover; }
+        .status-tag { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-left: 10px; vertical-align: middle; }
+        .fact-box { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border); display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        .fact-item h5 { color: var(--primary); font-size: 0.65rem; text-transform: uppercase; margin-bottom: 5px; }
+        audio { width: 100%; margin-top: 15px; filter: invert(1) hue-rotate(280deg) opacity(0.3); }
+
+        /* ARCADE */
+        .arcade-container { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        #game-canvas { background: #000; border: 2px solid var(--primary); border-radius: 15px; box-shadow: 0 0 30px rgba(255,0,127,0.2); }
+
+        /* POPUP */
+        #now-playing-popup {
+            position: fixed; bottom: 30px; right: 30px; background: #111;
+            border: 1px solid var(--primary); padding: 12px 20px; border-radius: 12px;
+            display: flex; align-items: center; gap: 15px; transform: translateX(250%);
+            transition: var(--transition); z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        #now-playing-popup.visible { transform: translateX(0); }
+        .mini-art { width: 45px; height: 45px; border-radius: 6px; }
+
+        /* THEME PICKER */
+        .theme-grid { display: flex; gap: 15px; margin-top: 20px; }
+        .theme-dot { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
+        .theme-dot:hover { transform: scale(1.2); }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow" id="bg-glow"></div>
+
+    <nav>
+        <div class="logo">
+            <span id="typing-text"></span><span class="cursor"></span>
+        </div>
+        <div class="nav-links">
+            <a onclick="showPage('home')" id="nav-home">Home</a>
+            <a onclick="showPage('music')" id="nav-music" class="active">Music</a>
+            <a onclick="showPage('arcade')" id="nav-arcade">Arcade</a>
+        </div>
+    </nav>
+
+    <div id="home" class="page">
+        <h1>Building <span style="color:var(--primary)">Digital</span> Experiences.</h1>
+        <div style="margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+            <div>
+                <h3>// Bio</h3>
+                <p style="color: var(--text-dim);">I am a developer focused on creating clean, functional, and aesthetically pleasing digital products.</p>
+            </div>
+            <div>
+                <h3>// System Theme</h3>
+                <div class="theme-grid">
+                    <div class="theme-dot" style="background:#ff007f" onclick="setTheme('#ff007f')"></div>
+                    <div class="theme-dot" style="background:#00f2ff" onclick="setTheme('#00f2ff')"></div>
+                    <div class="theme-dot" style="background:#00ff88" onclick="setTheme('#00ff88')"></div>
+                    <div class="theme-dot" style="background:#ffcc00" onclick="setTheme('#ffcc00')"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="music" class="page active">
+        <div class="song-container">
+            <div class="song-flex">
+                <img src="music/nirvana.jpg" class="album-art">
+                <div style="flex:1">
+                    <h3>Smells Like Teen Spirit <span class="status-tag" style="color:var(--status-inactive)">[Disbanded]</span></h3>
+                    <audio controls src="music/nirvana.mp3" data-title="Smells Like Teen Spirit" data-artist="Nirvana" data-art="music/nirvana.jpg"></audio>
+                </div>
+            </div>
+            <div class="fact-box">
+                <div class="fact-item"><h5>Vibe</h5><p>90s Grunge Anthem.</p></div>
+                <div class="fact-item"><h5>Status</h5><p>Ended 1994.</p></div>
+            </div>
+        </div>
+
+        <div class="song-container">
+            <div class="song-flex">
+                <img src="music/bilmuri.jpg" class="album-art">
+                <div style="flex:1">
+                    <h3>More Than Hate <span class="status-tag" style="color:var(--status-active)">[Active]</span></h3>
+                    <audio controls src="music/bilmuri.mp3" data-title="More Than Hate" data-artist="Bilmuri" data-art="music/bilmuri.jpg"></audio>
+                </div>
+            </div>
+            <div class="fact-box">
+                <div class="fact-item"><h5>Style</h5><p>Post-Hardcore / Heavy Pop.</p></div>
+                <div class="fact-item"><h5>Status</h5><p>Constantly touring.</p></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="arcade" class="page">
+        <div class="arcade-container">
+            <h3>// Neon Snake v2</h3>
+            <canvas id="game-canvas" width="400" height="400"></canvas>
+            <p style="font-size: 0.8rem; color: var(--text-dim);">Use Arrow Keys | High Score: <span id="high-score">0</span></p>
+        </div>
+    </div>
+
+    <div id="now-playing-popup">
+        <img id="popup-art" src="" class="mini-art">
+        <div>
+            <div id="popup-artist" style="font-size: 0.65rem; color: var(--primary); font-weight: 800; letter-spacing: 1px; text-transform: uppercase;"></div>
+            <div id="popup-title" style="font-size: 0.9rem; font-weight: 700;"></div>
+        </div>
+    </div>
+
+    <script>
+        const text = "AIDEN BECKER";
+        let charIndex = 0;
+
+        function typeEffect() {
+            if (charIndex < text.length) {
+                document.getElementById("typing-text").textContent += text.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeEffect, 150);
+            }
+        }
+
+        function showPage(p) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(p).classList.add('active');
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            document.getElementById('nav-'+p).classList.add('active');
+            if(p === 'arcade') startSnake();
+        }
+
+        function setTheme(color) {
+            document.documentElement.style.setProperty('--primary', color);
+            localStorage.setItem('aiden_theme', color);
+        }
+
+        // --- AUDIO ENGINE ---
+        const popup = document.getElementById('now-playing-popup');
+        document.querySelectorAll('audio').forEach(audio => {
+            audio.addEventListener('play', () => {
+                document.querySelectorAll('audio').forEach(other => { if(other !== audio) other.pause(); });
+                document.getElementById('popup-title').innerText = audio.getAttribute('data-title');
+                document.getElementById('popup-artist').innerText = audio.getAttribute('data-artist');
+                document.getElementById('popup-art').src = audio.getAttribute('data-art');
+                popup.classList.add('visible');
+            });
+            audio.addEventListener('pause', () => popup.classList.remove('visible'));
+        });
+
+        // --- SNAKE GAME ---
+        let snakeTicker;
+        function startSnake() {
+            const canvas = document.getElementById('game-canvas');
+            const ctx = canvas.getContext('2d');
+            let snake = [{x:10, y:10}];
+            let apple = {x:15, y:15};
+            let d = {x:1, y:0};
+
+            document.onkeydown = e => {
+                if(e.key === 'ArrowUp' && d.y === 0) d = {x:0, y:-1};
+                if(e.key === 'ArrowDown' && d.y === 0) d = {x:0, y:1};
+                if(e.key === 'ArrowLeft' && d.x === 0) d = {x:-1, y:0};
+                if(e.key === 'ArrowRight' && d.x === 0) d = {x:1, y:0};
+            };
+
+            if(snakeTicker) clearInterval(snakeTicker);
+            snakeTicker = setInterval(() => {
+                let head = {x: snake[0].x + d.x, y: snake[0].y + d.y};
+                snake.unshift(head);
+                if(head.x === apple.x && head.y === apple.y) {
+                    apple = {x: Math.floor(Math.random()*20), y: Math.floor(Math.random()*20)};
+                } else { snake.pop(); }
+
+                ctx.fillStyle = '#000'; ctx.fillRect(0,0,400,400);
+                ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary');
+                snake.forEach(s => ctx.fillRect(s.x*20, s.y*20, 18, 18));
+                ctx.fillStyle = '#fff'; ctx.fillRect(apple.x*20, apple.y*20, 18, 18);
+
+                if(head.x<0 || head.x>=20 || head.y<0 || head.y>=20) {
+                    snake = [{x:10, y:10}]; d = {x:1, y:0};
+                }
+            }, 100);
+        }
+
+        window.onload = () => {
+            typeEffect();
+            const savedTheme = localStorage.getItem('aiden_theme');
+            if(savedTheme) setTheme(savedTheme);
+        };
+    </script>
+</body>
+</html>
 
