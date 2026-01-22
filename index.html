@@ -1,1 +1,224 @@
-v
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aiden Becker | Official</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff007f;
+            --bg: #050505;
+            --card-bg: #0f0f0f;
+            --text-main: #ffffff;
+            --text-dim: #a1a1aa;
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .bg-glow {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 15% 15%, var(--primary) 0%, transparent 45%);
+            z-index: -1; opacity: 0.15; transition: var(--transition);
+        }
+
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 8%; position: sticky; top: 0; z-index: 1000;
+            backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.2rem; }
+        .cursor { display: inline-block; width: 10px; height: 1.2rem; background-color: var(--primary); margin-left: 5px; animation: blink 1s step-end infinite; }
+        @keyframes blink { from, to { background-color: transparent; } 50% { background-color: var(--primary); } }
+
+        .nav-links { display: flex; gap: 30px; }
+        nav a { color: var(--text-dim); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s; }
+        nav a:hover, nav a.active { color: var(--primary); }
+
+        .page { display: none; padding: 60px 8%; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.6s ease forwards; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* MUSIC CARDS */
+        .song-card { margin-bottom: 25px; background: var(--card-bg); padding: 25px; border-radius: 20px; border: 1px solid var(--glass-border); display: flex; gap: 25px; align-items: center; transition: 0.3s; }
+        .song-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .album-art { width: 100px; height: 100px; border-radius: 12px; object-fit: cover; }
+        audio { width: 100%; margin-top: 15px; filter: invert(1) hue-rotate(280deg) opacity(0.4); }
+
+        /* ARCADE */
+        .arcade-wrap { text-align: center; padding: 40px; background: #000; border-radius: 30px; border: 1px solid var(--primary); }
+        canvas { background: #080808; border-radius: 10px; }
+
+        /* MINI PLAYER POPUP */
+        #music-popup {
+            position: fixed; bottom: 30px; right: 30px; background: #111;
+            border: 1px solid var(--primary); padding: 12px 20px; border-radius: 15px;
+            display: flex; align-items: center; gap: 15px; transform: translateX(300%);
+            transition: var(--transition); z-index: 9999;
+        }
+        #music-popup.active { transform: translateX(0); }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <nav>
+        <div class="logo">
+            <span id="type-target"></span><span class="cursor"></span>
+        </div>
+        <div class="nav-links">
+            <a onclick="showTab('home')" id="l-home">Home</a>
+            <a onclick="showTab('music')" id="l-music" class="active">Music</a>
+            <a onclick="showTab('arcade')" id="l-arcade">Arcade</a>
+        </div>
+    </nav>
+
+    <div id="home" class="page">
+        <h1 style="font-size: 3.5rem; font-weight: 700;">Aiden <span style="color:var(--primary)">Becker</span></h1>
+        <p style="color:var(--text-dim); margin-top: 10px; max-width: 600px;">Full-stack developer and hardware enthusiast. Focus on high-fidelity user experiences.</p>
+        
+        <div style="margin-top: 50px;">
+            <h3>// Accent Color</h3>
+            <div style="display:flex; gap:15px; margin-top:15px;">
+                <div onclick="setTheme('#ff007f')" style="width:30px; height:30px; background:#ff007f; border-radius:50%; cursor:pointer;"></div>
+                <div onclick="setTheme('#00f2ff')" style="width:30px; height:30px; background:#00f2ff; border-radius:50%; cursor:pointer;"></div>
+                <div onclick="setTheme('#a3ff33')" style="width:30px; height:30px; background:#a3ff33; border-radius:50%; cursor:pointer;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="music" class="page active">
+        <div class="song-card">
+            <img src="music/nirvana.jpg" class="album-art">
+            <div style="flex:1">
+                <h3>Smells Like Teen Spirit</h3>
+                <audio controls src="music/nirvana.mp3" data-title="Teen Spirit" data-artist="Nirvana" data-img="music/nirvana.jpg"></audio>
+            </div>
+        </div>
+        <div class="song-card">
+            <img src="music/greenday.jpg" class="album-art">
+            <div style="flex:1">
+                <h3>American Idiot</h3>
+                <audio controls src="music/greenday.mp3" data-title="American Idiot" data-artist="Green Day" data-img="music/greenday.jpg"></audio>
+            </div>
+        </div>
+        <div class="song-card">
+            <img src="music/gorillaz.jpg" class="album-art">
+            <div style="flex:1">
+                <h3>On Melancholy Hill</h3>
+                <audio controls src="music/gorillaz.mp3" data-title="Melancholy Hill" data-artist="Gorillaz" data-img="music/gorillaz.jpg"></audio>
+            </div>
+        </div>
+        <div class="song-card">
+            <img src="music/bilmuri.jpg" class="album-art">
+            <div style="flex:1">
+                <h3>More Than Hate</h3>
+                <audio controls src="music/bilmuri.mp3" data-title="More Than Hate" data-artist="Bilmuri" data-img="music/bilmuri.jpg"></audio>
+            </div>
+        </div>
+    </div>
+
+    <div id="arcade" class="page">
+        <div class="arcade-wrap">
+            <h2>SYSTEM_SNAKE</h2>
+            <canvas id="snakeGame" width="400" height="400"></canvas>
+            <p style="margin-top:10px;">SCORE: <span id="sVal">0</span></p>
+        </div>
+    </div>
+
+    <div id="music-popup">
+        <img id="p-img" src="" style="width:40px; height:40px; border-radius:5px;">
+        <div>
+            <div id="p-artist" style="font-size:0.6rem; color:var(--primary); font-weight:800;"></div>
+            <div id="p-title" style="font-size:0.8rem; font-weight:700;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Typing
+        const name = "AIDEN BECKER";
+        let i = 0;
+        function type() {
+            if(i < name.length) {
+                document.getElementById('type-target').textContent += name.charAt(i);
+                i++; setTimeout(type, 150);
+            }
+        }
+
+        // Tabs
+        function showTab(t) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(t).classList.add('active');
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            document.getElementById('l-'+t).classList.add('active');
+            if(t === 'arcade') initSnake();
+        }
+
+        // Theme
+        function setTheme(c) {
+            document.documentElement.style.setProperty('--primary', c);
+            localStorage.setItem('a_theme', c);
+        }
+
+        // Audio
+        const pop = document.getElementById('music-popup');
+        document.querySelectorAll('audio').forEach(aud => {
+            aud.addEventListener('play', () => {
+                document.querySelectorAll('audio').forEach(x => { if(x !== aud) x.pause(); });
+                document.getElementById('p-title').innerText = aud.getAttribute('data-title');
+                document.getElementById('p-artist').innerText = aud.getAttribute('data-artist');
+                document.getElementById('p-img').src = aud.getAttribute('data-img');
+                pop.classList.add('active');
+            });
+            aud.addEventListener('pause', () => pop.classList.remove('active'));
+        });
+
+        // Snake
+        let snakeInt;
+        function initSnake() {
+            const cvs = document.getElementById('snakeGame');
+            const ctx = cvs.getContext('2d');
+            let sn = [{x:10, y:10}], f = {x:5, y:5}, dir = {x:1, y:0}, sc = 0;
+            document.onkeydown = e => {
+                if(e.key==='ArrowUp' && dir.y===0) dir={x:0, y:-1};
+                if(e.key==='ArrowDown' && dir.y===0) dir={x:0, y:1};
+                if(e.key==='ArrowLeft' && dir.x===0) dir={x:-1, y:0};
+                if(e.key==='ArrowRight' && dir.x===0) dir={x:1, y:0};
+            };
+            if(snakeInt) clearInterval(snakeInt);
+            snakeInt = setInterval(() => {
+                let h = {x: sn[0].x + dir.x, y: sn[0].y + dir.y};
+                sn.unshift(h);
+                if(h.x===f.x && h.y===f.y) {
+                    sc++; document.getElementById('sVal').innerText = sc;
+                    f = {x: Math.floor(Math.random()*20), y: Math.floor(Math.random()*20)};
+                } else { sn.pop(); }
+                ctx.fillStyle = '#080808'; ctx.fillRect(0,0,400,400);
+                ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary');
+                sn.forEach(p => ctx.fillRect(p.x*20, p.y*20, 18, 18));
+                ctx.fillStyle = '#fff'; ctx.fillRect(f.x*20, f.y*20, 18, 18);
+                if(h.x<0 || h.x>=20 || h.y<0 || h.y>=20) { sn=[{x:10, y:10}]; dir={x:1, y:0}; sc=0; document.getElementById('sVal').innerText=0; }
+            }, 100);
+        }
+
+        window.onload = () => {
+            type();
+            const c = localStorage.getItem('a_theme');
+            if(c) setTheme(c);
+        };
+    </script>
+</body>
+</html>
