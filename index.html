@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker | Developer & Musician</title>
+    <title>Aiden Becker | Dev & Music</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #ff007f; /* Hot Pink */
+            --primary: #ff007f;
             --primary-muted: rgba(255, 0, 127, 0.2);
-            --bg: #050505; /* Deep Black */
+            --bg: #050505;
             --card-bg: #0f0f0f;
             --text-main: #ffffff;
             --text-dim: #a1a1aa;
@@ -56,7 +56,6 @@
             font-weight: 700;
             font-size: 1.2rem;
             letter-spacing: -1px;
-            color: var(--text-main);
         }
 
         .nav-links { display: flex; gap: 30px; }
@@ -105,11 +104,7 @@
             transition: var(--transition);
         }
 
-        .card:hover {
-            border-color: var(--primary);
-            background: #141414;
-            transform: translateY(-5px);
-        }
+        .card:hover { border-color: var(--primary); background: #141414; }
 
         .tag {
             font-size: 0.7rem;
@@ -133,7 +128,9 @@
         iframe { width: 100%; height: 100%; border: none; }
 
         .btn-launch {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
             margin-top: 20px;
             padding: 14px 28px;
             background: var(--primary);
@@ -153,18 +150,36 @@
         .song-list { display: flex; flex-direction: column; gap: 12px; }
         .song-row {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             background: var(--card-bg);
-            padding: 15px 25px;
-            border-radius: 8px;
+            padding: 25px;
+            border-radius: 12px;
             border: 1px solid var(--glass-border);
             gap: 20px;
         }
 
-        .album-art { width: 50px; height: 50px; border-radius: 4px; object-fit: cover; }
+        .album-art { width: 60px; height: 60px; border-radius: 4px; object-fit: cover; }
         .song-meta { flex-grow: 1; }
-        .song-meta h4 { font-size: 1rem; margin: 0; }
-        .song-meta p { font-size: 0.8rem; color: var(--text-dim); }
+        .song-meta h4 { font-size: 1.1rem; margin-bottom: 2px; }
+        .song-meta p { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 10px; }
+
+        .song-description {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+            border-left: 2px solid var(--primary-muted);
+            padding-left: 15px;
+            margin-top: 10px;
+        }
+
+        .band-members {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--primary);
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
 
         audio {
             height: 35px;
@@ -187,20 +202,18 @@
         }
 
         #now-playing-popup.visible { transform: translateX(0); }
-
         .mini-art { width: 40px; height: 40px; border-radius: 50%; animation: spin 4s linear infinite; }
         @keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
 
-        footer { text-align: center; padding: 80px 0; color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; }
-
+        footer { text-align: center; padding: 80px 0; color: var(--text-dim); font-size: 0.7rem; letter-spacing: 2px; }
         .badge-group { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
         .badge {
             padding: 4px 12px;
             background: var(--primary-muted);
             border: 1px solid var(--primary);
             color: var(--primary);
-            font-size: 0.7rem;
-            border-radius: 20px;
+            font-size: 0.65rem;
+            border-radius: 4px;
             font-weight: 700;
         }
     </style>
@@ -220,33 +233,37 @@
 
     <div id="home" class="page active">
         <div class="hero">
-            <span class="tag">Game Developer and Future Musician</span>
-            <h1>Making <span class="pink-text">Fun</span> Games and Fun Music.</h1>
+            <span class="tag">Dev & Musician</span>
+            <h1>Games and <span class="pink-text">Music</span>.</h1>
         </div>
         
         <div class="grid">
             <div class="card">
-                <span class="tag">Project 01</span>
+                <span class="tag">Project</span>
                 <h3 style="font-family: 'Space Grotesk'; font-size: 1.5rem; margin-bottom: 10px;">DEAD ZONE</h3>
-                <p style="color: var(--text-dim); margin-bottom: 20px;">A survival experience focused on immersive mechanics and 3D spatial audio. Play the demo directly in your browser.</p>
-                <button onclick="showPage('arcade')" class="btn-launch">Launch Game</button>
+                <p style="color: var(--text-dim); margin-bottom: 20px;">A survival thing focused on 3D spatial audio and immersive mechanics. Play the demo in the browser.</p>
+                <button onclick="showPage('arcade')" class="btn-launch">Play Demo</button>
             </div>
 
             <div class="card">
-                <span class="tag">About Me</span>
-                <h3 style="font-family: 'Space Grotesk'; font-size: 1.5rem; margin-bottom: 10px;">Hello World!</h3>
-                <p style="color: var(--text-dim); margin-bottom: 20px;">I'm Aiden Becker, a high schooler who loves building worlds through code and sound. I hope you enjoy my work!</p>
+                <span class="tag">Who</span>
+                <h3 style="font-family: 'Space Grotesk'; font-size: 1.5rem; margin-bottom: 10px;">Aiden Becker</h3>
+                <p style="color: var(--text-dim); margin-bottom: 25px;">I'm a high schooler. I make stuff on Unity and write music when I'm bored. This is where I keep it all.</p>
+                <a href="assets/Aiden_Becker_Resume.pdf" download class="btn-launch">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                    Resume.pdf
+                </a>
             </div>
 
             <div class="card">
-                <span class="tag">Stack</span>
-                <h3 style="font-family: 'Space Grotesk'; font-size: 1.5rem; margin-bottom: 10px;">The Tech</h3>
-                <p style="color: var(--text-dim);">I enjoy building games using industry-standard tools and web tech.</p>
+                <span class="tag">Tools</span>
+                <h3 style="font-family: 'Space Grotesk'; font-size: 1.5rem; margin-bottom: 10px;">The Stack</h3>
+                <p style="color: var(--text-dim);">The stuff I actually use to build things.</p>
                 <div class="badge-group">
-                    <span class="badge">UNITY 3D</span>
+                    <span class="badge">UNITY</span>
                     <span class="badge">C#</span>
-                    <span class="badge">HTML5</span>
                     <span class="badge">SCRATCH</span>
+                    <span class="badge">HTML/CSS</span>
                 </div>
             </div>
         </div>
@@ -254,7 +271,7 @@
 
     <div id="arcade" class="page">
         <div class="hero" style="text-align: center;">
-            <span class="tag">Live Mission</span>
+            <span class="tag">Browser Build</span>
             <h1>Dead Zone <span class="pink-text">Demo</span></h1>
         </div>
         <div class="game-container">
@@ -263,15 +280,15 @@
             </div>
         </div>
         <div style="text-align: center; margin-top: 30px;">
-            <p style="color: var(--text-dim); font-size: 0.8rem; letter-spacing: 2px;">
-                CONTROLS: [W/A/D] MOVE/JUMP &bull; [SPACE] FIRE
+            <p style="color: var(--text-dim); font-size: 0.7rem; letter-spacing: 2px;">
+                W/A/S/D TO MOVE &bull; SPACE TO JUMP
             </p>
         </div>
     </div>
 
     <div id="music" class="page">
         <div class="hero">
-            <span class="tag">Inspiration</span>
+            <span class="tag">Archive</span>
             <h1>Music <span class="pink-text">Vault</span></h1>
         </div>
 
@@ -281,75 +298,92 @@
                 <div class="song-meta">
                     <h4>Smells Like Teen Spirit</h4>
                     <p>Nirvana</p>
+                    <div class="song-description">
+                        <span class="band-members">Kurt Cobain, Krist Novoselic, Dave Grohl</span>
+                        The energy in this is just different. I like how the drums sound on this track.
+                    </div>
                 </div>
-                <audio controls src="music/nirvana.mp3" data-title="Smells Like Teen Spirit" data-art="music/nirvana.jpg"></audio>
+                <audio controls src="music/nirvana.mp3" data-title="Teen Spirit" data-art="music/nirvana.jpg"></audio>
             </div>
 
             <div class="song-row">
                 <img src="music/gorillaz.jpg" class="album-art" alt="Gorillaz">
                 <div class="song-meta">
-                    <h4>Melancholy Hill</h4>
+                    <h4>On Melancholy Hill</h4>
                     <p>Gorillaz</p>
+                    <div class="song-description">
+                        <span class="band-members">Damon Albarn</span>
+                        The synth melody is simple but stuck in my head forever. Great vibe for coding.
+                    </div>
                 </div>
                 <audio controls src="music/gorillaz.mp3" data-title="Melancholy Hill" data-art="music/gorillaz.jpg"></audio>
             </div>
-                   <div class="song-row">
+
+            <div class="song-row">
                 <img src="music/greenday.jpg" class="album-art" alt="Green Day">
                 <div class="song-meta">
                     <h4>American Idiot</h4>
                     <p>Green Day</p>
+                    <div class="song-description">
+                        <span class="band-members">Billie Joe Armstrong, Mike Dirnt, Tré Cool</span>
+                        Classic. I like the fast pace and the simple, punchy riffs.
+                    </div>
                 </div>
                 <audio controls src="music/greenday.mp3" data-title="American Idiot" data-art="music/greenday.jpg"></audio>
             </div>
         </div>
     </div>
-        </div>
-    </div>
-
-
 
     <div id="now-playing-popup">
         <img id="popup-art" src="" class="mini-art">
         <div>
-            <div style="font-size: 0.6rem; color: var(--primary); font-weight: 800; text-transform: uppercase;">Playing</div>
-            <div id="popup-title" style="font-size: 0.9rem; font-weight: 600;">Song Title</div>
+            <div style="font-size: 0.6rem; color: var(--primary); font-weight: 800;">PLAYING</div>
+            <div id="popup-title" style="font-size: 0.8rem; font-weight: 600;">Song Title</div>
         </div>
     </div>
 
     <footer>
-        &copy; 2026 AIDEN BECKER &bull; <span class="pink-text">BUILDING THE FUTURE</span>
+        &copy; 2026 AIDEN BECKER &bull; <span class="pink-text">MADE BY ME</span>
     </footer>
 
     <script>
         function showPage(pageId) {
-            // Hide all pages
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            // Show the one we want
             document.getElementById(pageId).classList.add('active');
-            
-            // Remove 'active' from all nav links
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            // Find the nav link that matches the page ID
             const activeNav = document.getElementById('nav-' + pageId);
             if(activeNav) activeNav.classList.add('active');
-            
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
-        const audios = document.querySelectorAll('audio');
+        const audios = Array.from(document.querySelectorAll('audio'));
         const popup = document.getElementById('now-playing-popup');
         const pTitle = document.getElementById('popup-title');
         const pArt = document.getElementById('popup-art');
 
-        audios.forEach(audio => {
+        audios.forEach((audio, index) => {
             audio.addEventListener('play', () => {
                 audios.forEach(other => { if(other !== audio) other.pause(); });
                 pTitle.innerText = audio.getAttribute('data-title');
                 pArt.src = audio.getAttribute('data-art');
                 popup.classList.add('visible');
             });
-            audio.addEventListener('pause', () => popup.classList.remove('visible'));
-            audio.addEventListener('ended', () => popup.classList.remove('visible'));
+
+            audio.addEventListener('ended', () => {
+                popup.classList.remove('visible');
+                // Play next song logic
+                let nextIndex = index + 1;
+                if (nextIndex >= audios.length) nextIndex = 0; // Loop back to first
+                audios[nextIndex].currentTime = 0;
+                audios[nextIndex].play();
+            });
+
+            audio.addEventListener('pause', () => {
+                // Only hide popup if the audio actually stopped (not just ended)
+                if (audio.currentTime !== audio.duration) {
+                    popup.classList.remove('visible');
+                }
+            });
         });
     </script>
 </body>
