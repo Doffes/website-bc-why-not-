@@ -28,8 +28,7 @@
         }
 
         .bg-glow {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at 0% 0%, rgba(255, 0, 127, 0.05) 0%, transparent 35%);
             z-index: -1;
         }
@@ -64,7 +63,7 @@
         .song-meta { flex-grow: 1; }
         audio { height: 35px; filter: invert(1) hue-rotate(270deg) brightness(1.5); }
 
-        /* --- KARAOKE OVERLAY --- */
+        /* --- KARAOKE MODAL --- */
         #lyrics-modal {
             position: fixed; inset: 0; background: rgba(0,0,0,0.98);
             z-index: 10001; display: none; flex-direction: column; align-items: center; padding: 40px 20px;
@@ -72,20 +71,20 @@
 
         .modal-lyrics {
             width: 100%; max-width: 900px; flex-grow: 1; overflow-y: auto;
-            text-align: center; padding: 20vh 0; scrollbar-width: none;
+            text-align: center; padding: 25vh 0; scrollbar-width: none;
             mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
         }
         .modal-lyrics::-webkit-scrollbar { display: none; }
 
         .lyric-line {
-            font-size: clamp(1.5rem, 5vw, 2.8rem); font-weight: 700;
-            margin: 45px 0; color: rgba(255, 255, 255, 0.1);
+            font-size: clamp(1.5rem, 5vw, 2.5rem); font-weight: 700;
+            margin: 40px 0; color: rgba(255, 255, 255, 0.08);
             transition: all 0.4s ease; font-family: 'Space Grotesk', sans-serif;
+            cursor: pointer;
         }
-        .lyric-line.active { color: var(--karaoke-yellow); transform: scale(1.1); text-shadow: 0 0 30px rgba(255,255,0,0.3); }
+        .lyric-line.active { color: var(--karaoke-yellow); transform: scale(1.1); text-shadow: 0 0 30px rgba(255,255,0,0.4); }
 
-        /* --- PROGRESS BAR --- */
-        .progress-container { width: 100%; max-width: 600px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 20px; }
+        .progress-container { width: 100%; max-width: 600px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin: 20px 0; overflow: hidden; }
         .progress-fill { height: 100%; background: var(--primary); width: 0%; box-shadow: 0 0 10px var(--primary); }
 
         #now-playing-popup {
@@ -96,7 +95,7 @@
         }
         #now-playing-popup.visible { transform: translateX(0); }
         .mini-art { width: 45px; height: 45px; border-radius: 6px; }
-        .close-modal { position: absolute; top: 30px; right: 30px; background: none; border: 1px solid white; color: white; padding: 10px 20px; border-radius: 20px; cursor: pointer; }
+        .close-modal { position: absolute; top: 30px; right: 30px; background: rgba(255,255,255,0.1); border: none; color: white; padding: 10px 20px; border-radius: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -108,11 +107,13 @@
         <div class="nav-links">
             <a onclick="showPage('home')" id="nav-home" class="active">Portfolio</a>
             <a onclick="showPage('music')" id="nav-music">Music</a>
+            <a onclick="showPage('arcade')" id="nav-arcade">Arcade</a>
         </div>
     </nav>
 
     <div id="home" class="page active">
-        <h1>Welcome to the <span class="pink-text">Lab</span>.</h1>
+        <h1>Creative <span class="pink-text">Developer</span> & Musician.</h1>
+        <p style="color: var(--text-dim); margin-top: 20px;">Welcome to my digital space.</p>
     </div>
 
     <div id="music" class="page">
@@ -122,7 +123,7 @@
                 <div class="song-meta"><h4>Smells Like Teen Spirit</h4><p>Nirvana</p></div>
                 <audio controls src="music/nirvana.mp3" 
                     data-title="Smells Like Teen Spirit" data-artist="Nirvana" data-album="Nevermind" data-art="music/nirvana.jpg"
-                    data-lyrics='[{"t":0,"l":"(Guitar Riff)"},{"t":8.1,"l":"Load up on guns"},{"t":10.5,"l":"Bring your friends"},{"t":12.9,"l":"It is fun to lose and to pretend"},{"t":17.6,"l":"She is over-bored and self-assured"},{"t":22.4,"l":"Oh no, I know a dirty word"},{"t":27.1,"l":"Hello, hello, hello, how low?"},{"t":31.9,"l":"Hello, hello, hello, how low?"},{"t":36.6,"l":"With the lights out, it is less dangerous"},{"t":41.4,"l":"Here we are now, entertain us"},{"t":46.1,"l":"I feel stupid and contagious"},{"t":50.9,"l":"Here we are now, entertain us"},{"t":55.4,"l":"A mulatto, an albino"},{"t":57.7,"l":"A mosquito, my libido"},{"t":60.2,"l":"Yay!"}]'></audio>
+                    data-lyrics='[{"t":0,"l":"(Guitar Riff)"},{"t":8.2,"l":"Load up on guns"},{"t":10.6,"l":"Bring your friends"},{"t":12.9,"l":"It is fun to lose and to pretend"},{"t":17.6,"l":"She is over-bored and self-assured"},{"t":22.4,"l":"Oh no, I know a dirty word"},{"t":27.2,"l":"Hello, hello, hello, how low?"},{"t":31.9,"l":"Hello, hello, hello, how low?"},{"t":36.6,"l":"With the lights out, it is less dangerous"},{"t":41.3,"l":"Here we are now, entertain us"},{"t":46.1,"l":"I feel stupid and contagious"},{"t":50.9,"l":"Here we are now, entertain us"},{"t":55.5,"l":"A mulatto, an albino, a mosquito, my libido"},{"t":60.2,"l":"Yay!"}]'></audio>
             </div>
 
             <div class="song-row">
@@ -130,7 +131,7 @@
                 <div class="song-meta"><h4>On Melancholy Hill</h4><p>Gorillaz</p></div>
                 <audio controls src="music/gorillaz.mp3" 
                     data-title="On Melancholy Hill" data-artist="Gorillaz" data-album="Plastic Beach" data-art="music/gorillaz.jpg"
-                    data-lyrics='[{"t":0,"l":"(Synth Intro)"},{"t":16.4,"l":"Up on melancholy hill"},{"t":20.3,"l":"There is a plastic tree"},{"t":24.3,"l":"Are you here with me?"},{"t":28.4,"l":"Just looking out on the day of another dream"},{"t":36.5,"l":"Well, you cannot get what you want"},{"t":40.5,"l":"But you can get me"},{"t":44.5,"l":"So let us set up and go"},{"t":48.6,"l":"Cause you are my medicine"},{"t":51.4,"l":"When you are close to me"}]'></audio>
+                    data-lyrics='[{"t":0,"l":"(Synth Intro)"},{"t":16.5,"l":"Up on melancholy hill"},{"t":20.4,"l":"There is a plastic tree"},{"t":24.5,"l":"Are you here with me?"},{"t":28.5,"l":"Just looking out on the day of another dream"},{"t":36.6,"l":"Well, you cannot get what you want"},{"t":40.6,"l":"But you can get me"},{"t":44.6,"l":"So let us set up and go"},{"t":48.8,"l":"Cause you are my medicine"},{"t":51.6,"l":"When you are close to me"}]'></audio>
             </div>
 
             <div class="song-row">
@@ -138,21 +139,28 @@
                 <div class="song-meta"><h4>American Idiot</h4><p>Green Day</p></div>
                 <audio controls src="music/greenday.mp3" 
                     data-title="American Idiot" data-artist="Green Day" data-album="American Idiot" data-art="music/greenday.jpg"
-                    data-lyrics='[{"t":0,"l":"(Guitar Intro)"},{"t":11.2,"l":"Don’t wanna be an American idiot"},{"t":15.1,"l":"Don’t want a nation under the new media"},{"t":19.0,"l":"And can you hear the sound of hysteria?"},{"t":22.8,"l":"The subliminal mind-f*** America"},{"t":27.0,"l":"Welcome to a new kind of tension"},{"t":30.8,"l":"All across the alien nation"},{"t":34.7,"l":"Where everything is not meant to be okay"},{"t":38.4,"l":"In television dreams of tomorrow"},{"t":42.1,"l":"We are not the ones who are meant to follow"},{"t":46.0,"l":"For that is enough to argue"}]'></audio>
+                    data-lyrics='[{"t":0,"l":"(Guitar Intro)"},{"t":11.3,"l":"Don’t wanna be an American idiot"},{"t":15.1,"l":"Don’t want a nation under the new media"},{"t":19.1,"l":"And can you hear the sound of hysteria?"},{"t":22.9,"l":"The subliminal mind-f*** America"},{"t":27.1,"l":"Welcome to a new kind of tension"},{"t":30.9,"l":"All across the alien nation"},{"t":34.8,"l":"Where everything is not meant to be okay"},{"t":38.5,"l":"In television dreams of tomorrow"},{"t":42.2,"l":"We are not the ones who are meant to follow"},{"t":46.1,"l":"For that is enough to argue"}]'></audio>
             </div>
+        </div>
+    </div>
+
+    <div id="arcade" class="page">
+        <h2 style="margin-bottom: 20px;">Project <span class="pink-text">Demo</span></h2>
+        <div style="background:#000; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border);">
+            <iframe src="game.html" style="width:100%; height:100%; border:none;"></iframe>
         </div>
     </div>
 
     <div id="now-playing-popup" onclick="openLyrics()">
         <img id="popup-art" src="" class="mini-art">
         <div>
-            <div style="font-size: 0.6rem; color: var(--primary); font-weight: 800;">OPEN KARAOKE</div>
+            <div style="font-size: 0.6rem; color: var(--primary); font-weight: 800; letter-spacing: 1px;">KARAOKE ACTIVE</div>
             <div id="popup-title" style="font-size: 0.9rem; font-weight: 700;">Title</div>
         </div>
     </div>
 
     <div id="lyrics-modal">
-        <button class="close-modal" onclick="closeLyrics()">CLOSE</button>
+        <button class="close-modal" onclick="closeLyrics()">BACK TO SITE</button>
         <div id="modal-lyrics" class="modal-lyrics"></div>
         <div class="progress-container"><div id="progress-fill" class="progress-fill"></div></div>
     </div>
@@ -162,7 +170,8 @@
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById(p).classList.add('active');
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            document.getElementById('nav-'+p).classList.add('active');
+            const link = document.getElementById('nav-' + p);
+            if(link) link.classList.add('active');
         }
 
         let currentAudio = null;
@@ -189,6 +198,8 @@
                         active.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
                     document.getElementById('progress-fill').style.width = (audio.currentTime / audio.duration * 100) + '%';
+                    // Helper for manual sync tweaking
+                    console.log("Current Time:", audio.currentTime.toFixed(2));
                 }
             });
         });
@@ -204,8 +215,8 @@
             });
         }
 
-        function openLyrics() { document.getElementById('lyrics-modal').style.display = 'flex'; }
-        function closeLyrics() { document.getElementById('lyrics-modal').style.display = 'none'; }
+        function openLyrics() { document.getElementById('lyrics-modal').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+        function closeLyrics() { document.getElementById('lyrics-modal').style.display = 'none'; document.body.style.overflow = 'auto'; }
     </script>
 </body>
 </html>
