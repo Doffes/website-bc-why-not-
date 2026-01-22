@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden_OS v8.0 | Infinity</title>
+    <title>Aiden_OS v9.0 | Persistence</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #00f2ff;
-            --bg: #050508;
-            --window: #111116;
+            --bg: #08090a;
+            --window: #141619;
             --border: rgba(255, 255, 255, 0.1);
             --text: #ffffff;
         }
@@ -20,224 +20,188 @@
         /* --- DESKTOP --- */
         #desktop {
             height: calc(100vh - 50px); width: 100vw; background: var(--bg);
-            background-image: radial-gradient(var(--border) 1px, transparent 1px);
-            background-size: 50px 50px;
-            position: relative; padding: 25px; display: flex; flex-direction: column; flex-wrap: wrap; gap: 15px; align-content: flex-start;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            position: relative; padding: 20px; display: flex; flex-direction: column; flex-wrap: wrap; gap: 10px; align-content: flex-start;
         }
 
         .icon {
-            width: 90px; text-align: center; cursor: pointer; border-radius: 12px; padding: 10px;
-            transition: 0.2s; border: 1px solid transparent; z-index: 5;
+            width: 85px; text-align: center; cursor: pointer; border-radius: 12px; padding: 10px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid transparent; z-index: 5;
         }
-        .icon:hover { background: rgba(255,255,255,0.1); border-color: var(--primary); transform: scale(1.05); }
-        .icon-img { font-size: 2.5rem; margin-bottom: 5px; display: block; filter: drop-shadow(0 0 5px rgba(0,0,0,0.5)); }
-        .icon span { font-size: 0.75rem; font-weight: 600; text-shadow: 0 2px 4px #000; }
+        .icon:hover { background: rgba(0, 242, 255, 0.1); border-color: var(--primary); transform: translateY(-5px); }
+        .icon-img { font-size: 2.2rem; margin-bottom: 5px; display: block; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)); }
+        .icon span { font-size: 0.7rem; font-weight: 600; text-shadow: 0 2px 4px #000; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         /* --- WINDOWS --- */
         .window {
-            position: absolute; width: 800px; height: 500px; background: var(--window);
+            position: absolute; width: 600px; height: 400px; background: var(--window);
             border: 1px solid var(--border); border-radius: 12px; display: none;
-            flex-direction: column; box-shadow: 0 50px 100px rgba(0,0,0,0.9); z-index: 100;
-            backdrop-filter: blur(25px); overflow: hidden;
+            flex-direction: column; box-shadow: 0 40px 80px rgba(0,0,0,0.8); z-index: 100;
+            backdrop-filter: blur(20px); overflow: hidden;
         }
         .win-head {
-            height: 45px; background: rgba(255,255,255,0.05); display: flex; 
+            height: 40px; background: rgba(255,255,255,0.05); display: flex; 
             align-items: center; padding: 0 15px; cursor: move; justify-content: space-between;
         }
-        .win-title { font-size: 0.8rem; font-weight: 800; color: var(--primary); text-transform: uppercase; }
-        .win-btns { display: flex; gap: 10px; }
-        .win-dot { width: 14px; height: 14px; border-radius: 50%; cursor: pointer; }
-
-        .win-body { flex: 1; overflow-y: auto; position: relative; }
-
-        /* --- BROWSER --- */
-        .browser-bar { display: flex; gap: 10px; background: #222; padding: 10px; align-items: center; }
-        #url-input { flex: 1; background: #000; border: 1px solid #444; color: #fff; padding: 8px 15px; border-radius: 20px; outline: none; }
-        iframe { width: 100%; height: 100%; border: none; background: #fff; }
+        .win-title { font-size: 0.75rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; }
+        .win-dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; background: #ff5f56; }
+        .win-body { flex: 1; overflow-y: auto; position: relative; padding: 15px; }
 
         /* --- TASKBAR --- */
         #taskbar {
-            height: 50px; background: rgba(10,10,15,0.95); position: fixed; bottom: 0; width: 100%;
-            display: flex; align-items: center; justify-content: space-between; padding: 0 25px;
-            border-top: 1px solid var(--border); z-index: 1000; backdrop-filter: blur(10px);
+            height: 50px; background: rgba(0,0,0,0.9); position: fixed; bottom: 0; width: 100%;
+            display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
+            border-top: 1px solid var(--border); z-index: 2000;
         }
-        .tb-section { display: flex; align-items: center; gap: 20px; }
-        #start-btn { font-weight: 900; color: var(--primary); cursor: pointer; font-size: 1.2rem; }
+        #clock { font-family: 'Fira Code'; font-size: 0.8rem; font-weight: bold; color: var(--primary); }
+        .start-menu { padding: 5px 15px; background: var(--primary); color: #000; border-radius: 5px; font-weight: 900; cursor: pointer; }
 
-        /* --- APP STORE --- */
-        .store-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; padding: 20px; }
-        .store-item { background: #1a1a20; padding: 15px; border-radius: 15px; text-align: center; border: 1px solid #333; }
-        .buy-btn { background: var(--primary); color: #000; border: none; padding: 5px 15px; border-radius: 5px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        /* --- APPS --- */
+        #editor { width: 100%; height: 90%; background: #000; color: #0f0; font-family: 'Fira Code'; border: none; padding: 10px; resize: none; outline: none; }
+        .browser-top { display: flex; gap: 10px; margin-bottom: 10px; }
+        #url-bar { flex: 1; background: #222; border: 1px solid #444; color: #fff; padding: 5px 10px; border-radius: 4px; outline: none; }
+        iframe { width: 100%; height: calc(100% - 40px); border: none; background: #fff; }
 
-        /* --- GAME: SNAKE --- */
-        #snake-canvas { background: #000; display: block; margin: 20px auto; border: 2px solid var(--primary); }
+        .hidden { display: none; }
     </style>
 </head>
-<body onclick="if(aCtx) aCtx.resume();">
+<body onload="loadOS()">
 
-    <div id="desktop">
-        <div class="icon" onclick="openWin('win-browser')"><span class="icon-img">🌐</span><span>Quantum</span></div>
-        <div class="icon" onclick="openWin('win-store')"><span class="icon-img">🛍️</span><span>App Store</span></div>
-        <div class="icon" onclick="openWin('win-music')"><span class="icon-img">💿</span><span>My Songs</span></div>
-        <div class="icon" onclick="openWin('win-games')"><span class="icon-img">🎮</span><span>Games</span></div>
-        <div class="icon" onclick="openWin('win-terminal')"><span class="icon-img">📟</span><span>Terminal</span></div>
-        <div class="icon" onclick="openWin('win-stats')"><span class="icon-img">📈</span><span>Sys Stats</span></div>
-        <div class="icon" onclick="openWin('win-about')"><span class="icon-img">📄</span><span>About_Me</span></div>
-    </div>
-
-    <div id="win-browser" class="window" style="width:90vw; height:80vh;">
-        <div class="win-head" onmousedown="drag(event, 'win-browser')">
-            <span class="win-title">Quantum Browser Pro</span>
-            <div class="win-btns"><div class="win-dot" style="background:#ff5f56;" onclick="closeWin('win-browser')"></div></div>
-        </div>
-        <div class="browser-bar">
-            <button onclick="navGo()" style="background:none; border:none; color:white; cursor:pointer;">🏠</button>
-            <input type="text" id="url-input" value="https://www.wikipedia.org">
-            <button onclick="navGo()" style="background:var(--primary); border:none; padding:5px 15px; border-radius:15px; cursor:pointer;">Go</button>
-        </div>
-        <div class="win-body">
-            <iframe id="browser-frame" src="https://www.wikipedia.org"></iframe>
-        </div>
-    </div>
-
-    <div id="win-store" class="window">
-        <div class="win-head" onmousedown="drag(event, 'win-store')">
-            <span class="win-title">Aiden App Store</span>
-            <div class="win-btns"><div class="win-dot" style="background:#ff5f56;" onclick="closeWin('win-store')"></div></div>
-        </div>
-        <div class="win-body">
-            <div class="store-grid">
-                <div class="store-item"><span>🎬</span><h3>Aiden-Tube</h3><button class="buy-btn" onclick="install('Tube')">Install</button></div>
-                <div class="store-item"><span>🎨</span><h3>Paint 3D</h3><button class="buy-btn" onclick="install('Paint')">Install</button></div>
-                <div class="store-item"><span>💬</span><h3>Messenger</h3><button class="buy-btn" onclick="install('Chat')">Install</button></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="win-games" class="window">
-        <div class="win-head" onmousedown="drag(event, 'win-games')">
-            <span class="win-title">Retro Game Center</span>
-            <div class="win-btns"><div class="win-dot" style="background:#ff5f56;" onclick="closeWin('win-games')"></div></div>
-        </div>
-        <div class="win-body" style="text-align:center;">
-            <h2 style="margin-top:20px;">Neon Snake</h2>
-            <canvas id="snake-canvas" width="400" height="400"></canvas>
-            <p>Use Arrow Keys to Play</p>
-        </div>
-    </div>
-
-    <div id="win-stats" class="window" style="width:400px; height:300px;">
-        <div class="win-head" onmousedown="drag(event, 'win-stats')">
-            <span class="win-title">System Monitor</span>
-            <div class="win-btns"><div class="win-dot" style="background:#ff5f56;" onclick="closeWin('win-stats')"></div></div>
-        </div>
-        <div class="win-body" style="padding:30px;">
-            <p>CPU Usage: <span id="cpu-load">5%</span></p>
-            <div style="width:100%; height:10px; background:#222; margin:10px 0;"><div id="cpu-bar" style="width:5%; height:100%; background:var(--primary);"></div></div>
-            <p>Network Load: <span id="net-load">12kb/s</span></p>
-            <p style="margin-top:20px; color:#666;">Kernel: v8.0.2-Infinity<br>Status: Optimal</p>
-        </div>
-    </div>
-
-    <div id="win-terminal" class="window"><div class="win-head" onmousedown="drag(event,'win-terminal')"><span class="win-title">Terminal</span></div><div class="win-body" style="background:#000; padding:20px; font-family:'Fira Code'; color:#0f0;">Type 'help' for commands...</div></div>
+    <div id="desktop"></div>
 
     <div id="taskbar">
-        <div class="tb-section">
-            <div id="start-btn" onclick="location.reload()">A</div>
-            <div style="font-size:0.8rem; opacity:0.6;">Aiden_OS // Infinity</div>
+        <div class="start-menu" onclick="resetOS()">FACTORY RESET</div>
+        <div id="active-apps" style="display:flex; gap:10px; margin-left: 20px;"></div>
+        <div id="clock">00:00:00</div>
+    </div>
+
+    <div id="win-template" class="window">
+        <div class="win-head">
+            <span class="win-title">App</span>
+            <div class="win-dot" onclick="this.closest('.window').style.display='none'"></div>
         </div>
-        <div class="tb-section">
-            <div id="clock" style="font-family:'Fira Code'; font-weight:bold;">00:00:00</div>
-        </div>
+        <div class="win-body"></div>
     </div>
 
     <script>
-        let aCtx;
-        function playSfx(f) {
-            if(!aCtx) aCtx = new AudioContext();
-            const o = aCtx.createOscillator(); const g = aCtx.createGain();
-            o.connect(g); g.connect(aCtx.destination);
-            o.frequency.setValueAtTime(f, aCtx.currentTime);
-            g.gain.setValueAtTime(0.05, aCtx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.001, aCtx.currentTime + 0.1);
-            o.start(); o.stop(aCtx.currentTime + 0.1);
+        const APP_DATA = [
+            { id: 'about', name: 'About Me', icon: '👤', content: '<h1>Aiden Becker</h1><p>Welcome to v9.0.</p>' },
+            { id: 'browser', name: 'Quantum Browser', icon: '🌐', type: 'browser' },
+            { id: 'notes', name: 'Aiden Notes', icon: '📝', type: 'editor' },
+            { id: 'music', name: 'Nevermind Player', icon: '💿', content: '<h3>My Songs</h3><p>Restored 4 tracks...</p>' },
+            { id: 'terminal', name: 'Root Terminal', icon: '📟', type: 'terminal' },
+            { id: 'store', name: 'App Store', icon: '🛍️', content: '<h3>Marketplace</h3><p>All apps pre-installed in v9.</p>' },
+            { id: 'files', name: 'Explorer', icon: '📂', content: '<h3>Disk C:</h3><p>System32<br>Users<br>Nevermind_Art</p>' },
+            { id: 'settings', name: 'Settings', icon: '⚙️', content: '<h3>System Settings</h3><p>Theme: Cyanide (Locked)</p>' },
+            { id: 'calc', name: 'Calculator', icon: '🔢', content: '<input type="text" style="width:100%; padding:10px;"><p>Result: 0</p>' },
+            { id: 'calendar', name: 'Calendar', icon: '📅', content: '<h3>January 2026</h3><p>Today is Thursday 22nd.</p>' },
+            { id: 'mail', name: 'Mail', icon: '✉️', content: '<h3>Inbox (2)</h3><p>Welcome to Aiden_OS!</p>' },
+            { id: 'photos', name: 'Gallery', icon: '🖼️', content: '<p>Loading images...</p>' },
+            { id: 'clock_app', name: 'World Clock', icon: '🕒', content: '<h3>GMT +0</h3><p>New York: 13:53</p>' },
+            { id: 'weather', name: 'Weather', icon: '🌤️', content: '<h3>Novi, MI</h3><p>72°F - Mostly Sunny</p>' },
+            { id: 'news', name: 'OS News', icon: '📰', content: '<h3>Aiden_OS v9 Live!</h3><p>New saving system added.</p>' },
+            { id: 'chat', name: 'Aiden Chat', icon: '💬', content: '<h3>Global Chat</h3><p>Aiden: Hello world!</p>' },
+            { id: 'snake', name: 'Snake Pro', icon: '🐍', content: '<p>Launch game from Terminal (type "snake")</p>' },
+            { id: 'health', name: 'Sys Health', icon: '🔋', content: '<h3>Battery: 98%</h3><p>Power Source: AC</p>' },
+            { id: 'maps', name: 'Aiden Maps', icon: '🗺️', content: '<p>GPS Signal Found.</p>' },
+            { id: 'trash', name: 'Trash', icon: '🗑️', content: '<p>Empty.</p>' }
+        ];
+
+        let OS_STATE = {
+            installed: APP_DATA.map(a => a.id),
+            positions: {},
+            noteBuffer: ""
+        };
+
+        function saveOS() {
+            localStorage.setItem('AIDEN_OS_V9', JSON.stringify(OS_STATE));
         }
 
-        // --- WINDOW ENGINE ---
-        function openWin(id) { 
-            const w = document.getElementById(id);
-            w.style.display = 'flex';
-            w.style.zIndex = Math.floor(Date.now()/1000);
-            playSfx(600);
-            if(id === 'win-games') startSnake();
-        }
-        function closeWin(id) { document.getElementById(id).style.display = 'none'; playSfx(300); }
-        function drag(e, id) {
-            const w = document.getElementById(id);
-            let ox = e.clientX - w.offsetLeft, oy = e.clientY - w.offsetTop;
-            document.onmousemove = (e) => { w.style.left = (e.clientX-ox)+'px'; w.style.top = (e.clientY-oy)+'px'; };
-            document.onmouseup = () => { document.onmousemove = null; };
+        function loadOS() {
+            const saved = localStorage.getItem('AIDEN_OS_V9');
+            if (saved) OS_STATE = JSON.parse(saved);
+            renderDesktop();
+            updateClock();
+            setInterval(updateClock, 1000);
         }
 
-        // --- BROWSER ---
-        function navGo() {
-            let url = document.getElementById('url-input').value;
-            if(!url.startsWith('http')) url = 'https://' + url;
-            document.getElementById('browser-frame').src = url;
-            playSfx(800);
+        function renderDesktop() {
+            const desk = document.getElementById('desktop');
+            desk.innerHTML = '';
+            OS_STATE.installed.forEach(appId => {
+                const app = APP_DATA.find(a => a.id === appId);
+                const div = document.createElement('div');
+                div.className = 'icon';
+                div.onclick = () => openApp(app);
+                div.innerHTML = `<span class="icon-img">${app.icon}</span><span>${app.name}</span>`;
+                desk.appendChild(div);
+            });
         }
 
-        // --- APP STORE ---
-        function install(name) {
-            alert("Installing " + name + "...");
-            setTimeout(() => {
-                const icon = document.createElement('div');
-                icon.className = 'icon';
-                icon.innerHTML = `<span class="icon-img">📦</span><span>${name}</span>`;
-                icon.onclick = () => alert(name + " launched successfully.");
-                document.getElementById('desktop').appendChild(icon);
-                playSfx(1000);
-            }, 1000);
-        }
-
-        // --- SNAKE GAME ---
-        function startSnake() {
-            const canvas = document.getElementById('snake-canvas');
-            const ctx = canvas.getContext('2d');
-            let snake = [{x:10, y:10}];
-            let food = {x:15, y:15};
-            let dx = 1, dy = 0;
-            
-            document.onkeydown = (e) => {
-                if(e.key === 'ArrowUp') { dx=0; dy=-1; }
-                if(e.key === 'ArrowDown') { dx=0; dy=1; }
-                if(e.key === 'ArrowLeft') { dx=-1; dy=0; }
-                if(e.key === 'ArrowRight') { dx=1; dy=0; }
-            };
-
-            function draw() {
-                ctx.fillStyle = 'black'; ctx.fillRect(0,0,400,400);
-                ctx.fillStyle = 'cyan';
-                snake.forEach(p => ctx.fillRect(p.x*20, p.y*20, 18, 18));
-                ctx.fillStyle = 'red'; ctx.fillRect(food.x*20, food.y*20, 18, 18);
+        function openApp(app) {
+            let win = document.getElementById(`win-${app.id}`);
+            if (!win) {
+                win = document.getElementById('win-template').cloneNode(true);
+                win.id = `win-${app.id}`;
+                win.querySelector('.win-title').innerText = app.name;
+                const body = win.querySelector('.win-body');
                 
-                let head = {x: snake[0].x + dx, y: snake[0].y + dy};
-                snake.unshift(head);
-                if(head.x === food.x && head.y === food.y) {
-                    food = {x: Math.floor(Math.random()*20), y: Math.floor(Math.random()*20)};
-                } else { snake.pop(); }
+                if (app.type === 'editor') {
+                    body.innerHTML = `<textarea id="editor" oninput="OS_STATE.noteBuffer=this.value; saveOS()">${OS_STATE.noteBuffer}</textarea>`;
+                } else if (app.type === 'browser') {
+                    body.innerHTML = `
+                        <div class="browser-top">
+                            <input id="url-bar" value="https://wikipedia.org">
+                            <button onclick="document.getElementById('frame-${app.id}').src=document.getElementById('url-bar').value">Go</button>
+                        </div>
+                        <iframe id="frame-${app.id}" src="https://wikipedia.org"></iframe>`;
+                } else {
+                    body.innerHTML = app.content || 'System error: Content missing.';
+                }
+
+                document.body.appendChild(win);
+                makeDraggable(win);
             }
-            setInterval(draw, 100);
+            
+            win.style.display = 'flex';
+            win.style.zIndex = Math.floor(Date.now() / 1000);
+            
+            // Restore position if exists
+            if (OS_STATE.positions[app.id]) {
+                win.style.left = OS_STATE.positions[app.id].x + 'px';
+                win.style.top = OS_STATE.positions[app.id].y + 'px';
+            } else {
+                win.style.left = '100px'; win.style.top = '100px';
+            }
         }
 
-        // --- STATS ---
-        setInterval(() => {
-            const cpu = Math.floor(Math.random() * 15) + 2;
-            document.getElementById('cpu-load').innerText = cpu + "%";
-            document.getElementById('cpu-bar').style.width = cpu + "%";
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-        }, 1000);
+        function makeDraggable(el) {
+            const head = el.querySelector('.win-head');
+            head.onmousedown = (e) => {
+                el.style.zIndex = Math.floor(Date.now() / 1000);
+                let ox = e.clientX - el.offsetLeft, oy = e.clientY - el.offsetTop;
+                document.onmousemove = (e) => {
+                    let x = e.clientX - ox, y = e.clientY - oy;
+                    el.style.left = x + 'px'; el.style.top = y + 'px';
+                    const appId = el.id.replace('win-', '');
+                    OS_STATE.positions[appId] = { x, y };
+                    saveOS();
+                };
+                document.onmouseup = () => { document.onmousemove = null; };
+            };
+        }
 
+        function updateClock() {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+        }
+
+        function resetOS() {
+            if (confirm("Factory Reset? All data and positions will be cleared.")) {
+                localStorage.removeItem('AIDEN_OS_V9');
+                location.reload();
+            }
+        }
     </script>
 </body>
 </html>
