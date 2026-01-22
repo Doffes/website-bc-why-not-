@@ -3,204 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden_OS // Bento</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    <title>Aiden Becker // Official Site</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;900&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
     <style>
         :root {
             --accent: #00f2ff;
-            --bg: #050608;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.08);
+            --bg: #0a0b10;
+            --surface: #16181d;
+            --text: #ffffff;
+            --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
-            background: var(--bg); color: #fff; 
-            font-family: 'Outfit', sans-serif;
-            height: 100vh; overflow: hidden;
-            display: flex; align-items: center; justify-content: center;
+            background: var(--bg); color: var(--text); 
+            font-family: 'Outfit', sans-serif; height: 100vh; overflow: hidden;
         }
 
-        /* --- BACKGROUND DECOR --- */
-        .bg-glow {
-            position: absolute; width: 40vw; height: 40vw;
-            background: radial-gradient(circle, rgba(0, 242, 255, 0.05) 0%, transparent 70%);
-            top: -10%; right: -10%; z-index: -1;
+        /* --- NAVIGATION --- */
+        nav {
+            height: 70px; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 50px; background: rgba(10, 11, 16, 0.8);
+            backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05);
+            position: fixed; top: 0; width: 100%; z-index: 1000;
         }
-
-        /* --- BENTO GRID --- */
-        .grid {
-            display: grid;
-            grid-template-columns: 350px 400px 250px;
-            grid-template-rows: 200px 200px 150px;
-            gap: 20px;
-            max-width: 1100px;
+        .logo { font-weight: 900; letter-spacing: 2px; font-size: 1.2rem; }
+        .logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links span { 
+            font-weight: 600; cursor: pointer; opacity: 0.5; 
+            transition: var(--transition); font-size: 0.9rem; text-transform: uppercase;
         }
+        .nav-links span:hover, .nav-links span.active { opacity: 1; color: var(--accent); }
 
-        .tile {
-            background: var(--glass);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            backdrop-filter: blur(12px);
-            padding: 25px;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative; overflow: hidden;
+        /* --- TAB SYSTEM --- */
+        .tab-content {
+            padding-top: 70px; height: calc(100vh - 80px);
+            display: none; animation: fadeIn 0.5s ease forwards;
         }
-        .tile:hover { transform: translateY(-5px); border-color: var(--accent); background: rgba(255,255,255,0.05); }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- MUSIC MODULE --- */
-        .music-tile { grid-column: 1 / 2; grid-row: 1 / 3; }
-        .song-btn {
-            display: flex; align-items: center; gap: 15px;
-            padding: 12px; border-radius: 16px; margin-bottom: 10px;
-            cursor: pointer; transition: 0.2s; border: 1px solid transparent;
+        /* --- HOME TAB --- */
+        .hero { height: 100%; display: flex; align-items: center; justify-content: center; text-align: center; flex-direction: column; }
+        .hero h1 { font-size: 5rem; line-height: 1; margin-bottom: 20px; font-weight: 900; }
+        .hero p { opacity: 0.6; max-width: 600px; line-height: 1.6; }
+
+        /* --- MUSIC TAB --- */
+        .music-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 20px; padding: 50px; max-width: 1200px; margin: 0 auto;
         }
-        .song-btn:hover { background: rgba(255,255,255,0.05); }
-        .song-btn.active { border-color: var(--accent); background: rgba(0, 242, 255, 0.1); }
-        .song-btn img { width: 45px; height: 45px; border-radius: 10px; object-fit: cover; }
-        .song-info b { display: block; font-size: 0.9rem; }
-        .song-info span { font-size: 0.7rem; color: #888; }
+        .card { 
+            background: var(--surface); border-radius: 20px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05); transition: var(--transition); cursor: pointer;
+        }
+        .card:hover { transform: translateY(-10px); border-color: var(--accent); }
+        .card img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+        .card-info { padding: 20px; }
 
-        /* --- TERMINAL MODULE --- */
-        .term-tile { grid-column: 2 / 4; grid-row: 1 / 2; font-family: 'Fira Code', monospace; }
-        #term-out { font-size: 0.8rem; color: #ccc; height: 100px; overflow-y: auto; margin-bottom: 10px; }
-        #term-in { background: none; border: none; outline: none; color: var(--accent); width: 100%; font-family: inherit; }
+        /* --- GAME TAB --- */
+        .game-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
+        canvas { background: #000; border: 4px solid var(--surface); border-radius: 10px; }
 
-        /* --- VISUALIZER --- */
-        .viz-tile { grid-column: 2 / 3; grid-row: 2 / 3; display: flex; align-items: flex-end; gap: 4px; justify-content: center; }
-        .bar { width: 10px; background: var(--accent); border-radius: 5px 5px 0 0; min-height: 5px; transition: 0.1s; }
+        /* --- THEME TAB --- */
+        .theme-selector { display: flex; gap: 20px; justify-content: center; padding: 50px; flex-wrap: wrap; }
+        .swatch { 
+            width: 100px; height: 100px; border-radius: 20px; cursor: pointer; 
+            display: flex; align-items: flex-end; padding: 10px; font-weight: 800; font-size: 0.7rem;
+            transition: 0.3s; border: 4px solid transparent;
+        }
+        .swatch:hover { transform: scale(1.1); }
 
-        /* --- CLOCK/ABOUT --- */
-        .time-tile { grid-column: 3 / 4; grid-row: 2 / 3; text-align: center; display: flex; flex-direction: column; justify-content: center; }
-        .time-tile h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -2px; }
-        
-        .about-tile { grid-column: 1 / 4; grid-row: 3 / 4; display: flex; align-items: center; gap: 20px; }
-        .about-tile h2 { font-weight: 800; color: var(--accent); }
+        /* --- PLAYER BAR --- */
+        .player-bar {
+            position: fixed; bottom: 0; width: 100%; height: 80px;
+            background: #111218; border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; padding: 0 50px; justify-content: space-between;
+        }
+        .now-playing { display: flex; align-items: center; gap: 15px; width: 300px; }
+        .now-playing img { width: 50px; height: 50px; border-radius: 8px; }
+        .visualizer { display: flex; gap: 3px; align-items: flex-end; height: 30px; }
+        .v-bar { width: 4px; background: var(--accent); height: 5px; }
 
-        /* --- CONTROLS --- */
-        .controls { position: absolute; bottom: 20px; right: 25px; display: flex; gap: 15px; }
-        .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--border); }
-        .dot.active { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="bg-glow"></div>
+    <nav>
+        <div class="logo">AIDEN<span>_OS</span></div>
+        <div class="nav-links">
+            <span onclick="showTab('home')" id="link-home" class="active">Home</span>
+            <span onclick="showTab('music')" id="link-music">Music</span>
+            <span onclick="showTab('game')" id="link-game">Game</span>
+            <span onclick="showTab('theme')" id="link-theme">Theme</span>
+        </div>
+    </nav>
 
-    <div class="grid">
-        <div class="tile music-tile">
-            <h3 style="margin-bottom: 20px; font-weight: 800; font-size: 0.8rem; letter-spacing: 2px; color: #555;">MY LIBRARY</h3>
-            <div id="library">
-                <div class="song-btn" onclick="play('nirvana')">
-                    <img src="./music/nirvana.jpg">
-                    <div class="song-info"><b>Nevermind</b><span>Nirvana</span></div>
-                </div>
-                <div class="song-btn" onclick="play('greenday')">
-                    <img src="./music/greenday.jpg">
-                    <div class="song-info"><b>American Idiot</b><span>Green Day</span></div>
-                </div>
-                <div class="song-btn" onclick="play('gorillaz')">
-                    <img src="./music/gorillaz.jpg">
-                    <div class="song-info"><b>Plastic Beach</b><span>Gorillaz</span></div>
-                </div>
-                <div class="song-btn" onclick="play('bilmuri')">
-                    <img src="./music/bilmuri.jpg">
-                    <div class="song-info"><b>Eggy Pocket</b><span>Bilmuri</span></div>
-                </div>
+    <div id="home" class="tab-content active">
+        <section class="hero">
+            <h1>C:\AIDEN<span>.EXE</span></h1>
+            <p>Welcome to the central hub. Switch tabs above to explore the audio library, play built-in games, or customize the interface aesthetics.</p>
+        </section>
+    </div>
+
+    <div id="music" class="tab-content">
+        <div class="music-grid">
+            <div class="card" onclick="playMusic('nirvana', 'Nevermind', 'Nirvana')">
+                <img src="./music/nirvana.jpg">
+                <div class="card-info"><h3>Nirvana</h3><p>Nevermind</p></div>
+            </div>
+            <div class="card" onclick="playMusic('greenday', 'American Idiot', 'Green Day')">
+                <img src="./music/greenday.jpg">
+                <div class="card-info"><h3>Green Day</h3><p>American Idiot</p></div>
+            </div>
+            <div class="card" onclick="playMusic('gorillaz', 'Plastic Beach', 'Gorillaz')">
+                <img src="./music/gorillaz.jpg">
+                <div class="card-info"><h3>Gorillaz</h3><p>Plastic Beach</p></div>
+            </div>
+            <div class="card" onclick="playMusic('bilmuri', 'Eggy Pocket', 'Bilmuri')">
+                <img src="./music/bilmuri.jpg">
+                <div class="card-info"><h3>Bilmuri</h3><p>Eggy Pocket</p></div>
             </div>
         </div>
+    </div>
 
-        <div class="tile term-tile">
-            <div id="term-out">Aiden_OS v12.0 // System ready.</div>
-            <div style="display:flex; gap:10px;">
-                <span style="color:var(--accent)">></span>
-                <input type="text" id="term-in" placeholder="Command..." autofocus>
-            </div>
+    <div id="game" class="tab-content">
+        <div class="game-container">
+            <h2 style="margin-bottom:20px;">Neon Snake</h2>
+            <canvas id="snakeGame" width="400" height="400"></canvas>
+            <p style="margin-top:20px; opacity:0.5;">Use Arrow Keys to Navigate</p>
         </div>
+    </div>
 
-        <div class="tile viz-tile" id="visualizer">
-            </div>
-
-        <div class="tile time-tile">
-            <h1 id="clock">00:00</h1>
-            <span id="date" style="color:#555; font-size:0.7rem; font-weight: 800;">JAN 22 2026</span>
+    <div id="theme" class="tab-content">
+        <div class="theme-selector">
+            <div class="swatch" style="background:#00f2ff; color:#000;" onclick="setTheme('#00f2ff')">CYANIDE</div>
+            <div class="swatch" style="background:#ff3e3e;" onclick="setTheme('#ff3e3e')">BLOOD</div>
+            <div class="swatch" style="background:#a3ff33; color:#000;" onclick="setTheme('#a3ff33')">TOXIC</div>
+            <div class="swatch" style="background:#ff00ff;" onclick="setTheme('#ff00ff')">NEON</div>
+            <div class="swatch" style="background:#ffffff; color:#000;" onclick="setTheme('#ffffff')">PURE</div>
         </div>
+    </div>
 
-        <div class="tile about-tile">
-            <div style="width: 50px; height: 50px; background: var(--accent); border-radius: 12px;"></div>
+    <div class="player-bar">
+        <div class="now-playing">
+            <img src="./music/default.jpg" id="player-img">
             <div>
-                <h2>AIDEN_BECKER</h2>
-                <p style="font-size: 0.8rem; color: #888;">Hardware Engineer & Sound Designer. Persistence Enabled.</p>
+                <b id="player-title">Not Playing</b><br>
+                <small id="player-artist" style="opacity:0.5;">Select a track</small>
             </div>
-            <div class="controls">
-                <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
-            </div>
+        </div>
+        
+        <div class="visualizer" id="viz">
+            <div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div>
+            <div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div>
+        </div>
+
+        <div class="controls">
+            <button onclick="toggleAudio()" id="play-btn" style="background:var(--accent); border:none; padding:10px 25px; border-radius:30px; font-weight:900; cursor:pointer;">PAUSE</button>
         </div>
     </div>
 
     <script>
         let audio = null;
-        const termIn = document.getElementById('term-in');
-        const termOut = document.getElementById('term-out');
-        const viz = document.getElementById('visualizer');
 
-        // Create Visualizer Bars
-        for(let i=0; i<15; i++) {
-            const bar = document.createElement('div');
-            bar.className = 'bar';
-            viz.appendChild(bar);
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-links span').forEach(s => s.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('link-' + tabId).classList.add('active');
+            if(tabId === 'game') initSnake();
         }
 
-        function play(id) {
+        function playMusic(file, title, artist) {
             if(audio) audio.pause();
+            audio = new Audio(`./music/${file}.mp3`);
+            audio.play();
             
-            // UI Update
-            document.querySelectorAll('.song-btn').forEach(b => b.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-
-            audio = new Audio(`./music/${id}.mp3`);
-            audio.play().catch(() => {
-                log(`Error: /music/${id}.mp3 not found.`);
-            });
-            
-            log(`Playing: ${id.toUpperCase()}`);
+            document.getElementById('player-img').src = `./music/${file}.jpg`;
+            document.getElementById('player-title').innerText = title;
+            document.getElementById('player-artist').innerText = artist;
+            document.getElementById('play-btn').innerText = "PAUSE";
             animateViz();
+        }
+
+        function toggleAudio() {
+            if(!audio) return;
+            if(audio.paused) { audio.play(); document.getElementById('play-btn').innerText = "PAUSE"; }
+            else { audio.pause(); document.getElementById('play-btn').innerText = "PLAY"; }
+        }
+
+        function setTheme(color) {
+            document.documentElement.style.setProperty('--accent', color);
+            localStorage.setItem('aidenTheme', color);
         }
 
         function animateViz() {
             if(!audio || audio.paused) return;
-            const bars = document.querySelectorAll('.bar');
-            bars.forEach(b => {
-                const h = Math.random() * 60 + 5;
-                b.style.height = h + 'px';
+            document.querySelectorAll('.v-bar').forEach(bar => {
+                const h = Math.random() * 30 + 5;
+                bar.style.height = h + 'px';
             });
             setTimeout(animateViz, 100);
         }
 
-        function log(msg) {
-            const div = document.createElement('div');
-            div.innerText = `[sys] ${msg}`;
-            termOut.appendChild(div);
-            termOut.scrollTop = termOut.scrollHeight;
-        }
+        // --- SNAKE ENGINE ---
+        function initSnake() {
+            const canvas = document.getElementById('snakeGame');
+            const ctx = canvas.getContext('2d');
+            let snake = [{x:10, y:10}];
+            let food = {x:15, y:15};
+            let dir = {x:1, y:0};
 
-        termIn.addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') {
-                const cmd = termIn.value.toLowerCase();
-                log(cmd);
-                if(cmd === 'help') log("Available: play, stop, clear, about");
-                if(cmd === 'stop') { if(audio) audio.pause(); log("Stopped."); }
-                if(cmd === 'clear') termOut.innerHTML = '';
-                termIn.value = '';
+            document.onkeydown = e => {
+                if(e.key === 'ArrowUp' && dir.y === 0) dir = {x:0, y:-1};
+                if(e.key === 'ArrowDown' && dir.y === 0) dir = {x:0, y:1};
+                if(e.key === 'ArrowLeft' && dir.x === 0) dir = {x:-1, y:0};
+                if(e.key === 'ArrowRight' && dir.x === 0) dir = {x:1, y:0};
+            };
+
+            function gameLoop() {
+                const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
+                snake.unshift(head);
+                if(head.x === food.x && head.y === food.y) {
+                    food = {x: Math.floor(Math.random()*20), y: Math.floor(Math.random()*20)};
+                } else { snake.pop(); }
+
+                ctx.fillStyle = '#000'; ctx.fillRect(0,0,400,400);
+                ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+                snake.forEach(s => ctx.fillRect(s.x*20, s.y*20, 18, 18));
+                ctx.fillStyle = '#ff0000'; ctx.fillRect(food.x*20, food.y*20, 18, 18);
+
+                if(head.x<0 || head.x>=20 || head.y<0 || head.y>=20) {
+                    snake = [{x:10, y:10}]; dir = {x:1, y:0};
+                }
             }
-        });
-
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').innerText = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+            if(window.sTicker) clearInterval(window.sTicker);
+            window.sTicker = setInterval(gameLoop, 100);
         }
-        setInterval(updateClock, 1000);
-        updateClock();
+
+        window.onload = () => {
+            const t = localStorage.getItem('aidenTheme');
+            if(t) setTheme(t);
+        };
     </script>
 </body>
 </html>
