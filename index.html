@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker </title>
+    <title>Aiden Becker | Developer Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&family=Space+Grotesk:wght@300;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ff007f;
-            --bg: #050505;
-            --card-bg: #0f0f0f;
+            --secondary: #7000ff; /* Added Purple for depth */
+            --bg: #030303;
+            --card-bg: #0a0a0a;
             --text-main: #ffffff;
             --text-dim: #a1a1aa;
-            --glass-border: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.08);
             --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             --status-active: #00ff88;
             --status-inactive: #ff4444;
@@ -29,9 +30,12 @@
             overflow-x: hidden;
         }
 
+        /* THEME TWEAK: Multi-color Glow */
         .bg-glow {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 15% 15%, rgba(255, 0, 127, 0.08) 0%, transparent 45%);
+            background: 
+                radial-gradient(circle at 15% 15%, rgba(255, 0, 127, 0.1) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(112, 0, 255, 0.1) 0%, transparent 45%);
             z-index: -1;
         }
 
@@ -49,51 +53,62 @@
         .pink-text { color: var(--primary); }
         .nav-links { display: flex; gap: 30px; }
         nav a { color: var(--text-dim); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s; }
-        nav a:hover, nav a.active { color: var(--primary); }
+        nav a:hover, nav a.active { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
 
         .page { display: none; padding: 60px 8%; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.6s ease; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* HOME PAGE ADDITIONS */
+        .hero { margin-bottom: 60px; }
+        .hero h1 { font-size: clamp(2rem, 5vw, 4rem); line-height: 1.1; }
+        .status-pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(0, 255, 136, 0.1); color: var(--status-active); padding: 6px 16px; border-radius: 100px; font-size: 0.75rem; font-weight: 700; margin-bottom: 20px; border: 1px solid rgba(0, 255, 136, 0.2); }
+        
+        .grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; }
+        .info-card { background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border); transition: var(--transition); }
+        .info-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .skill-tag { display: inline-block; background: rgba(255, 255, 255, 0.05); padding: 4px 12px; border-radius: 6px; font-size: 0.8rem; margin: 4px; color: var(--text-dim); }
+
         /* MUSIC TAB STYLES */
-        .song-container { margin-bottom: 40px; background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border); }
+        .song-container { margin-bottom: 40px; background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border); transition: var(--transition); }
+        .song-container:hover { border-color: var(--secondary); }
         .song-flex { display: flex; gap: 30px; align-items: center; }
-        .album-art { width: 100px; height: 100px; border-radius: 10px; }
+        .album-art { width: 100px; height: 100px; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
         .status-tag { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-left: 10px; vertical-align: middle; }
         .active-band { color: var(--status-active); }
         .inactive-band { color: var(--status-inactive); }
         .fact-box { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border); display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
         .fact-item h5 { color: var(--primary); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
         .fact-item p { font-size: 0.85rem; color: var(--text-dim); }
-        audio { width: 100%; margin-top: 15px; filter: invert(1) hue-rotate(280deg) opacity(0.5); }
+        audio { width: 100%; margin-top: 15px; filter: invert(1) hue-rotate(280deg) opacity(0.6); }
 
-        /* TERMINAL STYLES (Replacement for Chatbot) */
+        /* TERMINAL WIDGET */
         .term-widget { position: fixed; bottom: 30px; right: 30px; z-index: 10001; }
-        .term-btn { width: 60px; height: 60px; background: #000; border: 2px solid var(--primary); border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--primary); transition: var(--transition); box-shadow: 0 0 20px rgba(255, 0, 127, 0.2); }
-        .term-btn:hover { background: var(--primary); color: white; box-shadow: 0 0 30px rgba(255, 0, 127, 0.5); }
+        .term-btn { width: 60px; height: 60px; background: #000; border: 2px solid var(--primary); border-radius: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--primary); transition: var(--transition); box-shadow: 0 0 20px rgba(255, 0, 127, 0.2); }
+        .term-btn:hover { background: var(--primary); color: white; transform: rotate(-5deg); }
         
         .term-window { 
-            position: absolute; bottom: 80px; right: 0; width: 400px; height: 300px; 
-            background: rgba(5, 5, 5, 0.95); border: 1px solid var(--primary); border-radius: 8px;
-            display: none; flex-direction: column; overflow: hidden; backdrop-filter: blur(10px);
+            position: absolute; bottom: 80px; right: 0; width: clamp(300px, 90vw, 450px); height: 350px; 
+            background: rgba(5, 5, 5, 0.98); border: 1px solid var(--primary); border-radius: 12px;
+            display: none; flex-direction: column; overflow: hidden; backdrop-filter: blur(15px);
             font-family: 'Fira Code', monospace; font-size: 0.8rem; box-shadow: 0 20px 50px rgba(0,0,0,0.9);
         }
         .term-window.active { display: flex; animation: fadeIn 0.2s ease; }
-        .term-header { padding: 8px 15px; background: #111; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-dim); }
-        .term-body { flex: 1; padding: 15px; overflow-y: auto; color: #00ff88; }
-        .term-input-line { display: flex; gap: 8px; padding: 10px 15px; border-top: 1px solid var(--glass-border); }
-        .term-input-line span { color: var(--primary); }
+        .term-header { padding: 10px 15px; background: #111; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--primary); letter-spacing: 1px; }
+        .term-body { flex: 1; padding: 15px; overflow-y: auto; color: #00ff88; scrollbar-width: none; }
+        .term-input-line { display: flex; gap: 8px; padding: 12px 15px; border-top: 1px solid var(--glass-border); background: #000; }
+        .term-input-line span { color: var(--primary); font-weight: bold; }
         #term-input { background: transparent; border: none; color: white; flex: 1; outline: none; font-family: 'Fira Code', monospace; }
 
         /* NOW PLAYING POPUP */
         #now-playing-popup {
-            position: fixed; bottom: 30px; left: 30px; background: #111;
-            border: 1px solid var(--primary); padding: 12px 20px; border-radius: 12px;
+            position: fixed; bottom: 30px; left: 30px; background: #0a0a0a;
+            border: 1px solid var(--secondary); padding: 12px 20px; border-radius: 16px;
             display: flex; align-items: center; gap: 15px; transform: translateX(-250%);
-            transition: var(--transition); z-index: 10000;
+            transition: var(--transition); z-index: 10000; backdrop-filter: blur(10px);
         }
         #now-playing-popup.visible { transform: translateX(0); }
-        .mini-art { width: 45px; height: 45px; border-radius: 6px; }
+        .mini-art { width: 45px; height: 45px; border-radius: 8px; border: 1px solid var(--glass-border); }
     </style>
 </head>
 <body>
@@ -103,44 +118,117 @@
     <nav>
         <div class="logo"><span id="typing-text"></span><span class="cursor"></span></div>
         <div class="nav-links">
-            <a onclick="showPage('home')" id="nav-home">Home</a>
-            <a onclick="showPage('music')" id="nav-music" class="active">Music</a>
+            <a onclick="showPage('home')" id="nav-home" class="active">Home</a>
+            <a onclick="showPage('music')" id="nav-music">Music</a>
             <a onclick="showPage('arcade')" id="nav-arcade">Arcade</a>
         </div>
     </nav>
 
-    <div id="home" class="page">
-        <h1>Building <span class="pink-text">Digital</span> Experiences.</h1>
-        <p style="color: var(--text-dim); margin-top: 20px;">A Developer focused on performance and neon aesthetics.</p>
+    <div id="home" class="page active">
+        <div class="hero">
+            <div class="status-pill">● Available for Projects</div>
+            <h1>A Developer Building <br><span class="pink-text">Digital Frontiers.</span></h1>
+            <p style="color: var(--text-dim); margin-top: 20px; max-width: 600px; font-size: 1.1rem;">
+                Specializing in interactive web experiences, high-fidelity UI design, and logic-driven applications. 
+            </p>
+        </div>
+
+        <div class="grid-layout">
+            <div class="info-card">
+                <h3 style="margin-bottom: 15px;">// Expertise</h3>
+                <div class="skill-tag">JavaScript</div>
+                <div class="skill-tag">UI/UX Design</div>
+                <div class="skill-tag">HTML5 Canvas</div>
+                <div class="skill-tag">CSS3 Animations</div>
+                <div class="skill-tag">Responsive Logic</div>
+            </div>
+            <div class="info-card">
+                <h3 style="margin-bottom: 15px;">// Current Focus</h3>
+                <p style="color: var(--text-dim); font-size: 0.9rem;">
+                    Currently exploring the intersection of web performance and cyberpunk-inspired aesthetics. Every line of code is written for speed and visual impact.
+                </p>
+            </div>
+        </div>
     </div>
 
-    <div id="music" class="page active">
+    <div id="music" class="page">
         <div class="song-container">
             <div class="song-flex">
                 <img src="music/nirvana.jpg" class="album-art">
                 <div style="flex:1">
-                    <h3>Smells Like Teen Spirit</h3>
+                    <h3>Smells Like Teen Spirit <span class="status-tag inactive-band">[Disbanded]</span></h3>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">Nirvana • 1991</p>
                     <audio controls src="music/nirvana.mp3" data-title="Smells Like Teen Spirit" data-artist="Nirvana" data-art="music/nirvana.jpg"></audio>
                 </div>
+            </div>
+            <div class="fact-box">
+                <div class="fact-item"><h5>Vibe</h5><p>The definitive anthem of the 90s grunge movement.</p></div>
+                <div class="fact-item"><h5>Status</h5><p>Ended in 1994 following the death of Kurt Cobain.</p></div>
+            </div>
+        </div>
+
+        <div class="song-container">
+            <div class="song-flex">
+                <img src="music/gorillaz.jpg" class="album-art">
+                <div style="flex:1">
+                    <h3>On Melancholy Hill <span class="status-tag active-band">[Active]</span></h3>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">Gorillaz • 2010</p>
+                    <audio controls src="music/gorillaz.mp3" data-title="On Melancholy Hill" data-artist="Gorillaz" data-art="music/gorillaz.jpg"></audio>
+                </div>
+            </div>
+            <div class="fact-box">
+                <div class="fact-item"><h5>Style</h5><p>A gentle synth-pop departure from their hip-hop roots.</p></div>
+                <div class="fact-item"><h5>Status</h5><p>Active. Damon Albarn continues to lead the project.</p></div>
+            </div>
+        </div>
+
+        <div class="song-container">
+            <div class="song-flex">
+                <img src="music/greenday.jpg" class="album-art">
+                <div style="flex:1">
+                    <h3>American Idiot <span class="status-tag active-band">[Active]</span></h3>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">Green Day • 2004</p>
+                    <audio controls src="music/greenday.mp3" data-title="American Idiot" data-artist="Green Day" data-art="music/greenday.jpg"></audio>
+                </div>
+            </div>
+            <div class="fact-box">
+                <div class="fact-item"><h5>Concept</h5><p>The opening track to their massive "punk rock opera" album.</p></div>
+                <div class="fact-item"><h5>Status</h5><p>Active. Still touring with the original 1990 lineup.</p></div>
+            </div>
+        </div>
+
+        <div class="song-container">
+            <div class="song-flex">
+                <img src="music/bilmuri.jpg" class="album-art">
+                <div style="flex:1">
+                    <h3>More Than Hate <span class="status-tag active-band">[Active]</span></h3>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">Bilmuri • 2020</p>
+                    <audio controls src="music/bilmuri.mp3" data-title="More Than Hate" data-artist="Bilmuri" data-art="music/bilmuri.jpg"></audio>
+                </div>
+            </div>
+            <div class="fact-box">
+                <div class="fact-item"><h5>Personal Favorite</h5><p>Heavy riffs mixed with a unique post-hardcore energy.</p></div>
+                <div class="fact-item"><h5>Status</h5><p>Active. Johnny Franck is constantly releasing new tracks.</p></div>
             </div>
         </div>
     </div>
 
     <div id="arcade" class="page">
-        <div style="border: 1px solid var(--primary); background: #000; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden;">
+        <div style="border: 1px solid var(--primary); background: #000; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; box-shadow: 0 0 40px rgba(255, 0, 127, 0.2);">
             <iframe src="game.html" style="width:100%; height:100%; border:none;"></iframe>
         </div>
     </div>
 
     <div class="term-widget">
         <div class="term-window" id="term-window">
-            <div class="term-header"><span>aiden_terminal.exe</span><span>v1.0.4</span></div>
+            <div class="term-header"><span>SYSTEM_TERMINAL</span><span>[ONLINE]</span></div>
             <div class="term-body" id="term-body">
-                Welcome. Type 'help' to see commands.
+                Initialising Aiden_OS...<br>
+                Type 'help' to begin.
             </div>
             <div class="term-input-line">
                 <span>></span>
-                <input type="text" id="term-input" autofocus onkeypress="if(event.key==='Enter') runCmd()">
+                <input type="text" id="term-input" onkeypress="if(event.key==='Enter') runCmd()">
             </div>
         </div>
         <button class="term-btn" onclick="toggleTerm()">
@@ -151,13 +239,13 @@
     <div id="now-playing-popup">
         <img id="popup-art" src="" class="mini-art">
         <div>
-            <div id="popup-artist" style="font-size: 0.6rem; color: var(--primary); font-weight: 800;">Artist Name</div>
-            <div id="popup-title" style="font-size: 0.85rem; font-weight: 700;">Song Title</div>
+            <div id="popup-artist" style="font-size: 0.6rem; color: var(--primary); font-weight: 800; letter-spacing: 1px; text-transform: uppercase;">Artist Name</div>
+            <div id="popup-title" style="font-size: 0.9rem; font-weight: 700;">Song Title</div>
         </div>
     </div>
 
     <script>
-        // NAVIGATION & LOGO
+        // TYPING EFFECT
         const text = "AIDEN BECKER";
         let charIndex = 0;
         function typeEffect() {
@@ -169,6 +257,7 @@
         }
         window.onload = typeEffect;
 
+        // NAVIGATION
         function showPage(p) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById(p).classList.add('active');
@@ -176,7 +265,7 @@
             document.getElementById('nav-'+p).classList.add('active');
         }
 
-        // TERMINAL LOGIC
+        // TERMINAL LOGIC (EXPANDED)
         function toggleTerm() { 
             const win = document.getElementById('term-window');
             win.classList.toggle('active');
@@ -190,16 +279,25 @@
             input.value = "";
 
             let response = "";
-            if (cmd === 'help') response = "Available: about, music, arcade, clear, theme, exit";
-            else if (cmd === 'about') response = "Aiden Becker: Frontend Developer. Loves grunge and clean UI.";
-            else if (cmd === 'music') response = "Current stack: Nirvana, Bilmuri, Green Day, Gorillaz.";
-            else if (cmd === 'arcade') response = "Loading arcade engine... Check the Arcade tab to play.";
-            else if (cmd === 'clear') { body.innerHTML = ""; return; }
+            if (cmd === 'help') response = "CMDS: about, skills, playlist, sudo_neon, matrix, clear, exit";
+            else if (cmd === 'about') response = "Aiden Becker. Dev. Creator. Music Nerd.";
+            else if (cmd === 'skills') response = "HTML, CSS, JS, UI Design, Game Logic.";
+            else if (cmd === 'playlist') response = "Playing: Grunge/Post-Hardcore selection.";
+            else if (cmd === 'sudo_neon') {
+                document.documentElement.style.setProperty('--primary', '#00fbff');
+                document.documentElement.style.setProperty('--secondary', '#0051ff');
+                response = "PROTOCOL: NEON_CYAN enabled.";
+            }
+            else if (cmd === 'matrix') {
+                document.documentElement.style.setProperty('--primary', '#00ff41');
+                document.documentElement.style.setProperty('--secondary', '#003b00');
+                response = "Welcome to the Construct.";
+            }
+            else if (cmd === 'clear') { body.innerHTML = "Terminal Cleared."; return; }
             else if (cmd === 'exit') { toggleTerm(); return; }
-            else if (cmd === 'theme') { document.documentElement.style.setProperty('--primary', '#00ff88'); response = "Theme set to: MATRIX GREEN"; }
-            else response = `Command not found: ${cmd}`;
+            else response = `ERR: '${cmd}' not recognized.`;
 
-            body.innerHTML += `<div style="color:white; margin-top:5px;">> ${cmd}</div><div style="color:var(--primary);">${response}</div>`;
+            body.innerHTML += `<div style="color:white; margin-top:8px;">> ${cmd}</div><div style="color:var(--primary);">${response}</div>`;
             body.scrollTop = body.scrollHeight;
         }
 
