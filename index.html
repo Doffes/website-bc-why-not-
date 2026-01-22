@@ -3,189 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden-Deck // Live Sync v11</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&family=Syncopate:wght@700&display=swap" rel="stylesheet">
+    <title>Aiden_OS // Bento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
     <style>
-        :root { --glow: #00f2ff; --panel: #121214; --metal: #1e1e22; --screen: #0a0a0c; --rot: 0deg; }
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
-        body { background: #050505; font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; color: #fff; }
-
-        #deck {
-            width: 95vw; height: 85vh; background: var(--panel); border: 8px solid #2a2a2e; border-radius: 40px;
-            box-shadow: 0 0 100px #000; display: grid; grid-template-columns: 280px 1fr 280px; padding: 25px; gap: 20px;
+        :root {
+            --accent: #00f2ff;
+            --bg: #050608;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
         }
 
-        /* --- MODULES --- */
-        .module { background: var(--metal); border-radius: 20px; padding: 20px; border: 1px solid #333; display: flex; flex-direction: column; gap: 15px; }
-        .knob-unit { text-align: center; font-size: 0.6rem; color: #555; }
-        .knob { width: 70px; height: 70px; background: radial-gradient(#444, #111); border-radius: 50%; margin: 10px auto; border: 3px solid #333; position: relative; cursor: pointer; transition: transform 0.1s; }
-        .knob::after { content: ""; position: absolute; top: 5px; left: 50%; width: 4px; height: 15px; background: var(--glow); transform: translateX(-50%); border-radius: 2px; box-shadow: 0 0 10px var(--glow); }
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+        body { 
+            background: var(--bg); color: #fff; 
+            font-family: 'Outfit', sans-serif;
+            height: 100vh; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+        }
 
-        /* --- SCREEN --- */
-        #central-station { background: var(--screen); border-radius: 15px; border: 8px solid #111; display: flex; flex-direction: column; position: relative; }
-        .scanlines { position: absolute; inset: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%); background-size: 100% 4px; pointer-events: none; z-index: 10; }
-        #display-log { flex: 1; padding: 20px; color: var(--glow); font-size: 0.85rem; overflow-y: auto; text-shadow: 0 0 5px var(--glow); }
+        /* --- BACKGROUND DECOR --- */
+        .bg-glow {
+            position: absolute; width: 40vw; height: 40vw;
+            background: radial-gradient(circle, rgba(0, 242, 255, 0.05) 0%, transparent 70%);
+            top: -10%; right: -10%; z-index: -1;
+        }
+
+        /* --- BENTO GRID --- */
+        .grid {
+            display: grid;
+            grid-template-columns: 350px 400px 250px;
+            grid-template-rows: 200px 200px 150px;
+            gap: 20px;
+            max-width: 1100px;
+        }
+
+        .tile {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            backdrop-filter: blur(12px);
+            padding: 25px;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative; overflow: hidden;
+        }
+        .tile:hover { transform: translateY(-5px); border-color: var(--accent); background: rgba(255,255,255,0.05); }
+
+        /* --- MUSIC MODULE --- */
+        .music-tile { grid-column: 1 / 2; grid-row: 1 / 3; }
+        .song-btn {
+            display: flex; align-items: center; gap: 15px;
+            padding: 12px; border-radius: 16px; margin-bottom: 10px;
+            cursor: pointer; transition: 0.2s; border: 1px solid transparent;
+        }
+        .song-btn:hover { background: rgba(255,255,255,0.05); }
+        .song-btn.active { border-color: var(--accent); background: rgba(0, 242, 255, 0.1); }
+        .song-btn img { width: 45px; height: 45px; border-radius: 10px; object-fit: cover; }
+        .song-info b { display: block; font-size: 0.9rem; }
+        .song-info span { font-size: 0.7rem; color: #888; }
+
+        /* --- TERMINAL MODULE --- */
+        .term-tile { grid-column: 2 / 4; grid-row: 1 / 2; font-family: 'Fira Code', monospace; }
+        #term-out { font-size: 0.8rem; color: #ccc; height: 100px; overflow-y: auto; margin-bottom: 10px; }
+        #term-in { background: none; border: none; outline: none; color: var(--accent); width: 100%; font-family: inherit; }
+
+        /* --- VISUALIZER --- */
+        .viz-tile { grid-column: 2 / 3; grid-row: 2 / 3; display: flex; align-items: flex-end; gap: 4px; justify-content: center; }
+        .bar { width: 10px; background: var(--accent); border-radius: 5px 5px 0 0; min-height: 5px; transition: 0.1s; }
+
+        /* --- CLOCK/ABOUT --- */
+        .time-tile { grid-column: 3 / 4; grid-row: 2 / 3; text-align: center; display: flex; flex-direction: column; justify-content: center; }
+        .time-tile h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -2px; }
         
-        /* --- AUDIO BUTTONS --- */
-        .music-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .album-btn { background: #000; border: 2px solid #222; border-radius: 12px; overflow: hidden; cursor: pointer; transition: 0.2s; position: relative; aspect-ratio: 1; }
-        .album-btn:hover { border-color: var(--glow); transform: translateY(-3px); }
-        .album-btn img { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
-        .album-label { position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.8); text-align: center; font-size: 0.55rem; padding: 4px 0; color: var(--glow); font-weight: bold; }
+        .about-tile { grid-column: 1 / 4; grid-row: 3 / 4; display: flex; align-items: center; gap: 20px; }
+        .about-tile h2 { font-weight: 800; color: var(--accent); }
 
         /* --- CONTROLS --- */
-        #input-area { background: #111; padding: 15px; border-top: 2px solid #222; display: flex; gap: 10px; align-items: center; }
-        #cmd-in { background: transparent; border: none; outline: none; color: #fff; font-family: 'JetBrains Mono'; flex: 1; }
-        .btn-active { border-color: var(--glow) !important; box-shadow: 0 0 15px rgba(0,242,255,0.3); }
-        .btn-active img { opacity: 1 !important; }
+        .controls { position: absolute; bottom: 20px; right: 25px; display: flex; gap: 15px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--border); }
+        .dot.active { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
     </style>
 </head>
 <body>
 
-<div id="deck">
-    <div class="module">
-        <h2>DECK_CONTROLS</h2>
-        <div class="knob-unit">
-            <div class="knob" id="knob-vol" style="transform: rotate(0deg)"></div>
-            <p>MASTER_VOLUME</p>
+    <div class="bg-glow"></div>
+
+    <div class="grid">
+        <div class="tile music-tile">
+            <h3 style="margin-bottom: 20px; font-weight: 800; font-size: 0.8rem; letter-spacing: 2px; color: #555;">MY LIBRARY</h3>
+            <div id="library">
+                <div class="song-btn" onclick="play('nirvana')">
+                    <img src="./music/nirvana.jpg">
+                    <div class="song-info"><b>Nevermind</b><span>Nirvana</span></div>
+                </div>
+                <div class="song-btn" onclick="play('greenday')">
+                    <img src="./music/greenday.jpg">
+                    <div class="song-info"><b>American Idiot</b><span>Green Day</span></div>
+                </div>
+                <div class="song-btn" onclick="play('gorillaz')">
+                    <img src="./music/gorillaz.jpg">
+                    <div class="song-info"><b>Plastic Beach</b><span>Gorillaz</span></div>
+                </div>
+                <div class="song-btn" onclick="play('bilmuri')">
+                    <img src="./music/bilmuri.jpg">
+                    <div class="song-info"><b>Eggy Pocket</b><span>Bilmuri</span></div>
+                </div>
+            </div>
         </div>
-        <div class="knob-unit">
-            <div class="knob" id="knob-bass" style="transform: rotate(0deg)"></div>
-            <p>BASS_DISTORT</p>
+
+        <div class="tile term-tile">
+            <div id="term-out">Aiden_OS v12.0 // System ready.</div>
+            <div style="display:flex; gap:10px;">
+                <span style="color:var(--accent)">></span>
+                <input type="text" id="term-in" placeholder="Command..." autofocus>
+            </div>
         </div>
-        <div style="margin-top:auto; font-size:0.6rem; color:#444;">
-            MEMORY_ID: <span id="mem-id">AIDEN_77</span><br>
-            TEMP: <span id="temp-val">38.2°C</span>
+
+        <div class="tile viz-tile" id="visualizer">
+            </div>
+
+        <div class="tile time-tile">
+            <h1 id="clock">00:00</h1>
+            <span id="date" style="color:#555; font-size:0.7rem; font-weight: 800;">JAN 22 2026</span>
+        </div>
+
+        <div class="tile about-tile">
+            <div style="width: 50px; height: 50px; background: var(--accent); border-radius: 12px;"></div>
+            <div>
+                <h2>AIDEN_BECKER</h2>
+                <p style="font-size: 0.8rem; color: #888;">Hardware Engineer & Sound Designer. Persistence Enabled.</p>
+            </div>
+            <div class="controls">
+                <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+            </div>
         </div>
     </div>
 
-    <div id="central-station">
-        <div class="scanlines"></div>
-        <div id="display-log">
-            [SYS] BOOTING FROM GITHUB_MUSIC_DIR...<br>
-            [SYS] LOCATING ASSETS...<br>
-            [SYS] FOUND: nirvana.mp3, greenday.mp3, bilmuri.mp3, gorillaz.mp3<br>
-            [SYS] READY.
-        </div>
-        <div id="input-area">
-            <span style="color:var(--glow)">$</span>
-            <input type="text" id="cmd-in" placeholder="TYPE A COMMAND..." autofocus>
-        </div>
-    </div>
+    <script>
+        let audio = null;
+        const termIn = document.getElementById('term-in');
+        const termOut = document.getElementById('term-out');
+        const viz = document.getElementById('visualizer');
 
-    <div class="module">
-        <h2>AUDIO_SAMPLES</h2>
-        <div class="music-grid">
-            <div class="album-btn" id="btn-nirvana" onclick="playMusic('nirvana')">
-                <img src="./music/nirvana.jpg">
-                <div class="album-label">NIRVANA</div>
-            </div>
-            <div class="album-btn" id="btn-greenday" onclick="playMusic('greenday')">
-                <img src="./music/greenday.jpg">
-                <div class="album-label">GREEN DAY</div>
-            </div>
-            <div class="album-btn" id="btn-bilmuri" onclick="playMusic('bilmuri')">
-                <img src="./music/bilmuri.jpg">
-                <div class="album-label">BILMURI</div>
-            </div>
-            <div class="album-btn" id="btn-gorillaz" onclick="playMusic('gorillaz')">
-                <img src="./music/gorillaz.jpg">
-                <div class="album-label">GORILLAZ</div>
-            </div>
-        </div>
-        <div style="margin-top:15px; background:#000; padding:10px; border:1px solid #333; border-radius:5px;">
-            <div style="font-size:0.6rem; color:#666;">PLAYING_NOW</div>
-            <div id="track-name" style="font-size:0.7rem; color:var(--glow);">---</div>
-            <div id="track-time" style="font-size:0.6rem; font-family:'Fira Code'; color:#444;">00:00 / 00:00</div>
-        </div>
-    </div>
-</div>
-
-<script>
-    let currentAudio = null;
-    let volume = 0.5;
-    const log = document.getElementById('display-log');
-    const trackName = document.getElementById('track-name');
-    const trackTime = document.getElementById('track-time');
-
-    function addLog(msg) {
-        const d = document.createElement('div');
-        d.innerHTML = `> ${msg}`;
-        log.appendChild(d);
-        log.scrollTop = log.scrollHeight;
-    }
-
-    function playMusic(id) {
-        if(currentAudio) {
-            currentAudio.pause();
-            document.querySelectorAll('.album-btn').forEach(b => b.classList.remove('btn-active'));
+        // Create Visualizer Bars
+        for(let i=0; i<15; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            viz.appendChild(bar);
         }
 
-        // --- PATHING TO YOUR GITHUB FOLDER ---
-        currentAudio = new Audio(`./music/${id}.mp3`);
-        currentAudio.volume = volume;
-        
-        currentAudio.play().then(() => {
-            addLog(`MOUNTED: ${id.toUpperCase()}.MP3`);
-            trackName.innerText = id.toUpperCase();
-            document.getElementById(`btn-${id}`).classList.add('btn-active');
-        }).catch(e => {
-            addLog(`ERROR: FILE NOT FOUND IN /music/${id}.mp3`);
+        function play(id) {
+            if(audio) audio.pause();
+            
+            // UI Update
+            document.querySelectorAll('.song-btn').forEach(b => b.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            audio = new Audio(`./music/${id}.mp3`);
+            audio.play().catch(() => {
+                log(`Error: /music/${id}.mp3 not found.`);
+            });
+            
+            log(`Playing: ${id.toUpperCase()}`);
+            animateViz();
+        }
+
+        function animateViz() {
+            if(!audio || audio.paused) return;
+            const bars = document.querySelectorAll('.bar');
+            bars.forEach(b => {
+                const h = Math.random() * 60 + 5;
+                b.style.height = h + 'px';
+            });
+            setTimeout(animateViz, 100);
+        }
+
+        function log(msg) {
+            const div = document.createElement('div');
+            div.innerText = `[sys] ${msg}`;
+            termOut.appendChild(div);
+            termOut.scrollTop = termOut.scrollHeight;
+        }
+
+        termIn.addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') {
+                const cmd = termIn.value.toLowerCase();
+                log(cmd);
+                if(cmd === 'help') log("Available: play, stop, clear, about");
+                if(cmd === 'stop') { if(audio) audio.pause(); log("Stopped."); }
+                if(cmd === 'clear') termOut.innerHTML = '';
+                termIn.value = '';
+            }
         });
 
-        currentAudio.ontimeupdate = () => {
-            const cur = Math.floor(currentAudio.currentTime);
-            const dur = Math.floor(currentAudio.duration) || 0;
-            trackTime.innerText = `${formatTime(cur)} / ${formatTime(dur)}`;
-        };
-    }
-
-    function formatTime(s) {
-        const m = Math.floor(s/60);
-        const sec = s % 60;
-        return `${m}:${sec.toString().padStart(2,'0')}`;
-    }
-
-    // --- KNOB INTERACTION ---
-    document.getElementById('knob-vol').onwheel = (e) => {
-        e.preventDefault();
-        const knob = e.target;
-        let rot = parseInt(knob.style.transform.replace('rotate(','').replace('deg)',''));
-        rot += e.deltaY > 0 ? -15 : 15;
-        rot = Math.max(-150, Math.min(150, rot));
-        knob.style.transform = `rotate(${rot}deg)`;
-        
-        volume = (rot + 150) / 300;
-        if(currentAudio) currentAudio.volume = volume;
-    };
-
-    document.getElementById('knob-bass').onwheel = (e) => {
-        const knob = e.target;
-        let rot = parseInt(knob.style.transform.replace('rotate(','').replace('deg)',''));
-        rot += e.deltaY > 0 ? -15 : 15;
-        knob.style.transform = `rotate(${rot}deg)`;
-        
-        // Visual distortion effect based on "Bass" knob
-        const intensity = Math.abs(rot / 30);
-        document.querySelector('.scanlines').style.opacity = 0.1 + (intensity/10);
-    };
-
-    // --- COMMANDS ---
-    document.getElementById('cmd-in').onkeypress = (e) => {
-        if(e.key === 'Enter') {
-            const cmd = e.target.value.toLowerCase();
-            addLog(`<span style="color:#fff">${cmd}</span>`);
-            if(cmd === 'stop') { if(currentAudio) currentAudio.pause(); addLog("AUDIO HALTED."); }
-            if(cmd === 'help') addLog("CMDS: stop, clear, status, eject");
-            if(cmd === 'clear') log.innerHTML = '';
-            e.target.value = '';
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
         }
-    };
-
-    setInterval(() => {
-        document.getElementById('temp-val').innerText = (37 + Math.random()).toFixed(1) + "°C";
-    }, 3000);
-</script>
-
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
 </body>
 </html>
