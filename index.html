@@ -19,21 +19,24 @@
             --transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; cursor: crosshair; }
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg);
             color: var(--text-main);
             transition: background 0.5s ease;
             overflow-x: hidden;
+            min-height: 100vh;
         }
 
+        /* DYNAMIC MOUSE GLOW */
         .bg-glow {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: 
-                radial-gradient(circle at 15% 15%, var(--primary) 0%, transparent 40%),
-                radial-gradient(circle at 85% 85%, var(--secondary) 0%, transparent 40%);
-            opacity: 0.15; z-index: -1; pointer-events: none;
+                radial-gradient(circle at var(--mouse-x, 15%) var(--mouse-y, 15%), var(--primary) 0%, transparent 35%),
+                radial-gradient(circle at 85% 85%, var(--secondary) 0%, transparent 30%);
+            opacity: 0.2; z-index: -1; pointer-events: none;
+            transition: background 0.1s ease;
         }
 
         nav {
@@ -42,99 +45,75 @@
             backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
         }
 
+        .logo-area { display: flex; align-items: center; gap: 20px; }
+        .system-clock { font-family: 'Fira Code', monospace; font-size: 0.7rem; color: var(--primary); background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--glass-border); }
+
         .logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.2rem; }
         .nav-links { display: flex; gap: 20px; }
-        nav a { color: var(--text-dim); text-decoration: none; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: var(--transition); }
-        nav a:hover { color: var(--primary); }
+        nav a { color: var(--text-dim); text-decoration: none; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition); }
+        nav a:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
         nav a.active { color: var(--primary); font-weight: 700; }
 
         .page { display: none; padding: 60px 8%; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.4s ease; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* LINK BUTTON STYLE */
         .link-btn {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 8px 16px;
-            background: rgba(255, 0, 127, 0.1);
-            color: var(--primary);
-            border: 1px solid var(--primary);
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.9rem;
-            transition: var(--transition);
+            display: inline-block; margin-top: 10px; padding: 10px 20px;
+            background: rgba(255, 0, 127, 0.05); color: var(--primary);
+            border: 1px solid var(--primary); border-radius: 8px;
+            text-decoration: none; font-weight: 700; transition: var(--transition);
         }
-        .link-btn:hover {
-            background: var(--primary);
-            color: #fff;
-            box-shadow: 0 0 15px var(--primary);
-            transform: translateY(-2px);
-        }
+        .link-btn:hover { background: var(--primary); color: #fff; box-shadow: 0 0 20px var(--primary); transform: scale(1.05); }
 
-        /* THEME GRID */
-        .theme-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-            margin-top: 30px;
-        }
+        .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 30px; }
         .theme-card {
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            padding: 15px;
-            border-radius: 12px;
-            cursor: pointer;
-            text-align: center;
-            transition: var(--transition);
+            background: var(--card-bg); border: 1px solid var(--glass-border); padding: 15px;
+            border-radius: 12px; text-align: center; transition: var(--transition);
         }
-        .theme-card:hover { border-color: var(--primary); transform: translateY(-3px); }
-        .swatch {
-            height: 40px; width: 100%; border-radius: 6px;
-            margin-bottom: 10px; display: flex;
-        }
+        .theme-card:hover { border-color: var(--primary); transform: translateY(-5px) scale(1.02); background: rgba(255,255,255,0.03); }
+        .swatch { height: 40px; width: 100%; border-radius: 6px; margin-bottom: 10px; display: flex; overflow: hidden; }
         .swatch div { flex: 1; }
 
-        /* MUSIC & CARDS */
         .song-container, .info-card { 
             background: var(--card-bg); padding: 25px; border-radius: 18px; 
-            border: 1px solid var(--glass-border); margin-bottom: 20px;
+            border: 1px solid var(--glass-border); margin-bottom: 20px; transition: var(--transition);
         }
-        .song-flex { display: flex; gap: 20px; align-items: center; }
-        .album-art { width: 80px; height: 80px; border-radius: 8px; }
-        audio { width: 100%; margin-top: 15px; filter: invert(1) opacity(0.5); }
+        .info-card:hover { border-color: var(--secondary); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
         /* TERMINAL */
         .term-widget { position: fixed; bottom: 30px; right: 30px; z-index: 10001; }
-        .term-btn { width: 55px; height: 55px; background: #000; border: 2px solid var(--primary); border-radius: 12px; cursor: pointer; color: var(--primary); transition: var(--transition); }
-        .term-btn:hover { transform: scale(1.05); }
+        .term-btn { width: 55px; height: 55px; background: #000; border: 2px solid var(--primary); border-radius: 12px; color: var(--primary); font-weight: bold; box-shadow: 0 0 15px rgba(255,0,127,0.2); }
         .term-window { 
-            position: absolute; bottom: 70px; right: 0; width: 350px; height: 300px; 
-            background: rgba(5,5,5,0.95); border: 1px solid var(--primary); border-radius: 8px;
-            display: none; flex-direction: column; font-family: 'Fira Code', monospace;
+            position: absolute; bottom: 70px; right: 0; width: 380px; height: 320px; 
+            background: rgba(5,5,5,0.98); border: 1px solid var(--primary); border-radius: 12px;
+            display: none; flex-direction: column; font-family: 'Fira Code', monospace; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
         }
         .term-window.active { display: flex; }
-        .term-body { flex: 1; padding: 15px; overflow-y: auto; color: var(--primary); font-size: 0.8rem; }
-        #term-input { background: transparent; border: none; color: white; padding: 10px; outline: none; border-top: 1px solid var(--glass-border); }
+        .term-header { padding: 10px; border-bottom: 1px solid var(--glass-border); font-size: 0.7rem; display: flex; justify-content: space-between; opacity: 0.7; }
+        .term-body { flex: 1; padding: 15px; overflow-y: auto; color: var(--primary); font-size: 0.8rem; line-height: 1.4; }
+        #term-input { background: transparent; border: none; color: white; padding: 15px; outline: none; border-top: 1px solid var(--glass-border); width: 100%; }
 
-        /* POPUP */
         #now-playing-popup {
             position: fixed; bottom: 30px; left: 30px; background: #0a0a0a;
-            border: 1px solid var(--primary); padding: 10px 20px; border-radius: 12px;
-            display: flex; align-items: center; gap: 12px; transform: translateX(-250%);
-            transition: var(--transition); z-index: 10000;
+            border: 1px solid var(--primary); padding: 12px 24px; border-radius: 16px;
+            display: flex; align-items: center; gap: 15px; transform: translateY(200%);
+            transition: var(--transition); z-index: 10000; box-shadow: 0 10px 40px rgba(0,0,0,0.6);
         }
-        #now-playing-popup.visible { transform: translateX(0); }
-        .mini-art { width: 40px; height: 40px; border-radius: 4px; }
+        #now-playing-popup.visible { transform: translateY(0); }
+        .mini-art { width: 45px; height: 45px; border-radius: 8px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <div class="bg-glow"></div>
+    <div class="bg-glow" id="glow"></div>
 
     <nav>
-        <div class="logo">AIDEN_<span style="color:var(--primary)">OS</span></div>
+        <div class="logo-area">
+            <div class="logo">AIDEN_<span style="color:var(--primary)">OS</span></div>
+            <div class="system-clock" id="clock">00:00:00</div>
+        </div>
         <div class="nav-links">
             <a onclick="showPage('home')" id="nav-home" class="active">Home</a>
             <a onclick="showPage('music')" id="nav-music">Music</a>
@@ -144,40 +123,39 @@
     </nav>
 
     <div id="home" class="page active">
-        <h1>System Status: <span style="color:var(--primary)">Running</span></h1>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top:30px;">
+        <h1 style="font-family:'Space Grotesk'; font-size: 3rem; margin-bottom: 10px;">System Status: <span style="color:var(--primary)" id="status-text">ONLINE</span></h1>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
             <div class="info-card">
-                <h3>// Where Did You Come From?</h3>
-                <p>Did you arrive from the portal at:</p>
-                <a href="https://mrpullen.com" target="_blank" class="link-btn">Mrpullen.com</a>
+                <h3>// Incoming Connection</h3>
+                <p style="margin: 15px 0;">Traffic detected from:</p>
+                <a href="https://mrpullen.com" target="_blank" class="link-btn">PORTAL: Mrpullen.com</a>
             </div>
             <div class="info-card">
-                <h3>// About Me</h3>
-                <p>Hello! I am <strong>Aiden Becker</strong>, a high schooler dedicated to game development and the art of playing music. Welcome to my OS.</p>
+                <h3>// Identity_File</h3>
+                <p><strong>Aiden Becker</strong>: High schooler, Game Dev, Musician. Building digital worlds and breaking strings.</p>
             </div>
         </div>
     </div>
 
-    <div id="music" class="page">
-        <div id="music-list"></div>
-    </div>
+    <div id="music" class="page"><div id="music-list"></div></div>
 
     <div id="arcade" class="page">
-        <div style="border: 1px solid var(--primary); aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; background: #000;">
+        <div style="border: 2px solid var(--primary); aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; background: #000; box-shadow: 0 0 30px rgba(0,0,0,0.5);">
             <iframe src="game.html" style="width:100%; height:100%; border:none;"></iframe>
         </div>
     </div>
 
     <div id="themes" class="page">
-        <h2>Visual Profiles</h2>
-        <p style="color:var(--text-dim)">Select a color scheme to reconfigure the interface.</p>
+        <h2>Appearance Modules</h2>
+        <p style="color:var(--text-dim)">Click a profile to inject new CSS variables into the kernel.</p>
         <div class="theme-grid" id="theme-grid"></div>
     </div>
 
     <div class="term-widget">
         <div class="term-window" id="term-window">
-            <div class="term-body" id="term-body">Type 'help' for commands.</div>
-            <input type="text" id="term-input" onkeypress="if(event.key==='Enter') runCmd()" placeholder="Enter command...">
+            <div class="term-header"><span>AIDEN_TERMINAL_V1</span><span>[ONLINE]</span></div>
+            <div class="term-body" id="term-body"></div>
+            <input type="text" id="term-input" onkeypress="if(event.key==='Enter') runCmd()" placeholder="Enter kernel command...">
         </div>
         <button class="term-btn" onclick="toggleTerm()">CMD</button>
     </div>
@@ -185,57 +163,73 @@
     <div id="now-playing-popup">
         <img id="popup-art" src="" class="mini-art">
         <div>
-            <div id="popup-artist" style="font-size: 0.6rem; color: var(--primary); font-weight: 800;">ARTIST</div>
-            <div id="popup-title" style="font-size: 0.8rem; font-weight: 700;">TITLE</div>
+            <div id="popup-artist" style="font-size: 0.6rem; color: var(--primary); letter-spacing: 1px;">TRANSITIONING...</div>
+            <div id="popup-title" style="font-size: 0.9rem; font-weight: 700;">TRACK_NAME</div>
         </div>
     </div>
 
     <script>
-        // THEME DATA
+        // MOUSE TRACKING
+        document.addEventListener('mousemove', e => {
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+            document.documentElement.style.setProperty('--mouse-x', x + '%');
+            document.documentElement.style.setProperty('--mouse-y', y + '%');
+        });
+
+        // CLOCK
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.getHours().toString().padStart(2, '0') + ":" + 
+                now.getMinutes().toString().padStart(2, '0') + ":" + 
+                now.getSeconds().toString().padStart(2, '0');
+        }
+        setInterval(updateClock, 1000); updateClock();
+
+        // THEMES (40 items)
         const themesList = [
-            { name: "Default", p: "#ff007f", s: "#7000ff" },
-            { name: "Matrix", p: "#00ff41", s: "#003b00" },
-            { name: "Electric Blue", p: "#00fbff", s: "#0044ff" },
-            { name: "Midas Special", p: "#ffcc00", s: "#996600" },
-            { name: "Bloody", p: "#ff0000", s: "#440000" },
-            { name: "Sunset", p: "#ff5e00", s: "#ff007f" },
-            { name: "Lava", p: "#ff4800", s: "#880000" },
-            { name: "Emerald", p: "#00ff88", s: "#004422" },
+            { name: "Neon Rose", p: "#ff007f", s: "#7000ff" },
+            { name: "The Matrix", p: "#00ff41", s: "#003b00" },
+            { name: "Subzero", p: "#00fbff", s: "#0044ff" },
+            { name: "Gold Rush", p: "#ffcc00", s: "#996600" },
+            { name: "Deep Blood", p: "#ff0000", s: "#440000" },
+            { name: "Cyber Sunset", p: "#ff5e00", s: "#ff007f" },
+            { name: "Magma", p: "#ff4800", s: "#880000" },
+            { name: "Emerald City", p: "#00ff88", s: "#004422" },
             { name: "Oceanic", p: "#0088ff", s: "#002244" },
-            { name: "Grape", p: "#cc00ff", s: "#440066" },
-            { name: "Synthwave", p: "#ff00ff", s: "#00ffff" },
-            { name: "Toxic", p: "#adff2f", s: "#228b22" },
-            { name: "Vampire", p: "#990000", s: "#111111" },
-            { name: "Skyline", p: "#87ceeb", s: "#4682b4" },
+            { name: "Purple Haze", p: "#cc00ff", s: "#440066" },
+            { name: "Retrowave", p: "#ff00ff", s: "#00ffff" },
+            { name: "Nuclear", p: "#adff2f", s: "#228b22" },
+            { name: "Dracula", p: "#ff79c6", s: "#bd93f9" },
+            { name: "Sky High", p: "#87ceeb", s: "#4682b4" },
             { name: "Midnight", p: "#191970", s: "#000080" },
             { name: "Sakura", p: "#ffb7c5", s: "#ff69b4" },
-            { name: "Ice", p: "#e0ffff", s: "#00ced1" },
-            { name: "Forest", p: "#228b22", s: "#006400" },
-            { name: "Hot Rod", p: "#d40000", s: "#000000" },
-            { name: "Neon Lime", p: "#32cd32", s: "#00ff00" },
-            { name: "Peachy", p: "#ffdab9", s: "#ff7f50" },
-            { name: "Oh Nevermind", p: "#00008b", s: "#008b8b" },
-            { name: "Lilac", p: "#e6e6fa", s: "#9370db" },
+            { name: "Arctic", p: "#e0ffff", s: "#00ced1" },
+            { name: "Everglade", p: "#228b22", s: "#006400" },
+            { name: "Redline", p: "#d40000", s: "#000000" },
+            { name: "Lime", p: "#32cd32", s: "#00ff00" },
+            { name: "Peach", p: "#ffdab9", s: "#ff7f50" },
+            { name: "Deep Sea", p: "#00008b", s: "#008b8b" },
+            { name: "Lavender", p: "#e6e6fa", s: "#9370db" },
             { name: "Rust", p: "#b7410e", s: "#5e270e" },
-            { name: "Plastic", p: "#ff1493", s: "#0000ff" },
-            { name: "Ghost", p: "#f8f8ff", s: "#708090" },
-            { name: "Coffee", p: "#6f4e37", s: "#3c2a21" },
+            { name: "Barbie Core", p: "#ff1493", s: "#0000ff" },
+            { name: "Ghostly", p: "#f8f8ff", s: "#708090" },
+            { name: "Espresso", p: "#6f4e37", s: "#3c2a21" },
             { name: "Bubblegum", p: "#ffc0cb", s: "#ff1493" },
-            { name: "Copper", p: "#b87333", s: "#1a1a1a" },
+            { name: "Bronze", p: "#b87333", s: "#1a1a1a" },
             { name: "Blueprint", p: "#0047ab", s: "#ffffff" },
-            { name: "Retro", p: "#ff8c00", s: "#483d8b" },
-            { name: "Nordic", p: "#88c0d0", s: "#2e3440" },
+            { name: "Classic 80s", p: "#ff8c00", s: "#483d8b" },
+            { name: "Frost", p: "#88c0d0", s: "#2e3440" },
             { name: "Ultraviolet", p: "#5d3fd3", s: "#120a2a" },
-            { name: "Magma", p: "#ff3300", s: "#330000" },
-            { name: "Candy", p: "#ff0066", s: "#6600ff" },
-            { name: "Mint", p: "#98ff98", s: "#3eb489" },
-            { name: "Shadow", p: "#333333", s: "#000000" },
-            { name: "Bolt", p: "#ffff00", s: "#ffaa00" },
-            { name: "Cyberpunk 2077", p: "#f3ec19", s: "#000000" },
+            { name: "Solar", p: "#ffcc33", s: "#ff6600" },
+            { name: "Cotton Candy", p: "#ffb6c1", s: "#87cefa" },
+            { name: "Minty", p: "#98ff98", s: "#3eb489" },
+            { name: "Coal", p: "#444444", s: "#000000" },
+            { name: "Voltage", p: "#ffff00", s: "#ffaa00" },
+            { name: "Samurai", p: "#f3ec19", s: "#000000" },
             { name: "Aiden Custom", p: "#ff007f", s: "#ffffff" }
         ];
 
-        // SONG DATA
         const songs = [
             { t: "Smells Like Teen Spirit", a: "Nirvana", src: "music/nirvana.mp3", art: "music/nirvana.jpg" },
             { t: "On Melancholy Hill", a: "Gorillaz", src: "music/gorillaz.mp3", art: "music/gorillaz.jpg" },
@@ -243,7 +237,6 @@
             { t: "More Than Hate", a: "Bilmuri", src: "music/bilmuri.mp3", art: "music/bilmuri.jpg" }
         ];
 
-        // PAGE NAVIGATION
         function showPage(p) {
             document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active'));
             document.getElementById(p).classList.add('active');
@@ -251,13 +244,11 @@
             document.getElementById('nav-'+p).classList.add('active');
         }
 
-        // THEME ENGINE
         function setTheme(p, s) {
             document.documentElement.style.setProperty('--primary', p);
             document.documentElement.style.setProperty('--secondary', s);
         }
 
-        // Initialize Themes Grid
         const grid = document.getElementById('theme-grid');
         themesList.forEach(t => {
             const card = document.createElement('div');
@@ -267,23 +258,13 @@
             grid.appendChild(card);
         });
 
-        // Initialize Music List
         const mList = document.getElementById('music-list');
         songs.forEach(s => {
-            mList.innerHTML += `
-                <div class="song-container">
-                    <div class="song-flex">
-                        <img src="${s.art}" class="album-art">
-                        <div><h3>${s.t}</h3><p>${s.a}</p></div>
-                    </div>
-                    <audio controls src="${s.src}" data-title="${s.t}" data-artist="${s.a}" data-art="${s.art}"></audio>
-                </div>`;
+            mList.innerHTML += `<div class="song-container"><div class="song-flex"><img src="${s.art}" class="album-art"><div><h3>${s.t}</h3><p>${s.a}</p></div></div><audio controls src="${s.src}" data-title="${s.t}" data-artist="${s.a}" data-art="${s.art}"></audio></div>`;
         });
 
-        // Audio Handler
         document.addEventListener('play', (e) => {
-            const audios = document.querySelectorAll('audio');
-            audios.forEach(a => { if(a !== e.target) a.pause() });
+            document.querySelectorAll('audio').forEach(a => { if(a !== e.target) a.pause() });
             const p = document.getElementById('now-playing-popup');
             document.getElementById('popup-title').innerText = e.target.dataset.title;
             document.getElementById('popup-artist').innerText = e.target.dataset.artist;
@@ -291,18 +272,33 @@
             p.classList.add('visible');
         }, true);
 
-        // Terminal logic
-        function toggleTerm() { document.getElementById('term-window').classList.toggle('active'); }
+        // TERMINAL BOOT SEQUENCE
+        function toggleTerm() { 
+            const win = document.getElementById('term-window');
+            win.classList.toggle('active'); 
+            if(win.classList.contains('active')) {
+                const body = document.getElementById('term-body');
+                body.innerHTML = "";
+                const text = ["> Initializing Aiden_OS...", "> Checking hardware...", "> Audio drivers: OK", "> Graphic kernel: OK", "> Ready for commands..."];
+                let line = 0;
+                const interval = setInterval(() => {
+                    body.innerHTML += text[line] + "<br>";
+                    line++;
+                    if(line >= text.length) clearInterval(interval);
+                }, 200);
+            }
+        }
+
         function runCmd() {
             const i = document.getElementById('term-input');
             const b = document.getElementById('term-body');
             const val = i.value.toLowerCase().trim();
             i.value = "";
-            if(val === 'help') b.innerHTML = "Commands: themes, status, clear";
-            else if(val === 'themes') b.innerHTML = "Navigate to the Themes tab for full UI control.";
-            else if(val === 'status') b.innerHTML = "Aiden_OS v1.0.4<br>Status: Optimal<br>Vibe: Chill";
-            else if(val === 'clear') b.innerHTML = "Terminal cleared.";
-            else b.innerHTML = `Command '${val}' not recognized.`;
+            if(val === 'help') b.innerHTML += "<br>> Available: themes, clear, restart";
+            else if(val === 'clear') b.innerHTML = "> Terminal wiped.";
+            else if(val === 'restart') location.reload();
+            else b.innerHTML += `<br>> Error: '${val}' not found in kernel.`;
+            b.scrollTop = b.scrollHeight;
         }
     </script>
 </body>
