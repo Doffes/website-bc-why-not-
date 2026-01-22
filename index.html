@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker </title>
+    <title>Aiden Becker | Developer & Musician</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
@@ -30,7 +30,6 @@
             overflow-x: hidden;
         }
 
-        /* Subtle Pink Ambient Glow */
         .bg-glow {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -87,7 +86,7 @@
         .hero { margin-bottom: 60px; }
         .hero h1 { 
             font-family: 'Space Grotesk', sans-serif; 
-            font-size: clamp(3rem, 8vw, 6rem); 
+            font-size: clamp(2.5rem, 8vw, 5rem); 
             line-height: 0.9;
             font-weight: 700;
             letter-spacing: -3px;
@@ -96,17 +95,14 @@
 
         .pink-text { color: var(--primary); }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
         
-        /* Modern Card Styling */
         .card {
             background: var(--card-bg);
             border: 1px solid var(--glass-border);
             border-radius: 12px;
             padding: 40px;
             transition: var(--transition);
-            position: relative;
-            overflow: hidden;
         }
 
         .card:hover {
@@ -125,7 +121,6 @@
             display: block;
         }
 
-        /* Arcade/Game Styles */
         .game-container {
             background: #000;
             border-radius: 16px;
@@ -153,9 +148,8 @@
             border: none;
             cursor: pointer;
         }
-        .btn-launch:hover { filter: brightness(1.2); transform: scale(1.02); }
+        .btn-launch:hover { filter: brightness(1.2); }
 
-        /* Music List Styling */
         .song-list { display: flex; flex-direction: column; gap: 12px; }
         .song-row {
             display: flex;
@@ -174,10 +168,9 @@
 
         audio {
             height: 35px;
-            filter: invert(1) hue-rotate(270deg) brightness(1.5); /* Adjusted for Pink */
+            filter: invert(1) hue-rotate(270deg) brightness(1.5);
         }
 
-        /* Now Playing Popup */
         #now-playing-popup {
             position: fixed;
             bottom: 30px; right: 30px;
@@ -200,7 +193,6 @@
 
         footer { text-align: center; padding: 80px 0; color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* Skill Badges */
         .badge-group { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
         .badge {
             padding: 4px 12px;
@@ -239,30 +231,31 @@
                 <p style="color: var(--text-dim); margin-bottom: 20px;">A survival experience focused on immersive mechanics and 3D spatial audio. Play the demo directly in your browser.</p>
                 <button onclick="showPage('arcade')" class="btn-launch">Launch Game</button>
             </div>
-                    <div class="grid">
+
             <div class="card">
                 <span class="tag">About Me</span>
-                <h3 style="font-family: 'Space Grotesk'; font-size: 1.5rem; margin-bottom: 10px;">About Me</h3>
-                <p style="color: var(--text-dim); margin-bottom: 20px;">Hello I Am Aiden Becker! I am a High Schooler Who Is A Game Dev And Musician In My Free Time! I Hope You Enjoy My Stuff!</p>
+                <h3 style="font-family: 'Space Grotesk'; font-size: 1.5rem; margin-bottom: 10px;">Hello World!</h3>
+                <p style="color: var(--text-dim); margin-bottom: 20px;">I'm Aiden Becker, a high schooler who loves building worlds through code and sound. I hope you enjoy my work!</p>
             </div>
 
             <div class="card">
                 <span class="tag">Stack</span>
-                <h3 style="font-family: 'Space Grotesk'; font-size: 1.5rem; margin-bottom: 10px;">I'm A Nerd</h3>
-                <p style="color: var(--text-dim);">What I Like Doing Is Building Fun Games On Unity, Scratch, and HTML.</p>
+                <h3 style="font-family: 'Space Grotesk'; font-size: 1.5rem; margin-bottom: 10px;">The Tech</h3>
+                <p style="color: var(--text-dim);">I enjoy building games using industry-standard tools and web tech.</p>
                 <div class="badge-group">
                     <span class="badge">UNITY 3D</span>
                     <span class="badge">C#</span>
                     <span class="badge">HTML5</span>
+                    <span class="badge">SCRATCH</span>
                 </div>
             </div>
         </div>
     </div>
 
-<div id="arcade" class="page">
+    <div id="arcade" class="page">
         <div class="hero" style="text-align: center;">
-            <span class="tag">Mission Terminal</span>
-            <h1>Live <span class="pink-text">Arcade</span></h1>
+            <span class="tag">Live Mission</span>
+            <h1>Dead Zone <span class="pink-text">Demo</span></h1>
         </div>
         <div class="game-container">
             <div class="game-wrapper">
@@ -275,6 +268,7 @@
             </p>
         </div>
     </div>
+
     <div id="music" class="page">
         <div class="hero">
             <span class="tag">Inspiration</span>
@@ -311,15 +305,19 @@
     </div>
 
     <footer>
-        &copy; 2026 AIDEN BECKER &bull; <span class="pink-text"></span>
+        &copy; 2026 AIDEN BECKER &bull; <span class="pink-text">BUILDING THE FUTURE</span>
     </footer>
 
     <script>
         function showPage(pageId) {
+            // Hide all pages
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Show the one we want
             document.getElementById(pageId).classList.add('active');
             
+            // Remove 'active' from all nav links
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            // Find the nav link that matches the page ID
             const activeNav = document.getElementById('nav-' + pageId);
             if(activeNav) activeNav.classList.add('active');
             
