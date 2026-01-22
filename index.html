@@ -6,23 +6,23 @@
     <title>Aiden Becker | Creative Developer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Outfit:wght@300;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #818cf8;
-            --secondary: #c084fc;
-            --bg: #020617;
-            --card-bg: rgba(15, 23, 42, 0.6);
-            --text-main: #f8fafc;
-            --text-dim: #94a3b8;
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --neon-shadow: rgba(129, 140, 248, 0.2);
+            --primary: #ff007f; /* Hot Pink */
+            --primary-muted: rgba(255, 0, 127, 0.2);
+            --bg: #050505; /* Deep Black */
+            --card-bg: #0f0f0f;
+            --text-main: #ffffff;
+            --text-dim: #a1a1aa;
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg);
             color: var(--text-main);
             line-height: 1.6;
@@ -30,170 +30,187 @@
             overflow-x: hidden;
         }
 
+        /* Subtle Pink Ambient Glow */
         .bg-glow {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: 
-                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(192, 132, 252, 0.1) 0%, transparent 40%);
+                radial-gradient(circle at 0% 0%, rgba(255, 0, 127, 0.05) 0%, transparent 35%),
+                radial-gradient(circle at 100% 100%, rgba(255, 0, 127, 0.05) 0%, transparent 35%);
             z-index: -1;
         }
 
         nav {
             display: flex;
-            justify-content: center;
-            gap: 40px;
-            padding: 20px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
             position: sticky;
             top: 0;
             z-index: 1000;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(15px);
             border-bottom: 1px solid var(--glass-border);
         }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: -1px;
+            color: var(--text-main);
+        }
+
+        .nav-links { display: flex; gap: 30px; }
 
         nav a {
             color: var(--text-dim);
             text-decoration: none;
             font-family: 'Space Grotesk', sans-serif;
-            font-weight: 600;
-            font-size: 0.85rem;
+            font-weight: 500;
+            font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            position: relative;
+            letter-spacing: 1px;
+            transition: var(--transition);
             cursor: pointer;
         }
 
-        nav a.active { color: var(--primary); }
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px; left: 0; width: 0%; height: 2px;
-            background: var(--primary);
-            transition: 0.3s;
-        }
-        nav a:hover::after, nav a.active::after { width: 100%; }
+        nav a.active, nav a:hover { color: var(--primary); }
 
-        .page { display: none; padding: 60px 20px; max-width: 1200px; margin: 0 auto; animation: pageIn 0.8s ease-out; }
+        .page { display: none; padding: 80px 8%; max-width: 1400px; margin: 0 auto; animation: pageIn 0.6s ease-out; }
         .page.active { display: block; }
 
         @keyframes pageIn {
-            from { opacity: 0; transform: translateY(10px); filter: blur(5px); }
-            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .hero { text-align: center; padding: 80px 0 40px; }
+        .hero { margin-bottom: 60px; }
         .hero h1 { 
             font-family: 'Space Grotesk', sans-serif; 
-            font-size: clamp(3rem, 10vw, 5rem); 
-            letter-spacing: -2px;
-            background: linear-gradient(135deg, #fff 30%, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
+            font-size: clamp(3rem, 8vw, 6rem); 
+            line-height: 0.9;
+            font-weight: 700;
+            letter-spacing: -3px;
+            margin-bottom: 20px;
         }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 30px; }
+        .pink-text { color: var(--primary); }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px; }
         
-        .card, .song-card {
+        /* Modern Card Styling */
+        .card {
             background: var(--card-bg);
             border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 35px;
-            backdrop-filter: blur(10px);
-            transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            border-radius: 12px;
+            padding: 40px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
         }
 
-        .card:hover { 
-            transform: translateY(-10px); 
+        .card:hover {
             border-color: var(--primary);
-            box-shadow: 0 20px 40px -10px var(--neon-shadow);
+            background: #141414;
+            transform: translateY(-5px);
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--primary);
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            display: block;
         }
 
         /* Arcade/Game Styles */
-        .game-wrapper {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            max-height: 70vh;
+        .game-container {
             background: #000;
-            border-radius: 24px;
-            border: 2px solid var(--primary);
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
             overflow: hidden;
-            box-shadow: 0 0 30px rgba(129, 140, 248, 0.3);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
         }
 
+        .game-wrapper { width: 100%; aspect-ratio: 16 / 9; }
         iframe { width: 100%; height: 100%; border: none; }
 
         .btn-launch {
-            display: inline-flex;
-            align-items: center;
-            margin-top: 25px;
-            padding: 12px 24px;
+            display: inline-block;
+            margin-top: 20px;
+            padding: 14px 28px;
             background: var(--primary);
             color: white;
             text-decoration: none;
-            border-radius: 12px;
+            border-radius: 4px;
             font-weight: 700;
-            font-size: 0.9rem;
-            transition: 0.3s;
-            cursor: pointer;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
             border: none;
+            cursor: pointer;
         }
-        .btn-launch:hover { background: var(--secondary); transform: scale(1.05); }
+        .btn-launch:hover { filter: brightness(1.2); transform: scale(1.02); }
 
-        .song-card { padding: 25px; gap: 20px; }
-        .song-info { display: flex; align-items: center; gap: 20px; }
-        
-        .album-art { 
-            width: 80px; height: 80px; 
-            border-radius: 16px; 
-            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.1);
+        /* Music List Styling */
+        .song-list { display: flex; flex-direction: column; gap: 12px; }
+        .song-row {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 15px 25px;
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+            gap: 20px;
         }
 
-        .song-details h4 { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; color: #fff; }
-        
+        .album-art { width: 50px; height: 50px; border-radius: 4px; object-fit: cover; }
+        .song-meta { flex-grow: 1; }
+        .song-meta h4 { font-size: 1rem; margin: 0; }
+        .song-meta p { font-size: 0.8rem; color: var(--text-dim); }
+
         audio {
-            width: 100%;
-            height: 40px;
-            filter: invert(1) hue-rotate(180deg) brightness(1.8);
-            border-radius: 30px;
+            height: 35px;
+            filter: invert(1) hue-rotate(270deg) brightness(1.5); /* Adjusted for Pink */
         }
 
+        /* Now Playing Popup */
         #now-playing-popup {
             position: fixed;
             bottom: 30px; right: 30px;
-            background: rgba(15, 23, 42, 0.9);
+            background: #1a1a1a;
             border: 1px solid var(--primary);
-            padding: 12px 25px 12px 12px;
-            border-radius: 100px;
+            padding: 10px 20px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             gap: 15px;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.8);
-            transform: translateY(200px);
-            transition: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform: translateX(200%);
+            transition: var(--transition);
             z-index: 10000;
         }
 
-        #now-playing-popup.visible { transform: translateY(0); }
+        #now-playing-popup.visible { transform: translateX(0); }
 
-        .record-container { width: 45px; height: 45px; position: relative; }
-        .record-img { 
-            width: 100%; height: 100%; border-radius: 50%; 
-            border: 2px solid var(--primary);
-            animation: spin 5s linear infinite; animation-play-state: paused;
+        .mini-art { width: 40px; height: 40px; border-radius: 50%; animation: spin 4s linear infinite; }
+        @keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+
+        footer { text-align: center; padding: 80px 0; color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* Skill Badges */
+        .badge-group { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+        .badge {
+            padding: 4px 12px;
+            background: var(--primary-muted);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            font-size: 0.7rem;
+            border-radius: 20px;
+            font-weight: 700;
         }
-        #now-playing-popup.visible .record-img { animation-play-state: running; }
-
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        .now-info h5 { color: var(--primary); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: -2px;}
-        .now-info p { color: white; font-size: 0.95rem; font-weight: 600; }
-
-        footer { text-align: center; padding: 100px 20px; color: var(--text-dim); font-size: 0.8rem; letter-spacing: 1px; }
-
     </style>
 </head>
 <body>
@@ -201,71 +218,81 @@
     <div class="bg-glow"></div>
 
     <nav>
-        <a id="nav-home" onclick="showPage('home')" class="active">Portfolio</a>
-        <a id="nav-arcade" onclick="showPage('arcade')">Arcade</a>
-        <a id="nav-music" onclick="showPage('music')">Music Vault</a>
+        <div class="logo">A.BECKER<span class="pink-text">_</span></div>
+        <div class="nav-links">
+            <a id="nav-home" onclick="showPage('home')" class="active">Portfolio</a>
+            <a id="nav-arcade" onclick="showPage('arcade')">Arcade</a>
+            <a id="nav-music" onclick="showPage('music')">Vault</a>
+        </div>
     </nav>
 
     <div id="home" class="page active">
         <div class="hero">
-            <h1>Aiden Becker</h1>
-            <p style="color: var(--text-dim); font-size: 1.1rem;">Engineering Virtual Worlds & Sonic Landscapes</p>
+            <span class="tag">Creative Developer & Audio Engineer</span>
+            <h1>Engineering <span class="pink-text">Virtual</span> Worlds & Sonic Landscapes.</h1>
         </div>
+        
         <div class="grid">
             <div class="card">
-                <div style="color: var(--secondary); font-weight: 700; margin-bottom: 5px;">PROJECT 01</div>
-                <h3 style="font-family: 'Space Grotesk'; font-size: 1.8rem; margin-bottom: 15px;">DEAD ZONE</h3>
-                <p>A survival experience focused on immersive mechanics and 3D spatial audio. Play the demo directly in your browser.</p>
-                <button onclick="showPage('arcade')" class="btn-launch">Play Demo →</button>
+                <span class="tag">Project 01</span>
+                <h3 style="font-family: 'Space Grotesk'; font-size: 1.5rem; margin-bottom: 10px;">DEAD ZONE</h3>
+                <p style="color: var(--text-dim); margin-bottom: 20px;">A survival experience focused on immersive mechanics and 3D spatial audio. Play the demo directly in your browser.</p>
+                <button onclick="showPage('arcade')" class="btn-launch">Launch Project</button>
             </div>
+
             <div class="card">
-                <div style="color: var(--primary); font-weight: 700; margin-bottom: 5px;">CAPABILITIES</div>
-                <h3 style="font-family: 'Space Grotesk'; font-size: 1.8rem; margin-bottom: 15px;">Technical Core</h3>
-                <p>Specializing in Unity engine, C# optimization, and responsive HTML5 game design.</p>
+                <span class="tag">Stack</span>
+                <h3 style="font-family: 'Space Grotesk'; font-size: 1.5rem; margin-bottom: 10px;">Technical Core</h3>
+                <p style="color: var(--text-dim);">Building high-performance applications with modern tools.</p>
+                <div class="badge-group">
+                    <span class="badge">UNITY 3D</span>
+                    <span class="badge">C#</span>
+                    <span class="badge">JAVASCRIPT</span>
+                    <span class="badge">HTML5</span>
+                    <span class="badge">SPATIAL AUDIO</span>
+                </div>
             </div>
         </div>
     </div>
 
     <div id="arcade" class="page">
-        <div class="hero">
-            <h1>Arcade</h1>
-            <p style="color: var(--text-dim);">Live Mission Terminal</p>
+        <div class="hero" style="text-align: center;">
+            <span class="tag">Mission Terminal</span>
+            <h1>Live <span class="pink-text">Arcade</span></h1>
         </div>
-        <div class="game-wrapper">
-            <iframe src="game.html" id="gameFrame"></iframe>
+        <div class="game-container">
+            <div class="game-wrapper">
+                <iframe src="game.html" id="gameFrame"></iframe>
+            </div>
         </div>
         <div style="text-align: center; margin-top: 30px;">
-            <p style="color: var(--text-dim); font-family: 'Space Grotesk'; letter-spacing: 1px;">
-                CONTROLS: [W/A/D] MOVE/JUMP | [SPACE] FIRE
+            <p style="color: var(--text-dim); font-size: 0.8rem; letter-spacing: 2px;">
+                CONTROLS: [W/A/D] MOVE/JUMP &bull; [SPACE] FIRE
             </p>
         </div>
     </div>
 
     <div id="music" class="page">
         <div class="hero">
-            <h1>Music Vault</h1>
-            <p style="color: var(--text-dim);">The playlist behind the code.</p>
+            <span class="tag">Inspiration</span>
+            <h1>Music <span class="pink-text">Vault</span></h1>
         </div>
 
-        <div class="grid">
-            <div class="song-card">
-                <div class="song-info">
-                    <img src="music/nirvana.jpg" class="album-art" alt="Nirvana">
-                    <div class="song-details">
-                        <h4>Smells Like Teen Spirit</h4>
-                        <p>Nirvana</p>
-                    </div>
+        <div class="song-list">
+            <div class="song-row">
+                <img src="music/nirvana.jpg" class="album-art" alt="Nirvana">
+                <div class="song-meta">
+                    <h4>Smells Like Teen Spirit</h4>
+                    <p>Nirvana</p>
                 </div>
                 <audio controls src="music/nirvana.mp3" data-title="Smells Like Teen Spirit" data-art="music/nirvana.jpg"></audio>
             </div>
 
-            <div class="song-card">
-                <div class="song-info">
-                    <img src="music/gorillaz.jpg" class="album-art" alt="Gorillaz">
-                    <div class="song-details">
-                        <h4>Melancholy Hill</h4>
-                        <p>Gorillaz</p>
-                    </div>
+            <div class="song-row">
+                <img src="music/gorillaz.jpg" class="album-art" alt="Gorillaz">
+                <div class="song-meta">
+                    <h4>Melancholy Hill</h4>
+                    <p>Gorillaz</p>
                 </div>
                 <audio controls src="music/gorillaz.mp3" data-title="Melancholy Hill" data-art="music/gorillaz.jpg"></audio>
             </div>
@@ -273,17 +300,15 @@
     </div>
 
     <div id="now-playing-popup">
-        <div class="record-container">
-            <img id="popup-art" src="" class="record-img">
-        </div>
-        <div class="now-info">
-            <h5>Currently Spinning</h5>
-            <p id="popup-title">Song Title</p>
+        <img id="popup-art" src="" class="mini-art">
+        <div>
+            <div style="font-size: 0.6rem; color: var(--primary); font-weight: 800; text-transform: uppercase;">Playing</div>
+            <div id="popup-title" style="font-size: 0.9rem; font-weight: 600;">Song Title</div>
         </div>
     </div>
 
     <footer>
-        &copy; 2026 AIDEN BECKER &bull; <span style="color: var(--primary)">MADE WITH PASSION</span>
+        &copy; 2026 AIDEN BECKER &bull; <span class="pink-text">All Rights Reserved</span>
     </footer>
 
     <script>
