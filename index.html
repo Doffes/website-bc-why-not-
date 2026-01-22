@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker </title>
+    <title>Aiden Becker | Developer Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
@@ -16,6 +16,8 @@
             --text-dim: #a1a1aa;
             --glass-border: rgba(255, 255, 255, 0.05);
             --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --status-active: #00ff88;
+            --status-inactive: #ff4444;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,107 +41,54 @@
             backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
         }
 
-        .logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.2rem; }
+        .logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.2rem; display: flex; align-items: center; }
+        #typing-text { min-width: 1px; }
+        .cursor { display: inline-block; width: 10px; height: 1.2rem; background-color: var(--primary); margin-left: 5px; animation: blink 1s step-end infinite; }
+        @keyframes blink { from, to { background-color: transparent; } 50% { background-color: var(--primary); } }
+
         .pink-text { color: var(--primary); }
         .nav-links { display: flex; gap: 30px; }
-        nav a { color: var(--text-dim); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
+        nav a { color: var(--text-dim); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s; }
         nav a:hover, nav a.active { color: var(--primary); }
 
         .page { display: none; padding: 60px 8%; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.6s ease; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* MUSIC STYLES (Simplified for clarity) */
-        .song-container { margin-bottom: 20px; background: var(--card-bg); padding: 20px; border-radius: 15px; border: 1px solid var(--glass-border); }
+        /* MUSIC TAB STYLES */
+        .song-container { margin-bottom: 40px; background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border); }
+        .song-flex { display: flex; gap: 30px; align-items: center; }
+        .album-art { width: 100px; height: 100px; border-radius: 10px; }
+        .status-tag { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-left: 10px; vertical-align: middle; }
+        .active-band { color: var(--status-active); }
+        .inactive-band { color: var(--status-inactive); }
+        .fact-box { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border); display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        .fact-item h5 { color: var(--primary); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .fact-item p { font-size: 0.85rem; color: var(--text-dim); }
+        audio { width: 100%; margin-top: 15px; filter: invert(1) hue-rotate(280deg) opacity(0.5); }
 
-        /* AI CHAT WIDGET */
-        .ai-chat-container {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            z-index: 9999;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+        /* NOW PLAYING POPUP */
+        #now-playing-popup {
+            position: fixed; bottom: 30px; left: 30px; background: #111;
+            border: 1px solid var(--primary); padding: 12px 20px; border-radius: 12px;
+            display: flex; align-items: center; gap: 15px; transform: translateX(-250%);
+            transition: var(--transition); z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
+        #now-playing-popup.visible { transform: translateX(0); }
+        .mini-art { width: 45px; height: 45px; border-radius: 6px; border: 1px solid var(--glass-border); }
 
-        .chat-trigger {
-            width: 60px;
-            height: 60px;
-            background: var(--primary);
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 24px rgba(255, 0, 127, 0.4);
-            transition: var(--transition);
-        }
-
-        .chat-trigger:hover { transform: scale(1.05) rotate(5deg); }
-
-        .chat-window {
-            width: 350px;
-            height: 500px;
-            background: #0c0c0c;
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            position: absolute;
-            bottom: 80px;
-            right: 0;
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-        }
-
-        .chat-window.open { display: flex; animation: slideUp 0.4s ease; }
-
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .chat-header {
-            padding: 20px;
-            background: linear-gradient(to right, rgba(255, 0, 127, 0.1), transparent);
-            border-bottom: 1px solid var(--glass-border);
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .bubble {
-            max-width: 80%;
-            padding: 10px 14px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-
-        .bubble.bot { background: #1a1a1a; align-self: flex-start; color: #e4e4e7; border-bottom-left-radius: 2px; }
-        .bubble.user { background: var(--primary); align-self: flex-end; color: white; border-bottom-right-radius: 2px; }
-
-        .chat-input-area {
-            padding: 15px;
-            background: #080808;
-            border-top: 1px solid var(--glass-border);
-            display: flex;
-            gap: 10px;
-        }
-
-        input#user-input {
-            flex: 1;
-            background: #121212;
-            border: 1px solid var(--glass-border);
-            color: white;
-            padding: 10px;
-            border-radius: 10px;
-            outline: none;
-        }
-
-        .typing { font-size: 0.7rem; color: var(--primary); margin-bottom: 5px; display: none; }
+        /* AI CHATBOX */
+        .chat-widget { position: fixed; bottom: 30px; right: 30px; z-index: 10001; display: flex; flex-direction: column; align-items: flex-end; }
+        .chat-button { width: 60px; height: 60px; background: var(--primary); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(255, 0, 127, 0.3); transition: var(--transition); }
+        .chat-window { width: 320px; height: 450px; background: #080808; border: 1px solid var(--glass-border); border-radius: 20px; margin-bottom: 15px; display: none; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+        .chat-window.active { display: flex; animation: fadeIn 0.3s ease; }
+        .chat-header { background: rgba(255, 0, 127, 0.1); padding: 15px; border-bottom: 1px solid var(--glass-border); color: var(--primary); font-weight: 700; font-size: 0.8rem; }
+        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; font-size: 0.85rem; }
+        .msg { padding: 10px 14px; border-radius: 15px; max-width: 85%; line-height: 1.4; }
+        .msg.bot { background: #1a1a1a; align-self: flex-start; color: #fff; border-bottom-left-radius: 2px; }
+        .msg.user { background: var(--primary); align-self: flex-end; color: #fff; border-bottom-right-radius: 2px; }
+        .chat-input-area { padding: 12px; border-top: 1px solid var(--glass-border); display: flex; gap: 8px; }
+        #chat-input { flex: 1; background: #000; border: 1px solid var(--glass-border); color: #fff; padding: 8px 12px; border-radius: 8px; outline: none; }
     </style>
 </head>
 <body>
@@ -147,7 +96,7 @@
     <div class="bg-glow"></div>
 
     <nav>
-        <div class="logo">AIDEN <span class="pink-text">BECKER</span></div>
+        <div class="logo"><span id="typing-text"></span><span class="cursor"></span></div>
         <div class="nav-links">
             <a onclick="showPage('home')" id="nav-home">Home</a>
             <a onclick="showPage('music')" id="nav-music" class="active">Music</a>
@@ -156,42 +105,86 @@
     </nav>
 
     <div id="home" class="page">
-        <h1>Welcome to the <span class="pink-text">Lab</span>.</h1>
-        <p style="margin-top:20px; color: var(--text-dim);"> Im Guessing You Got Here Through MrPullen.Com. Anyways Welcome! I Am Aiden Becker, A High Schooler Who Love Grunge, Game Developing, And Experimenting With AI!</p>
+        <h1>Building <span class="pink-text">Digital</span> Experiences.</h1>
+        <p style="color: var(--text-dim); margin-top: 20px;">I'm a developer focused on clean, functional design.</p>
     </div>
 
     <div id="music" class="page active">
         <div class="song-container">
-            <h3>Smells Like Teen Spirit</h3>
-            <p style="color:var(--text-dim)">Nirvana - Grunge Classic</p>
+            <div class="song-flex">
+                <img src="music/nirvana.jpg" class="album-art">
+                <div style="flex:1">
+                    <h3>Smells Like Teen Spirit <span class="status-tag inactive-band">[Disbanded]</span></h3>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">Nirvana • 1991</p>
+                    <audio controls src="music/nirvana.mp3" data-title="Smells Like Teen Spirit" data-artist="Nirvana" data-art="music/nirvana.jpg"></audio>
+                </div>
+            </div>
+            <div class="fact-box">
+                <div class="fact-item"><h5>Vibe</h5><p>The definitive anthem of the 90s grunge movement.</p></div>
+                <div class="fact-item"><h5>Status</h5><p>Ended in 1994.</p></div>
+            </div>
         </div>
+
         <div class="song-container">
-            <h3>More Than Hate</h3>
-            <p style="color:var(--text-dim)">Bilmuri - Post-Hardcore/Pop</p>
+            <div class="song-flex">
+                <img src="music/bilmuri.jpg" class="album-art">
+                <div style="flex:1">
+                    <h3>More Than Hate <span class="status-tag active-band">[Active]</span></h3>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">Bilmuri • 2020</p>
+                    <audio controls src="music/bilmuri.mp3" data-title="More Than Hate" data-artist="Bilmuri" data-art="music/bilmuri.jpg"></audio>
+                </div>
+            </div>
+            <div class="fact-box">
+                <div class="fact-item"><h5>Vibe</h5><p>Heavy riffs meets pop-infused energy.</p></div>
+                <div class="fact-item"><h5>Status</h5><p>Active and releasing new tracks.</p></div>
+            </div>
         </div>
     </div>
 
-    <div class="ai-chat-container">
+    <div id="arcade" class="page">
+        <div style="border: 1px solid var(--primary); background: #000; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden;">
+            <iframe src="game.html" style="width:100%; height:100%; border:none;"></iframe>
+        </div>
+    </div>
+
+    <div id="now-playing-popup">
+        <img id="popup-art" src="" class="mini-art">
+        <div>
+            <div id="popup-artist" style="font-size: 0.6rem; color: var(--primary); font-weight: 800; text-transform: uppercase;">Artist Name</div>
+            <div id="popup-title" style="font-size: 0.85rem; font-weight: 700;">Song Title</div>
+        </div>
+    </div>
+
+    <div class="chat-widget">
         <div class="chat-window" id="chat-window">
-            <div class="chat-header">
-                <div style="font-weight: 700; font-size: 0.8rem; letter-spacing: 1px;">GEMINI PORTFOLIO AI</div>
-                <div style="font-size: 0.6rem; color: var(--text-dim);">Moderated for ages 13-17</div>
+            <div class="chat-header">AIDEN'S ASSISTANT</div>
+            <div class="chat-messages" id="chat-messages">
+                <div class="msg bot">Hey! I'm Aiden's AI. What's on your mind? We can talk about code, music, or just chill.</div>
             </div>
-            <div class="chat-messages" id="chat-box">
-                <div class="bubble bot">Yo! I'm Aiden's AI. Want to know about his music, his code, or just chat?</div>
-            </div>
-            <div id="typing-indicator" class="typing" style="padding-left: 20px;">Gemini is thinking...</div>
             <div class="chat-input-area">
-                <input type="text" id="user-input" placeholder="Ask me something..." onkeypress="if(event.key==='Enter') handleChat()">
-                <button onclick="handleChat()" style="background:none; border:none; color:var(--primary); font-weight:700; cursor:pointer;">SEND</button>
+                <input type="text" id="chat-input" placeholder="Say something..." onkeypress="if(event.key==='Enter') sendMessage()">
+                <button onclick="sendMessage()" style="background:none; border:none; color:var(--primary); font-weight:bold; cursor:pointer;">SEND</button>
             </div>
         </div>
-        <div class="chat-trigger" onclick="toggleChat()">
+        <div class="chat-button" onclick="toggleChat()">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
         </div>
     </div>
 
     <script>
+        // --- LOGO TYPING ---
+        const text = "AIDEN BECKER";
+        let charIndex = 0;
+        function typeEffect() {
+            if (charIndex < text.length) {
+                document.getElementById("typing-text").textContent += text.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeEffect, 150);
+            }
+        }
+        window.onload = typeEffect;
+
+        // --- NAVIGATION ---
         function showPage(p) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById(p).classList.add('active');
@@ -199,72 +192,67 @@
             document.getElementById('nav-'+p).classList.add('active');
         }
 
-        function toggleChat() {
-            document.getElementById('chat-window').classList.toggle('open');
-        }
+        // --- AUDIO PLAYER ---
+        const popup = document.getElementById('now-playing-popup');
+        document.querySelectorAll('audio').forEach(audio => {
+            audio.addEventListener('play', () => {
+                document.querySelectorAll('audio').forEach(other => { if(other !== audio) other.pause(); });
+                document.getElementById('popup-title').innerText = audio.getAttribute('data-title');
+                document.getElementById('popup-artist').innerText = audio.getAttribute('data-artist');
+                document.getElementById('popup-art').src = audio.getAttribute('data-art');
+                popup.classList.add('visible');
+            });
+            audio.addEventListener('pause', () => popup.classList.remove('visible'));
+        });
 
-        async function handleChat() {
-            const input = document.getElementById('user-input');
-            const chatBox = document.getElementById('chat-box');
-            const typing = document.getElementById('typing-indicator');
-            const userText = input.value.trim();
+        // --- CHAT LOGIC ---
+        let chatContext = "none"; 
 
-            if(!userText) return;
+        function toggleChat() { document.getElementById('chat-window').classList.toggle('active'); }
 
-            // 1. Display User Message
-            const uBubble = document.createElement('div');
-            uBubble.className = 'bubble user';
-            uBubble.innerText = userText;
-            chatBox.appendChild(uBubble);
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const box = document.getElementById('chat-messages');
+            const msg = input.value.trim();
+            if(!msg) return;
+
+            // User msg
+            box.innerHTML += `<div class="msg user">${msg}</div>`;
             input.value = "";
-            chatBox.scrollTop = chatBox.scrollHeight;
+            box.scrollTop = box.scrollHeight;
 
-            // 2. Show Typing Indicator
-            typing.style.display = 'block';
-
-            // 3. GET AI RESPONSE
-            // In a production environment, you would use:
-            // const response = await fetch('YOUR_SERVER_URL', { method: 'POST', body: JSON.stringify({text: userText}) });
-            
-            const aiResponse = await simulateGeminiResponse(userText);
-            
-            // 4. Display AI Response
             setTimeout(() => {
-                typing.style.display = 'none';
-                const bBubble = document.createElement('div');
-                bBubble.className = 'bubble bot';
-                bBubble.innerText = aiResponse;
-                chatBox.appendChild(bBubble);
-                chatBox.scrollTop = chatBox.scrollHeight;
+                const response = getChatResponse(msg.toLowerCase());
+                box.innerHTML += `<div class="msg bot">${response}</div>`;
+                box.scrollTop = box.scrollHeight;
             }, 600);
         }
 
-        // --- THE BRAINS ---
-        // This simulates how a Large Language Model works with your specific safety restrictions.
-        async function simulateGeminiResponse(input) {
-            const cleanInput = input.toLowerCase();
+        function getChatResponse(input) {
+            // Cuss Filter
+            const badWords = ["cuss1", "cuss2", "badword"]; // Add actual words here
+            if (badWords.some(w => input.includes(w))) return "Whoa, let's keep the vibes clean! I don't use that kind of language.";
 
-            // Safety Block
-            if (/(badword|violence|hate|adult|address|phone)/.test(cleanInput)) {
-                return "I'm designed to keep things safe and professional here. Let's talk about Aiden's projects or music instead!";
+            // Dynamic Responses
+            if (input.includes("hello") || input.includes("hi") || input.includes("hey")) return "Hey! I'm just hanging out in the code. How's your day going?";
+            if (input.includes("who are you")) return "I'm Aiden's digital sidekick. I help people navigate his portfolio and talk about music.";
+            if (input.includes("music") || input.includes("songs")) {
+                chatContext = "music";
+                return "Aiden is really into Bilmuri and Nirvana. Do you like rock, or are you more into something else?";
             }
-
-            // Conversational Mapping
-            if (cleanInput.includes("who are you") || cleanInput.includes("what are you")) {
-                return "I'm a Gemini-powered assistant customized to Aiden's portfolio. I know all about his dev work and his obsession with Bilmuri riffs.";
-            }
-            if (cleanInput.includes("music") || cleanInput.includes("listen")) {
-                return "Aiden is huge on Grunge and Post-Hardcore. He thinks 'Smells Like Teen Spirit' is the ultimate 90s anthem. Do you like rock or something else?";
-            }
-            if (cleanInput.includes("code") || cleanInput.includes("build")) {
-                return "He mostly uses JavaScript and CSS for the visual stuff. He loves 'glassmorphism' (that blurry, glowing effect you see on this site!).";
-            }
-            if (cleanInput.includes("hi") || cleanInput.includes("hello") || cleanInput.includes("hey")) {
-                return "Hey! Hope you're having a good day. What do you think of the site's pink aesthetic?";
-            }
-
-            // General "Intelligent" Fallback
-            return "That's a cool question. While I'm still learning, I can definitely say that Aiden's focus is on blending high-energy music vibes with clean code. Have you checked out the Arcade yet?";
+            if (input.includes("favorite") && chatContext === "music") return "Right now, it's definitely 'More Than Hate'. The riff is insane. What's your favorite track?";
+            if (input.includes("code") || input.includes("build")) return "This site uses CSS variables and JS for all the smooth transitions. Aiden likes the 'Neon Glass' look.";
+            if (input.includes("arcade") || input.includes("game")) return "The arcade is where the fun happens. Most of those are built with Logic and HTML5 Canvas!";
+            if (input.includes("cool") || input.includes("awesome") || input.includes("nice")) return "Glad you think so! Aiden put a lot of work into the aesthetic.";
+            
+            // Random Conversational Fillers
+            const fillers = [
+                "That's interesting! Tell me more.",
+                "I get that. It's all about the digital experience, right?",
+                "Totally. By the way, have you tried the Arcade tab yet?",
+                "Interesting point. Aiden always says design is just as important as the code."
+            ];
+            return fillers[Math.floor(Math.random() * fillers.length)];
         }
     </script>
 </body>
