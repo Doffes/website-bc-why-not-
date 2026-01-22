@@ -3,237 +3,287 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden_OS v4.2 | Titanium Final</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <title>Aiden_OS v5.0 | Professional Desktop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #00f2ff;
-            --bg: #020202;
-            --card: rgba(20, 20, 20, 0.95);
-            --border: rgba(255, 255, 255, 0.1);
-            --text: #ffffff;
+            --bg: #0a0a0c;
+            --taskbar: rgba(15, 15, 18, 0.9);
+            --window-bg: #141417;
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #e0e0e0;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; cursor: crosshair; user-select: none; }
-        body { font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; }
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+        body { font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; cursor: default; }
 
-        /* --- SCREENS --- */
-        #boot-screen { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1s; }
-        #login-screen { position: fixed; inset: 0; background: radial-gradient(circle at center, #111, #000); z-index: 9999; display: none; align-items: center; justify-content: center; }
-        .login-box { text-align: center; padding: 40px; border: 1px solid var(--border); border-radius: 24px; background: rgba(0,0,0,0.8); width: 320px; backdrop-filter: blur(20px); }
-
-        /* --- OS UI --- */
-        #os-interface { display: none; height: 100vh; flex-direction: column; }
-        nav { height: 65px; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.9); z-index: 1000; }
-        .nav-btn { background: transparent; border: 1px solid transparent; color: #777; padding: 10px 20px; cursor: pointer; font-weight: 700; border-radius: 8px; transition: 0.3s; }
-        .nav-btn.active { color: var(--primary); border-color: rgba(0, 242, 255, 0.3); background: rgba(0, 242, 255, 0.05); }
-
-        #desktop { display: flex; flex: 1; position: relative; background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 40px 40px; }
-        .sidebar { width: 90px; border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding-top: 20px; gap: 25px; background: rgba(0,0,0,0.6); z-index: 5; }
-        
-        /* FILES */
-        .file-node { position: absolute; width: 90px; text-align: center; padding: 10px; border-radius: 8px; border: 1px solid transparent; z-index: 10; transition: background 0.2s; }
-        .file-node:hover { background: rgba(255,255,255,0.05); }
-        .file-node.selected { background: rgba(0, 242, 255, 0.1); border-color: var(--primary); }
-        .file-node div { font-size: 2.2rem; margin-bottom: 5px; }
-        .file-node span { font-size: 0.7rem; font-weight: 500; display: block; }
-
-        /* OVERLAYS */
-        .page-overlay { position: absolute; inset: 0; padding: 40px; background: rgba(5,5,5,0.98); display: none; z-index: 100; overflow-y: auto; backdrop-filter: blur(15px); }
-        .page-overlay.active { display: block; }
-        
-        #about-popup { 
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 400px; background: #111; border: 2px solid var(--primary);
-            border-radius: 15px; padding: 30px; z-index: 2000; display: none;
-            box-shadow: 0 0 50px rgba(0,0,0,1);
+        /* --- DESKTOP --- */
+        #desktop {
+            height: calc(100vh - 45px);
+            width: 100vw;
+            background: radial-gradient(circle at center, #1a1a20 0%, #0a0a0c 100%);
+            position: relative;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 100px);
+            grid-template-rows: repeat(auto-fill, 110px);
+            grid-auto-flow: column;
+            gap: 10px;
         }
 
-        /* CONTEXT MENU */
-        #ctx-menu { position: fixed; background: #121212; border: 1px solid #333; border-radius: 8px; padding: 6px 0; z-index: 10001; display: none; width: 170px; }
-        .ctx-item { padding: 10px 18px; font-size: 0.8rem; color: #ccc; cursor: pointer; }
-        .ctx-item:hover { background: var(--primary); color: #000; font-weight: bold; }
+        /* --- ICONS --- */
+        .icon {
+            width: 90px; height: 100px; display: flex; flex-direction: column; align-items: center; 
+            justify-content: center; text-align: center; border-radius: 8px; transition: 0.2s;
+            border: 1px solid transparent; cursor: pointer;
+        }
+        .icon:hover { background: rgba(255,255,255,0.05); border-color: var(--border); }
+        .icon img, .icon .emoji { font-size: 2.5rem; margin-bottom: 8px; }
+        .icon span { font-size: 0.75rem; font-weight: 500; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
-        .theme-card { background:#111; padding:15px; border-radius:12px; border:1px solid #333; text-align:center; cursor:pointer; font-size: 0.75rem; }
-        footer { height: 35px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 0 20px; font-size: 0.7rem; font-family: 'Fira Code'; color: #444; background: #000; }
+        /* --- WINDOWS --- */
+        .window {
+            position: absolute; width: 600px; height: 400px; background: var(--window-bg);
+            border: 1px solid var(--border); border-radius: 12px; display: none;
+            flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.5); z-index: 100;
+            overflow: hidden; backdrop-filter: blur(10px);
+        }
+        .win-header {
+            height: 35px; background: rgba(255,255,255,0.03); display: flex; 
+            align-items: center; padding: 0 15px; cursor: move; justify-content: space-between;
+        }
+        .win-title { font-size: 0.8rem; font-weight: bold; color: var(--primary); }
+        .win-btns { display: flex; gap: 8px; }
+        .win-btn { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; }
+        .close { background: #ff5f56; } .min { background: #ffbd2e; } .max { background: #27c93f; }
+        .win-content { flex: 1; padding: 20px; overflow-y: auto; }
+
+        /* --- TASKBAR --- */
+        #taskbar {
+            height: 45px; background: var(--taskbar); position: fixed; bottom: 0; width: 100%;
+            display: flex; align-items: center; justify-content: space-between; padding: 0 10px;
+            border-top: 1px solid var(--border); z-index: 1000; backdrop-filter: blur(15px);
+        }
+        .tb-left, .tb-right { display: flex; align-items: center; gap: 15px; }
+        .start-btn { 
+            width: 35px; height: 35px; background: var(--primary); border-radius: 6px; 
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            box-shadow: 0 0 10px var(--primary);
+        }
+        .tb-clock { font-family: 'Fira Code'; font-size: 0.8rem; color: #888; }
+
+        /* --- APP SPECIFIC --- */
+        #terminal { background: #000; color: #00ff41; font-family: 'Fira Code'; font-size: 0.85rem; }
+        .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
+        .theme-item { padding: 10px; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; text-align: center; cursor: pointer; font-size: 0.7rem; }
+        .music-item { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; margin-bottom: 8px; }
+
+        /* --- UTILS --- */
+        .hidden { display: none; }
     </style>
 </head>
-<body oncontextmenu="handleGlobalCtx(event)">
+<body oncontextmenu="return false;">
 
-    <div id="boot-screen" onclick="initKernel()">
-        <div style="font-size: 2rem; font-weight: 700; letter-spacing: 5px;">AIDEN_OS</div>
-        <div id="boot-status" style="margin-top:20px; font-family:'Fira Code'; color:var(--primary)">CLICK TO BOOT</div>
-    </div>
-
-    <div id="login-screen">
-        <div class="login-box">
-            <div style="width:70px; height:70px; background:var(--primary); border-radius:50%; margin: 0 auto 20px;"></div>
-            <h3>Aiden Becker</h3>
-            <input type="password" id="pw" placeholder="PASSWORD" style="background:#111; border:1px solid #333; color:#fff; padding:12px; border-radius:8px; width:100%; text-align:center; margin-top:15px;" onkeypress="if(event.key==='Enter') unlock()">
+    <div id="desktop">
+        <div class="icon" onclick="openWindow('win-about')">
+            <div class="emoji">👤</div><span>About_Me</span>
+        </div>
+        <div class="icon" onclick="openWindow('win-explorer')">
+            <div class="emoji">📂</div><span>Explorer</span>
+        </div>
+        <div class="icon" onclick="openWindow('win-music')">
+            <div class="emoji">🎵</div><span>Music</span>
+        </div>
+        <div class="icon" onclick="openWindow('win-terminal')">
+            <div class="emoji">📟</div><span>Terminal</span>
+        </div>
+        <div class="icon" onclick="openWindow('win-themes')">
+            <div class="emoji">🎨</div><span>Themes</span>
         </div>
     </div>
 
-    <div id="about-popup">
-        <h2 style="color:var(--primary)">About_Me.txt</h2>
-        <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
-        <p style="line-height:1.6; font-size:0.9rem;">
-            Hello! I'm Aiden. I'm a developer obsessed with creating immersive digital environments.<br><br>
-            I specialize in UI/UX, systems design, and audio integration. This OS is a sandbox of my latest experiments.
-        </p>
-        <button onclick="document.getElementById('about-popup').style.display='none'" style="margin-top:20px; background:var(--primary); border:none; padding:8px 15px; border-radius:5px; font-weight:bold; cursor:pointer;">Close</button>
+    <div id="win-about" class="window">
+        <div class="win-header" onmousedown="dragWindow(event, 'win-about')">
+            <span class="win-title">Bio - About_Me.txt</span>
+            <div class="win-btns">
+                <div class="win-btn min"></div><div class="win-btn max"></div>
+                <div class="win-btn close" onclick="closeWindow('win-about')"></div>
+            </div>
+        </div>
+        <div class="win-content">
+            <h2 style="color:var(--primary)">Aiden Becker</h2>
+            <p style="margin-top:10px; line-height:1.6">I am a creative technologist building immersive digital experiences. This OS is my private workspace and portfolio.</p>
+            <ul style="margin: 20px 0; padding-left: 20px;">
+                <li>30+ Built-in OS Modules</li>
+                <li>Custom Audio-Visual Engine</li>
+                <li>Dynamic Theme Integration</li>
+            </ul>
+        </div>
     </div>
 
-    <div id="ctx-menu">
-        <div class="ctx-item" id="ctx-open" onclick="openAbout()">Open</div>
-        <div class="ctx-item" onclick="createNewFile()">New File</div>
-        <div class="ctx-item" onclick="location.reload()">Restart System</div>
+    <div id="win-music" class="window">
+        <div class="win-header" onmousedown="dragWindow(event, 'win-music')">
+            <span class="win-title">Music Player</span>
+            <div class="win-btns"><div class="win-btn close" onclick="closeWindow('win-music')"></div></div>
+        </div>
+        <div class="win-content">
+            <div id="player-ui" style="text-align:center; padding: 20px; border-bottom: 1px solid var(--border); margin-bottom: 15px;">
+                <h3 id="now-playing">Select a track</h3>
+                <canvas id="viz" width="500" height="60" style="width:100%; margin: 10px 0;"></canvas>
+            </div>
+            <div id="track-list"></div>
+        </div>
     </div>
 
-    <div id="os-interface">
-        <nav>
-            <div style="font-weight: 700;">SYSTEM_ROOT</div>
-            <div class="nav-links">
-                <button class="nav-btn active" id="btn-desktop" onclick="showDesktop()">DESKTOP</button>
-                <button class="nav-btn" id="btn-music" onclick="openMenu('music')">MUSIC</button>
-                <button class="nav-btn" id="btn-themes" onclick="openMenu('themes')">THEMES</button>
+    <div id="win-terminal" class="window">
+        <div class="win-header" onmousedown="dragWindow(event, 'win-terminal')">
+            <span class="win-title">Aiden-Bash v1.0</span>
+            <div class="win-btns"><div class="win-btn close" onclick="closeWindow('win-terminal')"></div></div>
+        </div>
+        <div class="win-content" id="terminal">
+            <div>AIDEN_OS Kernel 5.0.0-Titanium</div>
+            <div>Type 'help' for commands.</div>
+            <div id="term-out"></div>
+            <div style="display:flex; gap:10px; margin-top:10px;">
+                <span>root@aiden_os:~$</span>
+                <input type="text" id="term-input" autofocus style="background:none; border:none; outline:none; color:#00ff41; font-family:'Fira Code'; flex:1;">
             </div>
-            <div id="clock">00:00:00</div>
-        </nav>
+        </div>
+    </div>
 
-        <main id="desktop" ondragover="event.preventDefault()" ondrop="handleDrop(event)">
-            <div class="sidebar">
-                <div class="desktop-icon" id="trash-bin" ondragover="event.preventDefault()" ondrop="handleTrash(event)">
-                    <div style="font-size:1.8rem">🗑️</div>Trash
-                </div>
+    <div id="win-themes" class="window">
+        <div class="win-header" onmousedown="dragWindow(event, 'win-themes')">
+            <span class="win-title">Display Settings</span>
+            <div class="win-btns"><div class="win-btn close" onclick="closeWindow('win-themes')"></div></div>
+        </div>
+        <div class="win-content">
+            <div class="theme-grid" id="theme-grid"></div>
+        </div>
+    </div>
+
+    <div id="win-explorer" class="window">
+        <div class="win-header" onmousedown="dragWindow(event, 'win-explorer')">
+            <span class="win-title">File Explorer</span>
+            <div class="win-btns"><div class="win-btn close" onclick="closeWindow('win-explorer')"></div></div>
+        </div>
+        <div class="win-content">
+            <div style="display:flex; gap:20px; flex-wrap:wrap;">
+                <div class="icon" style="width:70px;"><div class="emoji">📁</div><span>Documents</span></div>
+                <div class="icon" style="width:70px;"><div class="emoji">📁</div><span>Downloads</span></div>
+                <div class="icon" style="width:70px;"><div class="emoji">📁</div><span>Pictures</span></div>
             </div>
+        </div>
+    </div>
 
-            <div id="music-page" class="page-overlay">
-                <h1>Audio Engine</h1>
-                <div id="music-list" style="margin-top:20px;"></div>
-            </div>
-
-            <div id="themes-page" class="page-overlay">
-                <h1>Visual Modules (30+)</h1>
-                <div id="theme-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap:15px; margin-top:20px;"></div>
-            </div>
-
-            <div class="file-node" id="about-file" draggable="true" ondragstart="dragStart(event)" style="left:120px; top:40px;" oncontextmenu="setAboutCtx(event)">
-                <div style="color:var(--primary)">📄</div><span>About_Me</span>
-            </div>
-        </main>
-
-        <footer>
-            <div id="sys-msg">STATUS: READY</div>
-            <div>AIDEN_OS v4.2</div>
-        </footer>
+    <div id="taskbar">
+        <div class="tb-left">
+            <div class="start-btn" onclick="openWindow('win-terminal')">A</div>
+            <span style="font-weight:bold; font-size:0.8rem">AIDEN_OS</span>
+        </div>
+        <div class="tb-right">
+            <span id="tb-status">RAM: 1.2GB</span>
+            <div class="tb-clock" id="clock">00:00</div>
+        </div>
     </div>
 
     <script>
-        let audioCtx;
-
-        function playSound(freq, type = 'sine', duration = 0.1) {
-            if(!audioCtx) audioCtx = new AudioContext();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = type;
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(); osc.stop(audioCtx.currentTime + duration);
-        }
-
-        function initKernel() {
-            playSound(440, 'triangle', 0.5);
-            document.getElementById('boot-status').innerText = "BOOTING...";
-            setTimeout(() => {
-                document.getElementById('boot-screen').style.display = 'none';
-                document.getElementById('login-screen').style.display = 'flex';
-            }, 1000);
-        }
-
-        function unlock() {
+        // --- WINDOW LOGIC ---
+        function openWindow(id) {
+            const win = document.getElementById(id);
+            win.style.display = 'flex';
+            win.style.zIndex = Math.floor(Date.now() / 100000);
             playSound(880);
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('os-interface').style.display = 'flex';
         }
+        function closeWindow(id) { document.getElementById(id).style.display = 'none'; playSound(440); }
 
-        function showDesktop() {
-            playSound(600);
-            document.querySelectorAll('.page-overlay').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('btn-desktop').classList.add('active');
-        }
-
-        function openMenu(m) {
-            playSound(700);
-            document.querySelectorAll('.page-overlay').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(m + '-page').classList.add('active');
-            document.getElementById('btn-' + m).classList.add('active');
-        }
-
-        function openAbout() {
-            playSound(900);
-            document.getElementById('about-popup').style.display = 'block';
-            hideCtx();
-        }
-
-        // --- FILE SYSTEM ---
-        function dragStart(e) { e.dataTransfer.setData("text", e.target.id); }
-        function handleDrop(e) {
-            e.preventDefault();
-            const id = e.dataTransfer.getData("text");
-            const el = document.getElementById(id);
-            if(el) { el.style.left = e.clientX - 45 + 'px'; el.style.top = e.clientY - 45 + 'px'; }
-        }
-        function handleTrash(e) {
-            const id = e.dataTransfer.getData("text");
-            if(id === 'about-file') {
-                playSound(150, 'square', 0.3);
-                document.getElementById('sys-msg').innerText = "ERROR: SYSTEM FILE PROTECTED";
-                return;
+        function dragWindow(e, id) {
+            const win = document.getElementById(id);
+            let x = e.clientX - win.offsetLeft;
+            let y = e.clientY - win.offsetTop;
+            
+            function move(e) {
+                win.style.left = (e.clientX - x) + 'px';
+                win.style.top = (e.clientY - y) + 'px';
             }
-            document.getElementById(id).remove();
-            playSound(200);
+            document.onmousemove = move;
+            document.onmouseup = () => document.onmousemove = null;
         }
-
-        // --- CONTEXT MENU ---
-        function handleGlobalCtx(e) {
-            e.preventDefault();
-            document.getElementById('ctx-open').style.display = 'none';
-            const menu = document.getElementById('ctx-menu');
-            menu.style.display = 'block'; menu.style.left = e.clientX + 'px'; menu.style.top = e.clientY + 'px';
-        }
-        function setAboutCtx(e) {
-            e.preventDefault(); e.stopPropagation();
-            const menu = document.getElementById('ctx-menu');
-            document.getElementById('ctx-open').style.display = 'block';
-            menu.style.display = 'block'; menu.style.left = e.clientX + 'px'; menu.style.top = e.clientY + 'px';
-        }
-        function hideCtx() { document.getElementById('ctx-menu').style.display = 'none'; }
-        document.addEventListener('click', hideCtx);
 
         // --- THEMES (30+) ---
-        const themes = [
-            {n:"Nirvana", c:"#00f2ff"}, {n:"Cyberpunk", c:"#f3ec19"}, {n:"Matrix", c:"#00ff41"}, {n:"Nord", c:"#88c0d0"},
-            {n:"Vapor", c:"#ff71ce"}, {n:"Blood", c:"#ff4444"}, {n:"Amber", c:"#ffb000"}, {n:"Dracula", c:"#bd93f9"},
-            {n:"Forest", c:"#50fa7b"}, {n:"Ocean", c:"#0077be"}, {n:"Sakura", c:"#ffb7c5"}, {n:"Coffee", c:"#6f4e37"},
-            {n:"Slate", c:"#708090"}, {n:"Fire", c:"#ff4500"}, {n:"Mint", c:"#98ff98"}, {n:"Gold", c:"#ffd700"},
-            {n:"Retro", c:"#ff9900"}, {n:"Toxic", c:"#ccff00"}, {n:"Deep", c:"#191970"}, {n:"Ghost", c:"#f8f8f2"},
-            {n:"Rose", c:"#e0115f"}, {n:"Teal", c:"#008080"}, {n:"Bronze", c:"#cd7f32"}, {n:"Neon", c:"#39ff14"},
-            {n:"Sky", c:"#87ceeb"}, {n:"Berry", c:"#800080"}, {n:"Lime", c:"#32cd32"}, {n:"Cream", c:"#fffdd0"},
-            {n:"Midnight", c:"#000033"}, {n:"Sun", c:"#fdb813"}
+        const themeList = [
+            {n:"Cyanide", c:"#00f2ff"}, {n:"Ruby", c:"#ff4444"}, {n:"Emerald", c:"#50fa7b"}, 
+            {n:"Matrix", c:"#00ff41"}, {n:"Gold", c:"#ffd700"}, {n:"Vapor", c:"#ff71ce"},
+            {n:"Nord", c:"#88c0d0"}, {n:"Dracula", c:"#bd93f9"}, {n:"Coffee", c:"#6f4e37"},
+            {n:"Orange", c:"#ff9900"}, {n:"Slate", c:"#708090"}, {n:"Mint", c:"#98ff98"},
+            {n:"Blood", c:"#8b0000"}, {n:"Teal", c:"#008080"}, {n:"Sunset", c:"#ff4500"},
+            {n:"Lavender", c:"#e6e6fa"}, {n:"Deep Sea", c:"#191970"}, {n:"Toxic", c:"#adff2f"},
+            {n:"Cyber", c:"#f3ec19"}, {n:"Sky", c:"#87ceeb"}, {n:"Forest", c:"#228b22"},
+            {n:"White", c:"#ffffff"}, {n:"Bronze", c:"#cd7f32"}, {n:"Neon", c:"#39ff14"},
+            {n:"Rose", c:"#e0115f"}, {n:"Berry", c:"#800080"}, {n:"Lime", c:"#32cd32"},
+            {n:"Cream", c:"#fffdd0"}, {n:"Midnight", c:"#000033"}, {n:"Sand", c:"#c2b280"}
         ];
         const tGrid = document.getElementById('theme-grid');
-        themes.forEach(t => {
-            const d = document.createElement('div'); d.className = 'theme-card';
-            d.innerHTML = `<div style="height:25px; background:${t.c}; border-radius:4px; margin-bottom:8px"></div>${t.n}`;
-            d.onclick = () => { document.documentElement.style.setProperty('--primary', t.c); playSound(1000); };
-            tGrid.appendChild(d);
+        themeList.forEach(t => {
+            const div = document.createElement('div');
+            div.className = 'theme-item';
+            div.innerHTML = `<div style="background:${t.c}; height:20px; border-radius:4px; margin-bottom:5px"></div>${t.n}`;
+            div.onclick = () => { document.documentElement.style.setProperty('--primary', t.c); playSound(1200); };
+            tGrid.appendChild(div);
         });
 
-        setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
+        // --- MUSIC ENGINE ---
+        const tracks = [
+            {t: "Lo-Fi Beats", a: "Aiden", s: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"},
+            {t: "Synthwave v5", a: "Cybercore", s: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"},
+            {t: "Deep Focus", a: "Atmosphere", s: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"}
+        ];
+        const tList = document.getElementById('track-list');
+        tracks.forEach(tr => {
+            const d = document.createElement('div'); d.className = 'music-item';
+            d.innerHTML = `<div>▶</div><div style="flex:1"><b>${tr.t}</b><br><small>${tr.a}</small></div>
+                           <audio src="${tr.s}" onplay="updateNP('${tr.t}')"></audio>`;
+            d.onclick = () => { d.querySelector('audio').play(); };
+            tList.appendChild(d);
+        });
+        function updateNP(name) { document.getElementById('now-playing').innerText = "Playing: " + name; }
+
+        // --- TERMINAL ENGINE ---
+        const termInput = document.getElementById('term-input');
+        const termOut = document.getElementById('term-out');
+        termInput.onkeypress = (e) => {
+            if(e.key === 'Enter') {
+                const cmd = termInput.value.toLowerCase();
+                const res = document.createElement('div');
+                res.style.color = "#888";
+                if(cmd === 'help') res.innerText = "> Available: ls, clear, help, whoami, version, themes";
+                else if(cmd === 'ls') res.innerText = "> About_Me.txt  Music/  Themes/  Explorer/";
+                else if(cmd === 'clear') { termOut.innerHTML = ''; termInput.value = ''; return; }
+                else if(cmd === 'whoami') res.innerText = "> User: Aiden (Superuser)";
+                else if(cmd === 'version') res.innerText = "> Aiden_OS Titanium v5.0.2-Stable";
+                else res.innerText = "> Command not found: " + cmd;
+                termOut.appendChild(res);
+                termInput.value = '';
+            }
+        };
+
+        // --- AUDIO ---
+        let aCtx;
+        function playSound(f) {
+            if(!aCtx) aCtx = new AudioContext();
+            const o = aCtx.createOscillator(); const g = aCtx.createGain();
+            o.connect(g); g.connect(aCtx.destination);
+            o.frequency.setValueAtTime(f, aCtx.currentTime);
+            g.gain.setValueAtTime(0.02, aCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, aCtx.currentTime + 0.1);
+            o.start(); o.stop(aCtx.currentTime + 0.1);
+        }
+
+        setInterval(() => { 
+            const d = new Date();
+            document.getElementById('clock').innerText = d.getHours() + ":" + String(d.getMinutes()).padStart(2,'0');
+            document.getElementById('tb-status').innerText = `RAM: ${(1.1 + Math.random()*0.2).toFixed(1)}GB`;
+        }, 1000);
     </script>
 </body>
 </html>
