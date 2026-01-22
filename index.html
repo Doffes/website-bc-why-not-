@@ -3,245 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden-Deck // Workstation v10</title>
+    <title>Aiden-Deck // Live Sync v11</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&family=Syncopate:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --glow: #00f2ff;
-            --panel: #121214;
-            --metal: #1e1e22;
-            --screen: #0a0a0c;
-        }
-
+        :root { --glow: #00f2ff; --panel: #121214; --metal: #1e1e22; --screen: #0a0a0c; --rot: 0deg; }
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
-        body { 
-            background: #050505; 
-            font-family: 'JetBrains Mono', monospace; 
-            display: flex; align-items: center; justify-content: center; 
-            height: 100vh; overflow: hidden;
-            color: #fff;
-        }
+        body { background: #050505; font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; color: #fff; }
 
-        /* --- THE HARDWARE CHASSIS --- */
         #deck {
-            width: 95vw; height: 85vh;
-            background: var(--panel);
-            border: 8px solid #2a2a2e;
-            border-radius: 40px;
-            box-shadow: 0 0 100px rgba(0,0,0,1), inset 0 0 20px rgba(255,255,255,0.05);
-            display: grid;
-            grid-template-columns: 300px 1fr 300px;
-            padding: 30px;
-            gap: 20px;
-            border-bottom-width: 20px;
+            width: 95vw; height: 85vh; background: var(--panel); border: 8px solid #2a2a2e; border-radius: 40px;
+            box-shadow: 0 0 100px #000; display: grid; grid-template-columns: 280px 1fr 280px; padding: 25px; gap: 20px;
         }
 
-        /* --- SIDE PANELS (CONTROLS) --- */
-        .module {
-            background: var(--metal);
-            border-radius: 20px;
-            padding: 20px;
-            border: 1px solid #333;
-            display: flex; flex-direction: column; gap: 15px;
-        }
+        /* --- MODULES --- */
+        .module { background: var(--metal); border-radius: 20px; padding: 20px; border: 1px solid #333; display: flex; flex-direction: column; gap: 15px; }
+        .knob-unit { text-align: center; font-size: 0.6rem; color: #555; }
+        .knob { width: 70px; height: 70px; background: radial-gradient(#444, #111); border-radius: 50%; margin: 10px auto; border: 3px solid #333; position: relative; cursor: pointer; transition: transform 0.1s; }
+        .knob::after { content: ""; position: absolute; top: 5px; left: 50%; width: 4px; height: 15px; background: var(--glow); transform: translateX(-50%); border-radius: 2px; box-shadow: 0 0 10px var(--glow); }
 
-        .knob-unit { text-align: center; }
-        .knob {
-            width: 60px; height: 60px; background: radial-gradient(#444, #111);
-            border-radius: 50%; margin: 10px auto; border: 2px solid #555;
-            transition: transform 0.3s; cursor: pointer;
-        }
-        .knob:active { transform: rotate(45deg); }
+        /* --- SCREEN --- */
+        #central-station { background: var(--screen); border-radius: 15px; border: 8px solid #111; display: flex; flex-direction: column; position: relative; }
+        .scanlines { position: absolute; inset: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%); background-size: 100% 4px; pointer-events: none; z-index: 10; }
+        #display-log { flex: 1; padding: 20px; color: var(--glow); font-size: 0.85rem; overflow-y: auto; text-shadow: 0 0 5px var(--glow); }
+        
+        /* --- AUDIO BUTTONS --- */
+        .music-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .album-btn { background: #000; border: 2px solid #222; border-radius: 12px; overflow: hidden; cursor: pointer; transition: 0.2s; position: relative; aspect-ratio: 1; }
+        .album-btn:hover { border-color: var(--glow); transform: translateY(-3px); }
+        .album-btn img { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
+        .album-label { position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.8); text-align: center; font-size: 0.55rem; padding: 4px 0; color: var(--glow); font-weight: bold; }
 
-        /* --- CENTRAL CRT SCREEN --- */
-        #central-station {
-            background: var(--screen);
-            border-radius: 15px;
-            border: 10px solid #111;
-            position: relative;
-            overflow: hidden;
-            display: flex; flex-direction: column;
-            box-shadow: inset 0 0 50px #000;
-        }
-        #central-station::before {
-            content: ""; position: absolute; inset: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 2px, 3px 100%; pointer-events: none;
-        }
-
-        /* --- MUSIC MODULES --- */
-        .music-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; flex: 1;
-        }
-        .album-btn {
-            background: #000; border: 1px solid #333; border-radius: 10px;
-            overflow: hidden; cursor: pointer; transition: 0.3s; position: relative;
-        }
-        .album-btn:hover { border-color: var(--glow); transform: scale(1.02); }
-        .album-btn img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-        .album-label { position: absolute; bottom: 5px; width: 100%; text-align: center; font-size: 0.6rem; font-weight: 800; color: var(--glow); }
-
-        /* --- COMMAND INTERFACE --- */
-        #display-log { flex: 1; padding: 20px; color: var(--glow); font-size: 0.9rem; overflow-y: auto; text-shadow: 0 0 5px var(--glow); }
-        #input-area { 
-            background: #111; padding: 15px; border-top: 2px solid #222;
-            display: flex; gap: 10px; align-items: center;
-        }
-        #cmd-in { 
-            background: transparent; border: none; outline: none; color: #fff; 
-            font-family: 'JetBrains Mono'; flex: 1; font-size: 1rem;
-        }
-
-        /* --- SYSTEM LIGHTS --- */
-        .light { width: 12px; height: 12px; border-radius: 50%; background: #300; display: inline-block; margin-right: 5px; }
-        .light.active { background: #f00; box-shadow: 0 0 10px #f00; }
-        .light.blue { background: #004cff; box-shadow: 0 0 10px #004cff; }
-
-        h2 { font-family: 'Syncopate', sans-serif; font-size: 0.8rem; letter-spacing: 2px; color: #666; margin-bottom: 10px; }
+        /* --- CONTROLS --- */
+        #input-area { background: #111; padding: 15px; border-top: 2px solid #222; display: flex; gap: 10px; align-items: center; }
+        #cmd-in { background: transparent; border: none; outline: none; color: #fff; font-family: 'JetBrains Mono'; flex: 1; }
+        .btn-active { border-color: var(--glow) !important; box-shadow: 0 0 15px rgba(0,242,255,0.3); }
+        .btn-active img { opacity: 1 !important; }
     </style>
 </head>
 <body>
 
 <div id="deck">
     <div class="module">
-        <h2>POWER_SYSTEM</h2>
-        <div style="display:flex; align-items:center; gap:10px;">
-            <div class="light active"></div><span>CORE_LOAD</span>
-        </div>
-        <div style="display:flex; align-items:center; gap:10px;">
-            <div class="light blue active"></div><span>AUDIO_LINK</span>
-        </div>
-        <hr style="border:0; border-top:1px solid #333; margin:10px 0;">
+        <h2>DECK_CONTROLS</h2>
         <div class="knob-unit">
-            <div class="knob" id="vol-knob" onclick="rotateKnob(this)"></div>
-            <p>VOLUME</p>
+            <div class="knob" id="knob-vol" style="transform: rotate(0deg)"></div>
+            <p>MASTER_VOLUME</p>
         </div>
         <div class="knob-unit">
-            <div class="knob" id="freq-knob" onclick="rotateKnob(this)"></div>
-            <p>BASS_BOOST</p>
+            <div class="knob" id="knob-bass" style="transform: rotate(0deg)"></div>
+            <p>BASS_DISTORT</p>
+        </div>
+        <div style="margin-top:auto; font-size:0.6rem; color:#444;">
+            MEMORY_ID: <span id="mem-id">AIDEN_77</span><br>
+            TEMP: <span id="temp-val">38.2°C</span>
         </div>
     </div>
 
     <div id="central-station">
+        <div class="scanlines"></div>
         <div id="display-log">
-            [AIDEN-DECK v10.0 INITIALIZED]<br>
-            [STATUS: READY FOR INPUT]<br>
-            [SYSTEM: 4 AUDIO CORES DETECTED]<br><br>
-            > Type 'help' to begin.
+            [SYS] BOOTING FROM GITHUB_MUSIC_DIR...<br>
+            [SYS] LOCATING ASSETS...<br>
+            [SYS] FOUND: nirvana.mp3, greenday.mp3, bilmuri.mp3, gorillaz.mp3<br>
+            [SYS] READY.
         </div>
         <div id="input-area">
             <span style="color:var(--glow)">$</span>
-            <input type="text" id="cmd-in" placeholder="ENTER COMMAND..." autofocus>
+            <input type="text" id="cmd-in" placeholder="TYPE A COMMAND..." autofocus>
         </div>
     </div>
 
     <div class="module">
         <h2>AUDIO_SAMPLES</h2>
         <div class="music-grid">
-            <div class="album-btn" onclick="playSong('Nirvana - Nevermind')">
-                <img src="https://upload.wikimedia.org/wikipedia/en/b/b7/NirvanaNevermindalbumcover.jpg">
+            <div class="album-btn" id="btn-nirvana" onclick="playMusic('nirvana')">
+                <img src="./music/nirvana.jpg">
                 <div class="album-label">NIRVANA</div>
             </div>
-            <div class="album-btn" onclick="playSong('Green Day - American Idiot')">
-                <img src="https://upload.wikimedia.org/wikipedia/en/e/ed/Green_Day_-_American_Idiot_album_cover.png">
+            <div class="album-btn" id="btn-greenday" onclick="playMusic('greenday')">
+                <img src="./music/greenday.jpg">
                 <div class="album-label">GREEN DAY</div>
             </div>
-            <div class="album-btn" onclick="playSong('Gorillaz - Plastic Beach')">
-                <img src="https://upload.wikimedia.org/wikipedia/en/d/d1/Plasticbeach452.jpg">
-                <div class="album-label">GORILLAZ</div>
-            </div>
-            <div class="album-btn" onclick="playSong('Bilmuri - Eggy Pocket')">
-                <img src="https://f4.bcbits.com/img/a2862833075_10.jpg">
+            <div class="album-btn" id="btn-bilmuri" onclick="playMusic('bilmuri')">
+                <img src="./music/bilmuri.jpg">
                 <div class="album-label">BILMURI</div>
             </div>
+            <div class="album-btn" id="btn-gorillaz" onclick="playMusic('gorillaz')">
+                <img src="./music/gorillaz.jpg">
+                <div class="album-label">GORILLAZ</div>
+            </div>
         </div>
-        <div style="margin-top:20px; font-size:0.7rem; color:#444; border: 1px solid #222; padding:10px; border-radius:5px;">
-            NOW_PLAYING:<br>
-            <span id="np-text" style="color:#888;">IDLE...</span>
+        <div style="margin-top:15px; background:#000; padding:10px; border:1px solid #333; border-radius:5px;">
+            <div style="font-size:0.6rem; color:#666;">PLAYING_NOW</div>
+            <div id="track-name" style="font-size:0.7rem; color:var(--glow);">---</div>
+            <div id="track-time" style="font-size:0.6rem; font-family:'Fira Code'; color:#444;">00:00 / 00:00</div>
         </div>
     </div>
 </div>
 
 <script>
+    let currentAudio = null;
+    let volume = 0.5;
     const log = document.getElementById('display-log');
-    const cmdIn = document.getElementById('cmd-in');
-    const npText = document.getElementById('np-text');
-    let aCtx;
+    const trackName = document.getElementById('track-name');
+    const trackTime = document.getElementById('track-time');
 
-    // --- SOUND ENGINE ---
-    function playSfx(f) {
-        if(!aCtx) aCtx = new AudioContext();
-        const o = aCtx.createOscillator(); const g = aCtx.createGain();
-        o.connect(g); g.connect(aCtx.destination);
-        o.frequency.setValueAtTime(f, aCtx.currentTime);
-        g.gain.setValueAtTime(0.05, aCtx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.01, aCtx.currentTime + 0.1);
-        o.start(); o.stop(aCtx.currentTime + 0.1);
-    }
-
-    function rotateKnob(el) {
-        const currentRotation = el.style.transform ? parseInt(el.style.transform.replace('rotate(','').replace('deg)','')) : 0;
-        const newRot = currentRotation + 45;
-        el.style.transform = `rotate(${newRot}deg)`;
-        playSfx(400 + (newRot % 360));
-    }
-
-    function playSong(name) {
-        playSfx(880);
-        npText.innerText = name.toUpperCase();
-        addLog(`[AUDIO] MOUNTING TRACK: ${name}`);
-        addLog(`[AUDIO] BITRATE: 320KBPS / STATUS: STREAMING`);
-        localStorage.setItem('lastSong', name);
-    }
-
-    function addLog(text) {
-        const div = document.createElement('div');
-        div.innerHTML = `> ${text}`;
-        log.appendChild(div);
+    function addLog(msg) {
+        const d = document.createElement('div');
+        d.innerHTML = `> ${msg}`;
+        log.appendChild(d);
         log.scrollTop = log.scrollHeight;
     }
 
-    // --- COMMANDS ---
-    cmdIn.addEventListener('keypress', (e) => {
-        if(e.key === 'Enter') {
-            const cmd = cmdIn.value.toLowerCase().trim();
-            addLog(`<span style="color:#fff">${cmd}</span>`);
-            
-            if(cmd === 'help') {
-                addLog("AVAILABLE COMMANDS: 'clear', 'about', 'status', 'hack', 'eject', 'whoami'");
-            } else if(cmd === 'about') {
-                addLog("AIDEN BECKER // v10 WORKSTATION");
-                addLog("A CREATIVE HUB FOR MUSIC AND CODE.");
-            } else if(cmd === 'status') {
-                addLog("CORE TEMP: 42°C");
-                addLog("MEMORY: 64GB / VIRTUAL: ACTIVE");
-            } else if(cmd === 'hack') {
-                addLog("<span style='color:#f00'>INITIALIZING OVERRIDE... ACCESS DENIED.</span>");
-            } else if(cmd === 'clear') {
-                log.innerHTML = '';
-            } else if(cmd === 'whoami') {
-                addLog("CURRENT USER: ROOT_AIDEN");
-            } else {
-                addLog("ERROR: COMMAND NOT FOUND");
-            }
-            
-            cmdIn.value = '';
-            saveHistory();
+    function playMusic(id) {
+        if(currentAudio) {
+            currentAudio.pause();
+            document.querySelectorAll('.album-btn').forEach(b => b.classList.remove('btn-active'));
         }
-    });
 
-    // --- PERSISTENCE ---
-    function saveHistory() {
-        localStorage.setItem('deckLog', log.innerHTML);
+        // --- PATHING TO YOUR GITHUB FOLDER ---
+        currentAudio = new Audio(`./music/${id}.mp3`);
+        currentAudio.volume = volume;
+        
+        currentAudio.play().then(() => {
+            addLog(`MOUNTED: ${id.toUpperCase()}.MP3`);
+            trackName.innerText = id.toUpperCase();
+            document.getElementById(`btn-${id}`).classList.add('btn-active');
+        }).catch(e => {
+            addLog(`ERROR: FILE NOT FOUND IN /music/${id}.mp3`);
+        });
+
+        currentAudio.ontimeupdate = () => {
+            const cur = Math.floor(currentAudio.currentTime);
+            const dur = Math.floor(currentAudio.duration) || 0;
+            trackTime.innerText = `${formatTime(cur)} / ${formatTime(dur)}`;
+        };
     }
 
-    window.onload = () => {
-        const savedLog = localStorage.getItem('deckLog');
-        const savedSong = localStorage.getItem('lastSong');
-        if(savedLog) log.innerHTML = savedLog;
-        if(savedSong) npText.innerText = savedSong.toUpperCase();
-        addLog("RE-ESTABLISHING UPLINK...");
+    function formatTime(s) {
+        const m = Math.floor(s/60);
+        const sec = s % 60;
+        return `${m}:${sec.toString().padStart(2,'0')}`;
+    }
+
+    // --- KNOB INTERACTION ---
+    document.getElementById('knob-vol').onwheel = (e) => {
+        e.preventDefault();
+        const knob = e.target;
+        let rot = parseInt(knob.style.transform.replace('rotate(','').replace('deg)',''));
+        rot += e.deltaY > 0 ? -15 : 15;
+        rot = Math.max(-150, Math.min(150, rot));
+        knob.style.transform = `rotate(${rot}deg)`;
+        
+        volume = (rot + 150) / 300;
+        if(currentAudio) currentAudio.volume = volume;
     };
+
+    document.getElementById('knob-bass').onwheel = (e) => {
+        const knob = e.target;
+        let rot = parseInt(knob.style.transform.replace('rotate(','').replace('deg)',''));
+        rot += e.deltaY > 0 ? -15 : 15;
+        knob.style.transform = `rotate(${rot}deg)`;
+        
+        // Visual distortion effect based on "Bass" knob
+        const intensity = Math.abs(rot / 30);
+        document.querySelector('.scanlines').style.opacity = 0.1 + (intensity/10);
+    };
+
+    // --- COMMANDS ---
+    document.getElementById('cmd-in').onkeypress = (e) => {
+        if(e.key === 'Enter') {
+            const cmd = e.target.value.toLowerCase();
+            addLog(`<span style="color:#fff">${cmd}</span>`);
+            if(cmd === 'stop') { if(currentAudio) currentAudio.pause(); addLog("AUDIO HALTED."); }
+            if(cmd === 'help') addLog("CMDS: stop, clear, status, eject");
+            if(cmd === 'clear') log.innerHTML = '';
+            e.target.value = '';
+        }
+    };
+
+    setInterval(() => {
+        document.getElementById('temp-val').innerText = (37 + Math.random()).toFixed(1) + "°C";
+    }, 3000);
 </script>
 
 </body>
