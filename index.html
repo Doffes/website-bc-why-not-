@@ -11,6 +11,8 @@
             --text: #ffffff; --dim: #94a3b8; --glass: rgba(255, 255, 255, 0.03);
             --border: rgba(255, 255, 255, 0.08);
             --transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            --success: #10b981;
+            --error: #ef4444;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
@@ -20,33 +22,17 @@
             overflow-x: hidden; line-height: 1.6;
         }
 
-        /* PROFESSIONAL LOGO ANIMATION */
+        /* LOGO ANIMATION */
         .logo { 
-            font-weight: 700; 
-            font-size: 1.1rem; 
-            letter-spacing: -0.5px; 
-            cursor: pointer;
-            position: relative;
+            font-weight: 700; font-size: 1.1rem; letter-spacing: -0.5px; cursor: pointer;
             transition: var(--transition);
             background: linear-gradient(120deg, #fff 0%, #fff 40%, var(--primary) 50%, #fff 60%, #fff 100%);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             animation: shine 5s linear infinite;
         }
-        
-        .logo:hover {
-            letter-spacing: 1px;
-        }
-
-        .logo span {
-            -webkit-text-fill-color: var(--primary);
-            transition: var(--transition);
-        }
-
-        @keyframes shine {
-            to { background-position: 200% center; }
-        }
+        .logo:hover { letter-spacing: 1px; }
+        .logo span { -webkit-text-fill-color: var(--primary); }
+        @keyframes shine { to { background-position: 200% center; } }
 
         /* NAVIGATION */
         nav {
@@ -95,7 +81,6 @@
         }
         .track-card:hover { border-color: var(--primary); background: #151515; transform: translateX(10px); }
         .track-card.playing { border-color: var(--primary); background: rgba(0, 119, 255, 0.05); }
-
         .album-art { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; background: #222; }
 
         /* MASTER PLAYER */
@@ -106,6 +91,19 @@
         }
         .progress-bar { width: 100%; height: 6px; background: #1e1e1e; border-radius: 10px; margin: 20px 0; cursor: pointer; }
         #progress-fill { height: 100%; background: var(--primary); width: 0%; border-radius: 10px; }
+
+        /* OPINION SYSTEM */
+        .opinion-tag {
+            font-family: 'JetBrains Mono'; font-size: 0.65rem; font-weight: 700;
+            text-transform: uppercase; margin-left: 10px; padding: 2px 8px; border-radius: 4px;
+        }
+        .like { color: var(--success); border: 1px solid var(--success); }
+        .like::before { content: '✓ '; }
+        
+        .dislike { color: var(--error); border: 1px solid var(--error); }
+        .dislike::before { content: '✕ '; }
+
+        .neutral { color: var(--dim); border: 1px solid var(--border); }
 
         /* THEME CARDS */
         .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
@@ -140,71 +138,34 @@
 
     <section id="home" class="page active">
         <h1 style="font-size: clamp(3rem, 10vw, 5.5rem); font-weight: 700; letter-spacing: -3px; line-height: 0.9;">I build things <br>that <span style="color:var(--primary)">actually</span> work.</h1>
-        
         <div class="bio-box">
-            <p style="font-size: 1.2rem; color: #fff; max-width: 700px; margin-bottom: 15px;">
-                I'm Aiden. I spend most of my time messing with clean code and even cleaner audio. Whether it's building interactive websites or curating a perfect production archive, I'm all about high-quality results without the fluff.
-            </p>
-            <p style="color: var(--dim); max-width: 600px;">
-                This site is my personal space to test new UI ideas, play some music, and let people suggest tracks they think I should hear. No corporate templates, no retro-CRT gimmicks—just a professional setup for my projects.
-            </p>
-            
-            <span class="whisper">
-                psst... did you know you can suggest songs in the studio menu? 
-                you can also change the "theme" of the website to change the color of the bold text.
-            </span>
-        </div>
-
-        <div style="margin-bottom: 50px;">
-            <span class="skill-tag">Web Dev</span>
-            <span class="skill-tag">Audio Integration</span>
-            <span class="skill-tag">UI/UX Design</span>
-            <span class="skill-tag">Heavy Riffs Only</span>
-        </div>
-
-        <div style="display: flex; gap: 20px;">
-            <button class="btn" onclick="showTab('music')">Go to Music</button>
-            <button class="btn" style="background: var(--glass); border: 1px solid var(--border);" onclick="showTab('suggested')">Check Suggestions</button>
+            <p style="font-size: 1.2rem; color: #fff; max-width: 700px; margin-bottom: 15px;">I'm Aiden. I spend most of my time messing with clean code and even cleaner audio.</p>
+            <div style="margin-top: 20px;">
+                <span class="skill-tag">Web Dev</span><span class="skill-tag">Audio Integration</span><span class="skill-tag">UI/UX Design</span>
+            </div>
+            <span class="whisper">psst... did you know you can suggest songs in the studio menu? you can also change the "theme" of the website.</span>
         </div>
     </section>
 
     <section id="music" class="page">
         <div class="studio-grid">
             <div class="left-col">
-                <h2 style="font-size: 2rem; margin-bottom: 40px; letter-spacing: -1px;">Production Archive</h2>
+                <h2 style="font-size: 2rem; margin-bottom: 40px;">Production Archive</h2>
                 <div class="track-list">
-                    <div class="track-card" onclick="playTrack('Nirvana', 'Smells Like Teen Spirit', 'a1')">
-                        <img src="music/nirvana.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222?text=NIRVANA'">
-                        <div style="flex:1"><h4>Smells Like Teen Spirit</h4><p style="font-size: 0.75rem; color:var(--dim);">NIRVANA // NEVERMIND</p></div>
+                    <div class="track-card" onclick="playTrack('Nirvana', 'Teen Spirit', 'a1')">
+                        <img src="" class="album-art" onerror="this.src='https://via.placeholder.com/60/222?text=NIRVANA'">
+                        <div style="flex:1"><h4>Smells Like Teen Spirit</h4><p style="font-size: 0.75rem; color:var(--dim);">NIRVANA</p></div>
                         <audio id="a1" src="music/nirvana.mp3"></audio>
-                    </div>
-                    <div class="track-card" onclick="playTrack('Green Day', 'American Idiot', 'a2')">
-                        <img src="music/greenday.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222?text=GD'">
-                        <div style="flex:1"><h4>American Idiot</h4><p style="font-size: 0.75rem; color:var(--dim);">GREEN DAY // AMERICAN IDIOT</p></div>
-                        <audio id="a2" src="music/greenday.mp3"></audio>
-                    </div>
-                    <div class="track-card" onclick="playTrack('Bilmuri', 'More Than Hate', 'a3')">
-                        <img src="music/bilmuri.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222?text=MURI'">
-                        <div style="flex:1"><h4>More Than Hate</h4><p style="font-size: 0.75rem; color:var(--dim);">BILMURI // EGGY POCKET</p></div>
-                        <audio id="a3" src="music/bilmuri.mp3"></audio>
-                    </div>
-                    <div class="track-card" onclick="playTrack('Gorillaz', 'On Melancholy Hill', 'a4')">
-                        <img src="music/gorillaz.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222?text=GRZ'">
-                        <div style="flex:1"><h4>On Melancholy Hill</h4><p style="font-size: 0.75rem; color:var(--dim);">GORILLAZ // PLASTIC BEACH</p></div>
-                        <audio id="a4" src="music/gorillaz.mp3"></audio>
                     </div>
                 </div>
             </div>
             <div class="right-col">
                 <div class="master-rack">
-                    <p style="font-size: 0.7rem; color: var(--primary); font-weight: 700; text-transform: uppercase;">Channel Monitor</p>
-                    <h3 id="r-track" style="margin-top: 15px; font-size: 1.2rem;">Ready</h3>
+                    <p style="font-size: 0.7rem; color: var(--primary); font-weight: 700;">CHANNEL MONITOR</p>
+                    <h3 id="r-track" style="margin-top: 15px;">Ready</h3>
                     <p id="r-artist" style="font-size: 0.85rem; color: var(--dim);">Awaiting Signal...</p>
                     <div class="progress-bar" onclick="seek(event)"><div id="progress-fill"></div></div>
-                    <div style="display:flex; justify-content:space-between; font-size: 0.7rem; color: var(--dim); font-family: 'JetBrains Mono'; margin-bottom: 30px;">
-                        <span id="c-time">0:00</span><span id="d-time">0:00</span>
-                    </div>
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdF7U3qu9mVYDHilxSeunjiXrjRb8YjjB0GN3ZR021CsWyrWA/viewform?usp=publish-editor" target="_blank" class="btn" style="width: 100%;">Suggest a Song</a>
+                    <a href="https://docs.google.com" target="_blank" class="btn" style="width: 100%;">Suggest a Song</a>
                 </div>
             </div>
         </div>
@@ -212,34 +173,55 @@
 
     <section id="suggested" class="page">
         <h2 style="font-size: 2.5rem; margin-bottom: 40px;">Community Signals</h2>
-        <div class="studio-grid">
-            <div class="track-list">
-                <div class="track-card" onclick="playTrack('Tool', 'The Grudge', 's1')">
-                    <img src="music/tool.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222/0077ff?text=TOOL'">
-                    <div style="flex:1">
-                        <span class="suggested-badge">REQUESTED BY: Aiden_Admin</span>
+        <div class="track-list" style="max-width: 800px;">
+            
+            <div class="track-card" onclick="playTrack('Tool', 'The Grudge', 's1')">
+                <img src="" class="album-art" onerror="this.src='https://via.placeholder.com/60/222/0077ff?text=TOOL'">
+                <div style="flex:1">
+                    <span class="suggested-badge">REQUESTED BY: Aiden_Admin</span>
+                    <div style="display:flex; align-items:center;">
                         <h4>The Grudge</h4>
-                        <p style="font-size: 0.75rem; color:var(--dim);">TOOL // LATERALUS</p>
+                        <span class="opinion-tag like">Aiden Likes This</span>
                     </div>
-                    <audio id="s1" src="music/tool.mp3"></audio>
+                </div>
+                <audio id="s1" src="music/tool.mp3"></audio>
+            </div>
+
+            <div class="track-card" onclick="playTrack('Nickelback', 'Photograph', 's2')">
+                <img src="" class="album-art" onerror="this.src='https://via.placeholder.com/60/222/ef4444?text=NB'">
+                <div style="flex:1">
+                    <span class="suggested-badge">REQUESTED BY: RandomUser_99</span>
+                    <div style="display:flex; align-items:center;">
+                        <h4>Photograph</h4>
+                        <span class="opinion-tag dislike">Aiden Dislikes This</span>
+                    </div>
+                </div>
+                <audio id="s2" src="music/nickelback.mp3"></audio>
+            </div>
+
+            <div class="track-card">
+                <div class="album-art"></div>
+                <div style="flex:1">
+                    <span class="suggested-badge">REQUESTED BY: New_Fan</span>
+                    <div style="display:flex; align-items:center;">
+                        <h4>Coming Soon...</h4>
+                        <span class="opinion-tag neutral">Reviewing</span>
+                    </div>
                 </div>
             </div>
+
         </div>
     </section>
 
     <section id="themes" class="page">
         <h2 style="font-size: 2.5rem; margin-bottom: 10px;">System Aesthetics</h2>
-        <p style="color:var(--dim); margin-bottom: 30px;">Select a custom skin to restyle the UI.</p>
         <div class="theme-grid" id="theme-host"></div>
     </section>
 
     <script>
         const skins = [
-            {n:"Nevermind", c:"#0077ff"}, {n:"Cyberpunk", c:"#ff007f"}, {n:"'Crank The Hog'", c:"#ffcc00"},
-            {n:"Matrix", c:"#00ff41"}, {n:"Emo Soul", c:"#1e293b"}, {n:"ColorLess", c:"#ffffff"},
-            {n:"Bloody Theme", c:"#ff0000"}, {n:"NordVPN", c:"#88c0d0"}, {n:"Mint", c:"#00ffcc"},
-            {n:"Tokyo", c:"#7000ff"}, {n:"Hmmph", c:"#10b981"}, {n:"Midas", c:"#d4af37"},
-            {n:"CO2", c:"#222222"}, {n:"The Sun", c:"#ee7e2b"}
+            {n:"Nevermind", c:"#0077ff"}, {n:"Cyberpunk", c:"#ff007f"}, {n:"Gold", c:"#d4af37"},
+            {n:"Matrix", c:"#00ff41"}, {n:"Bloody", c:"#ff0000"}, {n:"Mint", c:"#00ffcc"}
         ];
 
         function showTab(t) {
@@ -255,26 +237,14 @@
             if(activeAudio) { activeAudio.pause(); }
             activeAudio = document.getElementById(id);
             if(activeAudio) {
-                activeAudio.play().catch(() => console.log("Missing Audio File"));
+                activeAudio.play().catch(() => {});
                 document.getElementById('r-artist').innerText = artist.toUpperCase();
                 document.getElementById('r-track').innerText = track;
-                document.querySelectorAll('.track-card').forEach(c => c.classList.remove('playing'));
-                let card = event.currentTarget || event.target.closest('.track-card');
-                if(card) card.classList.add('playing');
                 activeAudio.ontimeupdate = () => {
                     const p = (activeAudio.currentTime / activeAudio.duration) * 100;
                     document.getElementById('progress-fill').style.width = p + "%";
-                    document.getElementById('c-time').innerText = formatTime(activeAudio.currentTime);
-                    document.getElementById('d-time').innerText = formatTime(activeAudio.duration);
                 };
             }
-        }
-
-        function formatTime(s) { let m = Math.floor(s/60), sec = Math.floor(s%60); return m + ":" + (sec<10?"0":"") + sec; }
-        function seek(e) {
-            if(!activeAudio) return;
-            const rect = e.currentTarget.getBoundingClientRect();
-            activeAudio.currentTime = ((e.clientX - rect.left) / rect.width) * activeAudio.duration;
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -284,11 +254,9 @@
                 card.className = 'theme-card';
                 card.onclick = () => {
                     document.documentElement.style.setProperty('--primary', s.c);
-                    // Update logo shimmer gradient to match theme color
                     document.querySelector('.logo').style.backgroundImage = `linear-gradient(120deg, #fff 0%, #fff 40%, ${s.c} 50%, #fff 60%, #fff 100%)`;
                 };
-                card.innerHTML = `<div class="theme-dot" style="background:${s.c}"></div>
-                <span style="font-weight:700; font-size:0.75rem; font-family:'JetBrains Mono'; text-transform:uppercase;">${s.n}</span>`;
+                card.innerHTML = `<div class="theme-dot" style="background:${s.c}"></div><span style="font-weight:700; font-size:0.75rem; font-family:'JetBrains Mono';">${s.n}</span>`;
                 host.appendChild(card);
             });
         });
