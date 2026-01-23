@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker | Industrial OS</title>
+    <title>Aiden Becker | Industrial OS v51</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,7 +11,7 @@
             --text: #ffffff; --dim: #666666; --glass: rgba(0, 255, 65, 0.05);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; cursor: crosshair; }
+        * { box-sizing: border-box; margin: 0; padding: 0; cursor: crosshair; outline: none; }
         body {
             font-family: 'JetBrains Mono', monospace;
             background-color: var(--bg); color: var(--text);
@@ -36,9 +36,9 @@
         .logo { font-family: 'Space Grotesk'; font-size: 1.1rem; color: var(--primary); letter-spacing: 2px; }
         .nav-links a { 
             color: var(--dim); text-decoration: none; font-size: 0.75rem; 
-            margin-left: 30px; transition: 0.2s; font-weight: 700;
+            margin-left: 30px; transition: 0.2s; font-weight: 700; cursor: pointer;
         }
-        .nav-links a.active, .nav-links a:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+        .nav-links a.active, .nav-links a:hover { color: var(--primary); text-shadow: 0 0 100px var(--primary); }
 
         /* CONTENT LAYOUT */
         .page { display: none; padding: 130px 6% 100px; min-height: 100vh; }
@@ -51,7 +51,7 @@
         
         .track-card {
             background: var(--card); border: 1px solid #222; padding: 15px 20px;
-            display: flex; align-items: center; gap: 20px; transition: 0.2s;
+            display: flex; align-items: center; gap: 20px; transition: 0.2s; cursor: pointer;
         }
         .track-card:hover { border-color: var(--primary); background: #181818; }
         .track-card.playing { border: 1px solid var(--primary); background: var(--glass); }
@@ -68,8 +68,8 @@
         .rack-header { font-size: 0.6rem; color: var(--primary); border-bottom: 1px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; }
 
         /* METERS & UI */
-        .progress-container { width: 100%; height: 6px; background: #111; border: 1px solid #333; margin: 20px 0; overflow: hidden; }
-        #progress-fill { height: 100%; background: var(--primary); width: 0%; box-shadow: 0 0 10px var(--primary); }
+        .progress-container { width: 100%; height: 6px; background: #111; border: 1px solid #333; margin: 20px 0; overflow: hidden; cursor: pointer; }
+        #progress-fill { height: 100%; background: var(--primary); width: 0%; box-shadow: 0 0 10px var(--primary); pointer-events: none;}
         
         .gain-strip { display: flex; gap: 3px; height: 12px; margin-top: 10px; }
         .gain-node { flex: 1; background: #111; transition: 0.05s; }
@@ -77,7 +77,7 @@
         .btn-retro {
             background: transparent; border: 1px solid var(--primary); color: var(--primary);
             padding: 10px 20px; font-family: 'JetBrains Mono'; font-size: 0.65rem;
-            text-transform: uppercase; margin-top: 20px; transition: 0.1s; display: inline-block; text-decoration: none;
+            text-transform: uppercase; margin-top: 20px; transition: 0.1s; display: inline-block; text-decoration: none; cursor: pointer;
         }
         .btn-retro:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary); }
 
@@ -85,12 +85,43 @@
         .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
         .theme-card { 
             background: #111; border: 1px solid #222; padding: 12px; 
-            font-size: 0.65rem; transition: 0.2s; display: flex; align-items: center; gap: 10px;
+            font-size: 0.65rem; transition: 0.2s; display: flex; align-items: center; gap: 10px; cursor: pointer;
         }
         .theme-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+
+        /* HUD */
+        #system-hud {
+            position: fixed; top: 90px; right: 6%; text-align: right;
+            font-family: 'JetBrains Mono'; font-size: 0.6rem; color: var(--primary);
+            z-index: 900; pointer-events: none; opacity: 0.8;
+        }
+
+        /* COMMAND BAR */
+        #command-bar {
+            position: fixed; top: 20%; left: 50%; transform: translate(-50%, -50%);
+            width: 450px; background: #000; border: 2px solid var(--primary);
+            padding: 25px; z-index: 11000; display: none;
+            box-shadow: 0 0 50px rgba(0,0,0,0.9);
+        }
+        #cmd-input {
+            width: 100%; background: transparent; border: none; color: #fff;
+            font-family: 'JetBrains Mono'; font-size: 1rem; border-bottom: 1px solid var(--primary);
+            padding: 10px 0; margin-top: 10px;
+        }
     </style>
 </head>
 <body onmousemove="updateMouse(event)">
+
+    <div id="system-hud">
+        <div id="hud-time">00:00:00</div>
+        <div id="hud-status">SYS_STATUS: OPTIMAL</div>
+        <div id="hud-uptime">UPTIME: 0m 0s</div>
+    </div>
+
+    <div id="command-bar">
+        <span style="font-size: 0.6rem; color: var(--primary);">[ SYSTEM_COMMAND_PROMPT ]</span>
+        <input type="text" id="cmd-input" placeholder="Enter logic...">
+    </div>
 
     <nav>
         <div class="logo">AIDEN_OS//v51.0</div>
@@ -110,7 +141,7 @@
         </p>
         <div style="margin-top: 40px;">
             <a onclick="showTab('music')" class="btn-retro">ACCESS_STUDIO</a>
-            <a href="https://github.com" class="btn-retro" style="margin-left: 10px;">SOURCE_FILES</a>
+            <a href="#" class="btn-retro" style="margin-left: 10px;">VIEW_ARCHIVES</a>
         </div>
     </section>
 
@@ -119,43 +150,42 @@
             <div class="left-pane">
                 <h2 style="font-family: 'Space Grotesk'; margin-bottom: 30px; font-size: 1.5rem;">AUDIO_ARCHIVE</h2>
                 <div class="track-list">
-                    <div class="track-card" onclick="playTrack('NIRVANA', 'Smells Like Teen Spirit', 'music/nirvana.jpg', 'a1')">
-                        <img src="music/nirvana.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222/00ff41?text=CD'">
+                    <div class="track-card" onclick="playTrack('NIRVANA', 'Smells Like Teen Spirit', 'a1')">
+                        <div class="album-art" style="background: #222; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 0.5rem;">[ART]</div>
                         <div style="flex:1">
                             <h4 style="font-size: 0.9rem;">Smells Like Teen Spirit</h4>
-                            <p style="font-size: 0.65rem; color:var(--dim);">NIRVANA // 1991</p>
+                            <p style="font-size: 0.65rem; color:var(--dim);">NIRVANA // NEVERMIND</p>
                         </div>
                         <audio id="a1" src="music/nirvana.mp3"></audio>
                     </div>
-                    <div class="track-card" onclick="playTrack('GREEN DAY', 'American Idiot', 'music/greenday.jpg', 'a2')">
-                        <img src="music/greenday.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222/00ff41?text=CD'">
+                    <div class="track-card" onclick="playTrack('GREEN DAY', 'American Idiot', 'a2')">
+                         <div class="album-art" style="background: #222; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 0.5rem;">[ART]</div>
                         <div style="flex:1">
                             <h4 style="font-size: 0.9rem;">American Idiot</h4>
-                            <p style="font-size: 0.65rem; color:var(--dim);">GREEN DAY // 2004</p>
+                            <p style="font-size: 0.65rem; color:var(--dim);">GREEN DAY // AMERICAN IDIOT</p>
                         </div>
                         <audio id="a2" src="music/greenday.mp3"></audio>
                     </div>
-                    <div class="track-card" onclick="playTrack('GORILLAZ', 'On Melancholy Hill', 'music/gorillaz.jpg', 'a3')">
-                        <img src="music/gorillaz.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222/00ff41?text=CD'">
+                    <div class="track-card" onclick="playTrack('GORILLAZ', 'On Melancholy Hill', 'a3')">
+                         <div class="album-art" style="background: #222; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 0.5rem;">[ART]</div>
                         <div style="flex:1">
                             <h4 style="font-size: 0.9rem;">On Melancholy Hill</h4>
-                            <p style="font-size: 0.65rem; color:var(--dim);">GORILLAZ // 2010</p>
+                            <p style="font-size: 0.65rem; color:var(--dim);">GORILLAZ // PLASTIC BEACH</p>
                         </div>
                         <audio id="a3" src="music/gorillaz.mp3"></audio>
                     </div>
-                    <div class="track-card" onclick="playTrack('BILMURI', 'More Than Hate', 'music/bilmuri.jpg', 'a4')">
-                        <img src="music/bilmuri.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222/00ff41?text=CD'">
+                    <div class="track-card" onclick="playTrack('BILMURI', 'More Than Hate', 'a4')">
+                         <div class="album-art" style="background: #222; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 0.5rem;">[ART]</div>
                         <div style="flex:1">
                             <h4 style="font-size: 0.9rem;">More Than Hate</h4>
-                            <p style="font-size: 0.65rem; color:var(--dim);">BILMURI // 2020</p>
+                            <p style="font-size: 0.65rem; color:var(--dim);">BILMURI // EGGY POCKET</p>
                         </div>
                         <audio id="a4" src="music/bilmuri.mp3"></audio>
                     </div>
                 </div>
 
                 <div style="margin-top: 50px; border-top: 1px solid #222; padding-top: 30px;">
-                    <h3 style="font-size: 0.8rem; margin-bottom: 15px;">EXTERNAL_DATA_INPUT</h3>
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdF7U3qu9mVYDHilxSeunjiXrjRb8YjjB0GN3ZR021CsWyrWA/viewform?usp=publish-editor" target="_blank" class="btn-retro">SUGGEST_NEW_SIGNAL</a>
+                    <a href="https://docs.google.com" target="_blank" class="btn-retro">SUGGEST_NEW_SIGNAL</a>
                 </div>
             </div>
 
@@ -164,7 +194,7 @@
                 <h3 id="rack-artist" style="margin-top: 15px;">STANDBY</h3>
                 <p id="rack-track" style="font-size: 0.7rem; color: var(--dim);">AWAITING_INPUT_SIGNAL...</p>
                 
-                <div class="progress-container"><div id="progress-fill"></div></div>
+                <div class="progress-container" onclick="seek(event)"><div id="progress-fill"></div></div>
                 
                 <div style="display:flex; justify-content:space-between; font-size: 0.6rem; color: var(--primary);">
                     <span id="c-time">0:00</span><span id="d-time">0:00</span>
@@ -176,10 +206,6 @@
                     <label style="font-size: 0.5rem; color: var(--primary); display: block; margin-bottom: 8px;">GAIN_LEVEL</label>
                     <input type="range" min="0" max="1" step="0.01" value="0.7" style="width: 100%; accent-color: var(--primary);" oninput="setVol(this.value)">
                 </div>
-
-                <div style="margin-top: 25px; font-size: 0.55rem; color: var(--dim); border-top: 1px solid #222; padding-top: 15px;">
-                    BITRATE: 320KBPS / LOSSLESS<br>SOURCE: LOCAL_DISK_A
-                </div>
             </div>
         </div>
     </section>
@@ -190,7 +216,7 @@
     </section>
 
     <script>
-        // 1. SOUND ENGINE
+        // 1. SOUND ENGINE (Synthesized beeps)
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playUISound(freq, type) {
             const osc = audioCtx.createOscillator();
@@ -203,19 +229,15 @@
             osc.start(); osc.stop(audioCtx.currentTime + 0.1);
         }
 
-        // 2. THEME DATA
-        const skins = [
-            {n:"Matrix", c:"#00ff41"}, {n:"Cyber", c:"#ff007f"}, {n:"Amber", c:"#ffb000"},
-            {n:"Bilmuri", c:"#ffcc00"}, {n:"Radar", c:"#00ccff"}, {n:"Blood", c:"#ff0000"},
-            {n:"Nord", c:"#88c0d0"}, {n:"Tokyo", c:"#7000ff"}, {n:"Crimson", c:"#dc2626"},
-            {n:"Emerald", c:"#10b981"}, {n:"Ghost", c:"#ffffff"}, {n:"Midnight", c:"#1e293b"},
-            {n:"Lava", c:"#ff4d00"}, {n:"Mint", c:"#00ffcc"}, {n:"Ocean", c:"#00f2ff"},
-            {n:"Rose", c:"#fb7185"}, {n:"Slate", c:"#475569"}, {n:"Solar", c:"#ee7e2b"},
-            {n:"Forest", c:"#2d5a27"}, {n:"Carbon", c:"#222222"}, {n:"Neon", c:"#ccff00"},
-            {n:"Sky", c:"#7dd3fc"}, {n:"Deep", c:"#7f1d1d"}, {n:"Gold", c:"#d4af37"}
-        ];
+        // 2. HUD & NAVIGATION
+        const startTime = Date.now();
+        function updateHUD() {
+            document.getElementById('hud-time').innerText = new Date().toLocaleTimeString();
+            const uptime = Math.floor((Date.now() - startTime) / 1000);
+            document.getElementById('hud-uptime').innerText = `UPTIME: ${Math.floor(uptime/60)}m ${uptime%60}s`;
+            requestAnimationFrame(updateHUD);
+        }
 
-        // 3. NAVIGATION
         function showTab(t) {
             playUISound(600, 'square');
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -224,9 +246,9 @@
             document.getElementById('l-' + t).classList.add('active');
         }
 
-        // 4. MUSIC LOGIC
+        // 3. MUSIC SYSTEM
         let activeAudio = null;
-        function playTrack(artist, track, img, id) {
+        function playTrack(artist, track, id) {
             playUISound(800, 'sine');
             if(activeAudio) { activeAudio.pause(); activeAudio.currentTime = 0; }
             activeAudio = document.getElementById(id);
@@ -248,6 +270,11 @@
 
         function setVol(v) { if(activeAudio) activeAudio.volume = v; }
         function formatTime(s) { let m = Math.floor(s/60), sec = Math.floor(s%60); return m + ":" + (sec<10?"0":"") + sec; }
+        function seek(e) {
+            if(!activeAudio) return;
+            const rect = e.currentTarget.getBoundingClientRect();
+            activeAudio.currentTime = ((e.clientX - rect.left) / rect.width) * activeAudio.duration;
+        }
 
         function updateMeters() {
             const nodes = document.querySelectorAll('.gain-node');
@@ -257,8 +284,17 @@
             });
         }
 
-        // 5. INITIALIZE
+        // 4. THEMES DATA
+        const skins = [
+            {n:"Nevermind", c:"#0077ff"}, {n:"Cyberpunk", c:"#ff007f"}, {n:"Bilmuri", c:"#ffcc00"},
+            {n:"Matrix", c:"#00ff41"}, {n:"Midnight", c:"#1e293b"}, {n:"Whiteout", c:"#ffffff"},
+            {n:"Blood", c:"#ff0000"}, {n:"Nord", c:"#88c0d0"}, {n:"Mint", c:"#00ffcc"},
+            {n:"Tokyo", c:"#7000ff"}, {n:"Emerald", c:"#10b981"}, {n:"Midas", c:"#d4af37"},
+            {n:"Carbon", c:"#222222"}, {n:"Solar", c:"#ee7e2b"}
+        ];
+
         window.onload = () => {
+            updateHUD();
             const host = document.getElementById('theme-host');
             skins.forEach(s => {
                 const div = document.createElement('div');
@@ -279,6 +315,16 @@
                 strip.appendChild(node);
             }
         };
+
+        // COMMAND PALETTE TOGGLE
+        window.addEventListener('keydown', (e) => {
+            if(e.key.toLowerCase() === 'k') {
+                const bar = document.getElementById('command-bar');
+                bar.style.display = bar.style.display === 'block' ? 'none' : 'block';
+                document.getElementById('cmd-input').focus();
+            }
+            if(e.key === 'Escape') document.getElementById('command-bar').style.display = 'none';
+        });
 
         function updateMouse(e) {
             document.documentElement.style.setProperty('--mx', e.clientX + 'px');
