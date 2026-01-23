@@ -20,6 +20,34 @@
             overflow-x: hidden; line-height: 1.6;
         }
 
+        /* PROFESSIONAL LOGO ANIMATION */
+        .logo { 
+            font-weight: 700; 
+            font-size: 1.1rem; 
+            letter-spacing: -0.5px; 
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+            background: linear-gradient(120deg, #fff 0%, #fff 40%, var(--primary) 50%, #fff 60%, #fff 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 5s linear infinite;
+        }
+        
+        .logo:hover {
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            -webkit-text-fill-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
         /* NAVIGATION */
         nav {
             position: fixed; top: 0; width: 100%; height: 80px;
@@ -27,7 +55,6 @@
             padding: 0 8%; background: rgba(3, 3, 3, 0.8);
             backdrop-filter: blur(20px); z-index: 1000; border-bottom: 1px solid var(--border);
         }
-        .logo { font-weight: 700; font-size: 1.1rem; letter-spacing: -0.5px; }
         .nav-links { display: flex; gap: 40px; }
         .nav-link { 
             text-decoration: none; color: var(--dim); font-size: 0.85rem; 
@@ -102,7 +129,7 @@
 <body>
 
     <nav>
-        <div class="logo">AIDEN BECKER<span style="color:var(--primary)">.</span></div>
+        <div class="logo" onclick="showTab('home')">AIDEN BECKER<span>.</span></div>
         <div class="nav-links">
             <a onclick="showTab('home')" id="l-home" class="nav-link active">Home</a>
             <a onclick="showTab('music')" id="l-music" class="nav-link">Studio</a>
@@ -168,7 +195,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="right-col">
                 <div class="master-rack">
                     <p style="font-size: 0.7rem; color: var(--primary); font-weight: 700; text-transform: uppercase;">Channel Monitor</p>
@@ -196,14 +222,6 @@
                         <p style="font-size: 0.75rem; color:var(--dim);">TOOL // LATERALUS</p>
                     </div>
                     <audio id="s1" src="music/tool.mp3"></audio>
-                </div>
-                <div class="track-card" style="opacity: 0.3;">
-                    <div class="album-art"></div>
-                    <div style="flex:1">
-                        <span class="suggested-badge">EMPTY SLOT</span>
-                        <h4>Your Song Here</h4>
-                        <p style="font-size: 0.75rem; color:var(--dim);">Hit the Suggestion button to add tracks.</p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -243,7 +261,6 @@
                 document.querySelectorAll('.track-card').forEach(c => c.classList.remove('playing'));
                 let card = event.currentTarget || event.target.closest('.track-card');
                 if(card) card.classList.add('playing');
-
                 activeAudio.ontimeupdate = () => {
                     const p = (activeAudio.currentTime / activeAudio.duration) * 100;
                     document.getElementById('progress-fill').style.width = p + "%";
@@ -254,7 +271,6 @@
         }
 
         function formatTime(s) { let m = Math.floor(s/60), sec = Math.floor(s%60); return m + ":" + (sec<10?"0":"") + sec; }
-        
         function seek(e) {
             if(!activeAudio) return;
             const rect = e.currentTarget.getBoundingClientRect();
@@ -266,7 +282,11 @@
             skins.forEach(s => {
                 const card = document.createElement('div');
                 card.className = 'theme-card';
-                card.onclick = () => document.documentElement.style.setProperty('--primary', s.c);
+                card.onclick = () => {
+                    document.documentElement.style.setProperty('--primary', s.c);
+                    // Update logo shimmer gradient to match theme color
+                    document.querySelector('.logo').style.backgroundImage = `linear-gradient(120deg, #fff 0%, #fff 40%, ${s.c} 50%, #fff 60%, #fff 100%)`;
+                };
                 card.innerHTML = `<div class="theme-dot" style="background:${s.c}"></div>
                 <span style="font-weight:700; font-size:0.75rem; font-family:'JetBrains Mono'; text-transform:uppercase;">${s.n}</span>`;
                 host.appendChild(card);
