@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker | Offical Website</title>
+    <title>Aiden Becker | Creative Technologist</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -35,13 +35,10 @@
         }
         .nav-link:hover, .nav-link.active { color: #fff; }
 
-        /* HERO SECTION */
+        /* SECTIONS */
         .page { display: none; padding: 160px 8% 100px; min-height: 100vh; }
         .page.active { display: block; animation: fadeIn 0.8s var(--transition); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .hero-title { font-size: clamp(3rem, 8vw, 5rem); font-weight: 700; line-height: 1.1; letter-spacing: -2px; margin-bottom: 25px; }
-        .hero-sub { color: var(--dim); max-width: 600px; font-size: 1.1rem; margin-bottom: 40px; }
 
         /* STUDIO LAYOUT */
         .studio-grid { display: grid; grid-template-columns: 1fr 400px; gap: 60px; }
@@ -57,17 +54,20 @@
 
         .album-art { width: 64px; height: 64px; border-radius: 10px; object-fit: cover; background: #222; }
 
-        /* MASTER RACK (PLAYER) */
+        /* MASTER RACK */
         .master-rack {
             background: #000; border: 1px solid var(--border); border-radius: 24px;
             padding: 35px; height: fit-content; position: sticky; top: 120px;
             box-shadow: 0 40px 80px rgba(0,0,0,0.5);
         }
-        .waveform-sim { display: flex; align-items: flex-end; gap: 3px; height: 40px; margin: 30px 0; }
-        .wave-bar { flex: 1; background: var(--primary); height: 10%; transition: 0.15s; border-radius: 2px; opacity: 0.3; }
-
-        .progress-bar { width: 100%; height: 6px; background: #1e1e1e; border-radius: 10px; margin: 20px 0; cursor: pointer; position: relative; }
+        .progress-bar { width: 100%; height: 6px; background: #1e1e1e; border-radius: 10px; margin: 20px 0; cursor: pointer; }
         #progress-fill { height: 100%; background: var(--primary); width: 0%; border-radius: 10px; transition: 0.1s linear; }
+
+        /* SUGGESTIONS TABLE */
+        .suggest-table { width: 100%; border-collapse: collapse; margin-top: 30px; }
+        .suggest-table th { text-align: left; padding: 15px; font-size: 0.75rem; color: var(--dim); text-transform: uppercase; border-bottom: 1px solid var(--border); }
+        .suggest-table td { padding: 20px 15px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        .placeholder-row { opacity: 0.3; font-style: italic; }
 
         /* BUTTONS */
         .btn {
@@ -76,14 +76,7 @@
             border: none; cursor: pointer; font-size: 0.9rem;
         }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 119, 255, 0.3); }
-
-        /* THEME GRID */
-        .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
-        .theme-item { 
-            background: var(--card); border: 1px solid var(--border); padding: 20px; 
-            border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.3s;
-        }
-        .theme-item:hover { border-color: var(--primary); background: #111; }
+        .btn-outline { background: transparent; border: 1px solid var(--border); }
     </style>
 </head>
 <body>
@@ -93,33 +86,17 @@
         <div class="nav-links">
             <a onclick="showTab('home')" id="l-home" class="nav-link active">Nexus</a>
             <a onclick="showTab('music')" id="l-music" class="nav-link">Studio</a>
+            <a onclick="showTab('suggested')" id="l-suggested" class="nav-link">Suggested</a>
             <a onclick="showTab('themes')" id="l-themes" class="nav-link">Skins</a>
         </div>
     </nav>
 
     <section id="home" class="page active">
-        <h1 class="hero-title">Architecting <br><span style="color:var(--primary)">Digital Sound.</span></h1>
-        <p class="hero-sub">
-           Hello Im Aiden Becker! Im A High Schooler Who Loves Grunge, Punk Rock, And Game Development (yes im a nerd)
+        <h1 style="font-size: 4.5rem; font-weight: 700; letter-spacing: -3px; line-height: 1;">Aiden Becker.</h1>
+        <p style="color: var(--dim); font-size: 1.2rem; margin: 20px 0 40px; max-width: 600px;">
+            Creative Technologist and Systems Architect. Bridging the gap between high-performance code and professional audio production.
         </p>
-        <div style="display: flex; gap: 15px;">
-            <button class="btn" onclick="showTab('music')">Launch Music Station</button>
-        </div>
-
-        <div style="margin-top: 100px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;">
-            <div style="background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--border);">
-                <h3 style="margin-bottom: 10px; font-size: 1rem;">Website Maker (sort of)</h3>
-                <p style="font-size: 0.85rem; color: var(--dim);">Making Websites For Me And My Games! Check Out Dead Zone!</p>
-            </div>
-            <div style="background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--border);">
-                <h3 style="margin-bottom: 10px; font-size: 1rem;">Audio Intelligence</h3>
-                <p style="font-size: 0.85rem; color: var(--dim);">Check Out The Music Tab! Listen To My Favorites, Or Even Suggest Your Own Favorites!</p>
-            </div>
-            <div style="background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--border);">
-                <h3 style="margin-bottom: 10px; font-size: 1rem;">User Experience</h3>
-                <p style="font-size: 0.85rem; color: var(--dim);">Very Immersive Website For Myself And About Myself.</p>
-            </div>
-        </div>
+        <button class="btn" onclick="showTab('music')">Enter Studio</button>
     </section>
 
     <section id="music" class="page">
@@ -127,80 +104,91 @@
             <div class="left-col">
                 <h2 style="font-size: 2rem; margin-bottom: 40px; letter-spacing: -1px;">Production Archive</h2>
                 <div class="track-list">
-                    <div class="track-card" onclick="playTrack('Nirvana', 'Smells Like Teen Spirit', 'music/nirvana.jpg', 'a1')">
-                        <img src="music/nirvana.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/64/222/666?text=Track'">
+                    <div class="track-card" onclick="playTrack('Nirvana', 'Smells Like Teen Spirit', 'a1')">
+                        <img src="music/nirvana.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/64/222/666?text=Art'">
                         <div style="flex:1">
                             <h4 style="font-size: 1rem;">Smells Like Teen Spirit</h4>
                             <p style="font-size: 0.75rem; color:var(--dim);">NIRVANA // NEVERMIND</p>
                         </div>
                         <audio id="a1" src="music/nirvana.mp3"></audio>
                     </div>
-                    <div class="track-card" onclick="playTrack('Green Day', 'American Idiot', 'music/greenday.jpg', 'a2')">
-                        <img src="music/greenday.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/64/222/666?text=Track'">
+                    <div class="track-card" onclick="playTrack('Green Day', 'American Idiot', 'a2')">
+                        <img src="music/greenday.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/64/222/666?text=Art'">
                         <div style="flex:1">
                             <h4 style="font-size: 1rem;">American Idiot</h4>
                             <p style="font-size: 0.75rem; color:var(--dim);">GREEN DAY // AMERICAN IDIOT</p>
                         </div>
                         <audio id="a2" src="music/greenday.mp3"></audio>
                     </div>
-                    <div class="track-card" onclick="playTrack('Gorillaz', 'On Melancholy Hill', 'music/gorillaz.jpg', 'a3')">
-                        <img src="music/gorillaz.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/64/222/666?text=Track'">
-                        <div style="flex:1">
-                            <h4 style="font-size: 1rem;">On Melancholy Hill</h4>
-                            <p style="font-size: 0.75rem; color:var(--dim);">GORILLAZ // PLASTIC BEACH</p>
-                        </div>
-                        <audio id="a3" src="music/gorillaz.mp3"></audio>
-                    </div>
-                    <div class="track-card" onclick="playTrack('Bilmuri', 'More Than Hate', 'music/bilmuri.jpg', 'a4')">
-                        <img src="music/bilmuri.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/64/222/666?text=Track'">
-                        <div style="flex:1">
-                            <h4 style="font-size: 1rem;">More Than Hate</h4>
-                            <p style="font-size: 0.75rem; color:var(--dim);">BILMURI // EGGY POCKET</p>
-                        </div>
-                        <audio id="a4" src="music/bilmuri.mp3"></audio>
-                    </div>
                 </div>
             </div>
 
             <div class="right-col">
                 <div class="master-rack">
-                    <p style="font-size: 0.7rem; color: var(--primary); font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">Now Playing</p>
-                    <h3 id="r-track" style="margin-top: 15px; font-size: 1.2rem;">System Standby</h3>
-                    <p id="r-artist" style="font-size: 0.85rem; color: var(--dim);">Awaiting Signal...</p>
+                    <p style="font-size: 0.7rem; color: var(--primary); font-weight: 700; text-transform: uppercase;">Channel Monitor</p>
+                    <h3 id="r-track" style="margin-top: 15px; font-size: 1.2rem;">Ready</h3>
+                    <p id="r-artist" style="font-size: 0.85rem; color: var(--dim);">Select a track...</p>
                     
-                    <div class="waveform-sim" id="waveform">
-                        </div>
-
                     <div class="progress-bar" onclick="seek(event)"><div id="progress-fill"></div></div>
                     
-                    <div style="display:flex; justify-content:space-between; font-size: 0.7rem; color: var(--dim); font-family: 'JetBrains Mono';">
+                    <div style="display:flex; justify-content:space-between; font-size: 0.7rem; color: var(--dim); font-family: 'JetBrains Mono'; margin-bottom: 30px;">
                         <span id="c-time">0:00</span><span id="d-time">0:00</span>
                     </div>
 
-                    <div style="margin-top: 30px; border-top: 1px solid var(--border); padding-top: 25px;">
-                        <label style="font-size: 0.7rem; display: block; margin-bottom: 10px; color: var(--dim);">Master Gain</label>
-                        <input type="range" min="0" max="1" step="0.01" value="0.7" style="width: 100%; accent-color: var(--primary);" oninput="setVol(this.value)">
-                    </div>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdF7U3qu9mVYDHilxSeunjiXrjRb8YjjB0GN3ZR021CsWyrWA/viewform?usp=publish-editor" target="_blank" class="btn" style="width: 100%; text-align: center;">Suggest a Song</a>
                 </div>
             </div>
         </div>
     </section>
 
+    <section id="suggested" class="page">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px;">
+            <div>
+                <h2 style="font-size: 2.5rem; letter-spacing: -1px;">Suggested Signals</h2>
+                <p style="color: var(--dim);">Tracks requested by the community for future integration.</p>
+            </div>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdF7U3qu9mVYDHilxSeunjiXrjRb8YjjB0GN3ZR021CsWyrWA/viewform" target="_blank" class="btn btn-outline" style="font-size: 0.75rem;">Submit New</a>
+        </div>
+
+        <table class="suggest-table">
+            <thead>
+                <tr>
+                    <th>Song Name</th>
+                    <th>Artist</th>
+                    <th>Album</th>
+                    <th>Suggested By</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Lateralus</strong></td>
+                    <td>Tool</td>
+                    <td>Lateralus</td>
+                    <td>System_Admin</td>
+                </tr>
+                <tr class="placeholder-row">
+                    <td>Awaiting Signal...</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>User_01</td>
+                </tr>
+                <tr class="placeholder-row">
+                    <td>Awaiting Signal...</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>User_02</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
     <section id="themes" class="page">
-        <h2 style="font-size: 2rem; margin-bottom: 40px;">System Aesthetics</h2>
-        <div class="theme-grid" id="theme-host"></div>
+        <h2 style="font-size: 2rem; margin-bottom: 40px;">UI Aesthetics</h2>
+        <div id="theme-host" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;"></div>
     </section>
 
     <script>
-        // 1. DATA
-        const skins = [
-            {n:"Nevermind", c:"#0077ff"}, {n:"Hellish Red", c:"#e11d48"}, {n:"Villiger Favorite", c:"#10b981"},
-            {n:"Cyber Pink", c:"#ff007f"}, {n:"Amber", c:"#f59e0b"}, {n:"Nord", c:"#88c0d0"},
-            {n:"Purple (guy)", c:"#8b5cf6"}, {n:"Slate", c:"#64748b"}, {n:"Midas", c:"#d4af37"},
-            {n:"Darkness", c:"#1e293b"}, {n:"Mintyness", c:"#4ade80"}, {n:"Water", c:"#0369a1"}
-        ];
-
-        // 2. NAVIGATION
+        // TAB LOGIC
         function showTab(t) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
@@ -209,63 +197,32 @@
             window.scrollTo(0,0);
         }
 
-        // 3. AUDIO PLAYER
+        // AUDIO LOGIC
         let activeAudio = null;
-        function playTrack(artist, track, img, id) {
+        function playTrack(artist, track, id) {
             if(activeAudio) { activeAudio.pause(); activeAudio.currentTime = 0; }
             activeAudio = document.getElementById(id);
             activeAudio.play();
-
             document.getElementById('r-artist').innerText = artist.toUpperCase();
             document.getElementById('r-track').innerText = track;
-            
-            document.querySelectorAll('.track-card').forEach(c => c.classList.remove('playing'));
-            event.currentTarget.classList.add('playing');
-
             activeAudio.ontimeupdate = () => {
                 const p = (activeAudio.currentTime / activeAudio.duration) * 100;
                 document.getElementById('progress-fill').style.width = p + "%";
                 document.getElementById('c-time').innerText = formatTime(activeAudio.currentTime);
                 document.getElementById('d-time').innerText = formatTime(activeAudio.duration);
-                animateWaveform();
             };
         }
-
         function formatTime(s) { let m = Math.floor(s/60), sec = Math.floor(s%60); return m + ":" + (sec<10?"0":"") + sec; }
-        function setVol(v) { if(activeAudio) activeAudio.volume = v; }
-        function seek(e) {
-            if(!activeAudio) return;
-            const rect = e.currentTarget.getBoundingClientRect();
-            activeAudio.currentTime = ((e.clientX - rect.left) / rect.width) * activeAudio.duration;
-        }
 
-        function animateWaveform() {
-            const bars = document.querySelectorAll('.wave-bar');
-            bars.forEach(b => {
-                const h = Math.random() * 90 + 10;
-                b.style.height = h + "%";
-                b.style.opacity = (h/100) + 0.2;
-            });
-        }
-
-        // 4. INITIALIZE
+        // THEME INIT
         window.onload = () => {
-            // Build Waveform
-            const wave = document.getElementById('waveform');
-            for(let i=0; i<25; i++) {
-                const b = document.createElement('div');
-                b.className = 'wave-bar';
-                wave.appendChild(b);
-            }
-
-            // Build Themes
             const host = document.getElementById('theme-host');
+            const skins = [{n:"Electric Blue", c:"#0077ff"}, {n:"Crimson", c:"#e11d48"}, {n:"Nordic", c:"#88c0d0"}, {n:"Emerald", c:"#10b981"}];
             skins.forEach(s => {
                 const d = document.createElement('div');
-                d.className = 'theme-item';
+                d.style = `background:var(--card); padding:20px; border-radius:15px; border:1px solid var(--border); cursor:pointer;`;
                 d.onclick = () => document.documentElement.style.setProperty('--primary', s.c);
-                d.innerHTML = `<div style="width:12px; height:12px; background:${s.c}; border-radius:3px;"></div>
-                               <span style="font-size:0.8rem; font-weight:600;">${s.n}</span>`;
+                d.innerHTML = `<span style="color:${s.c}; font-weight:700;">●</span> ${s.n}`;
                 host.appendChild(d);
             });
         };
