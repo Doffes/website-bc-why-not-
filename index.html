@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker | Studio OS v55</title>
+    <title>Aiden Becker | Studio OS v56</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -40,7 +40,7 @@
         .page.active { display: block; animation: fadeIn 0.8s var(--transition); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* STUDIO & SUGGESTED LAYOUT */
+        /* STUDIO LAYOUT */
         .studio-grid { display: grid; grid-template-columns: 1fr 400px; gap: 60px; }
         .track-list { display: flex; flex-direction: column; gap: 15px; }
         
@@ -54,7 +54,7 @@
 
         .album-art { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; background: #222; }
 
-        /* MASTER RACK (FIXED PLAYER) */
+        /* MASTER PLAYER */
         .master-rack {
             background: #000; border: 1px solid var(--border); border-radius: 24px;
             padding: 35px; height: fit-content; position: sticky; top: 120px;
@@ -63,14 +63,15 @@
         .progress-bar { width: 100%; height: 6px; background: #1e1e1e; border-radius: 10px; margin: 20px 0; cursor: pointer; }
         #progress-fill { height: 100%; background: var(--primary); width: 0%; border-radius: 10px; }
 
-        /* THEME CARDS */
-        .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        /* THEME CARDS - FIXED RENDERING */
+        .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
         .theme-card {
             background: var(--card); border: 1px solid var(--border); padding: 15px;
             border-radius: 12px; cursor: pointer; transition: 0.3s;
             display: flex; align-items: center; gap: 15px;
         }
-        .theme-card:hover { border-color: var(--primary); }
+        .theme-card:hover { border-color: var(--primary); background: #111; }
+        .theme-dot { width: 12px; height: 12px; border-radius: 50%; }
 
         .btn {
             background: var(--primary); color: #fff; padding: 14px 28px; border-radius: 12px;
@@ -78,7 +79,6 @@
             border: none; cursor: pointer; font-size: 0.9rem; text-align: center;
         }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 119, 255, 0.3); }
-
         .suggested-badge { font-family: 'JetBrains Mono'; font-size: 0.6rem; color: var(--primary); border: 1px solid var(--primary); padding: 2px 6px; border-radius: 4px; margin-bottom: 5px; display: inline-block; }
     </style>
 </head>
@@ -97,32 +97,32 @@
     <section id="home" class="page active">
         <h1 style="font-size: 5rem; font-weight: 700; letter-spacing: -3px; line-height: 1;">Architecting <br>Sound.</h1>
         <p style="color: var(--dim); font-size: 1.25rem; margin: 25px 0 45px; max-width: 650px;">
-            Aiden Becker: Creative Technologist. High-fidelity developer bridging the gap between systems engineering and professional audio production.
+            Creative Technologist and Systems Architect. High-fidelity developer specializing in professional audio experiences and custom digital kernels.
         </p>
-        <button class="btn" onclick="showTab('music')">Enter Archive</button>
+        <button class="btn" onclick="showTab('music')">Launch Studio</button>
     </section>
 
     <section id="music" class="page">
         <div class="studio-grid">
             <div class="left-col">
-                <h2 style="font-size: 2rem; margin-bottom: 40px; letter-spacing: -1px;">Studio Master</h2>
+                <h2 style="font-size: 2rem; margin-bottom: 40px; letter-spacing: -1px;">Production Archive</h2>
                 <div class="track-list">
-                    <div class="track-card" onclick="playTrack('Nirvana', 'Smells Like Teen Spirit', 'music/nirvana.jpg', 'a1')">
+                    <div class="track-card" onclick="playTrack('Nirvana', 'Smells Like Teen Spirit', 'a1')">
                         <img src="music/nirvana.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222?text=CD'">
                         <div style="flex:1"><h4>Smells Like Teen Spirit</h4><p style="font-size: 0.75rem; color:var(--dim);">NIRVANA // NEVERMIND</p></div>
                         <audio id="a1" src="music/nirvana.mp3"></audio>
                     </div>
-                    <div class="track-card" onclick="playTrack('Green Day', 'American Idiot', 'music/greenday.jpg', 'a2')">
+                    <div class="track-card" onclick="playTrack('Green Day', 'American Idiot', 'a2')">
                         <img src="music/greenday.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222?text=CD'">
                         <div style="flex:1"><h4>American Idiot</h4><p style="font-size: 0.75rem; color:var(--dim);">GREEN DAY // AMERICAN IDIOT</p></div>
                         <audio id="a2" src="music/greenday.mp3"></audio>
                     </div>
-                    <div class="track-card" onclick="playTrack('Bilmuri', 'More Than Hate', 'music/bilmuri.jpg', 'a3')">
+                    <div class="track-card" onclick="playTrack('Bilmuri', 'More Than Hate', 'a3')">
                         <img src="music/bilmuri.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222?text=CD'">
                         <div style="flex:1"><h4>More Than Hate</h4><p style="font-size: 0.75rem; color:var(--dim);">BILMURI // EGGY POCKET</p></div>
                         <audio id="a3" src="music/bilmuri.mp3"></audio>
                     </div>
-                    <div class="track-card" onclick="playTrack('Gorillaz', 'On Melancholy Hill', 'music/gorillaz.jpg', 'a4')">
+                    <div class="track-card" onclick="playTrack('Gorillaz', 'On Melancholy Hill', 'a4')">
                         <img src="music/gorillaz.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222?text=CD'">
                         <div style="flex:1"><h4>On Melancholy Hill</h4><p style="font-size: 0.75rem; color:var(--dim);">GORILLAZ // PLASTIC BEACH</p></div>
                         <audio id="a4" src="music/gorillaz.mp3"></audio>
@@ -132,29 +132,25 @@
 
             <div class="right-col">
                 <div class="master-rack">
-                    <p style="font-size: 0.7rem; color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Live Monitor</p>
-                    <h3 id="r-track" style="margin-top: 15px; font-size: 1.2rem;">Idle</h3>
-                    <p id="r-artist" style="font-size: 0.85rem; color: var(--dim);">Ready for Signal...</p>
-                    
+                    <p style="font-size: 0.7rem; color: var(--primary); font-weight: 700; text-transform: uppercase;">Channel Monitor</p>
+                    <h3 id="r-track" style="margin-top: 15px; font-size: 1.2rem;">Ready</h3>
+                    <p id="r-artist" style="font-size: 0.85rem; color: var(--dim);">Awaiting Signal...</p>
                     <div class="progress-bar" onclick="seek(event)"><div id="progress-fill"></div></div>
                     <div style="display:flex; justify-content:space-between; font-size: 0.7rem; color: var(--dim); font-family: 'JetBrains Mono'; margin-bottom: 30px;">
                         <span id="c-time">0:00</span><span id="d-time">0:00</span>
                     </div>
-
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdF7U3qu9mVYDHilxSeunjiXrjRb8YjjB0GN3ZR021CsWyrWA/viewform?usp=publish-editor" target="_blank" class="btn" style="width: 100%;">Suggest a Song</a>
+                    <a href="https://docs.google.com" target="_blank" class="btn" style="width: 100%;">Suggest a Song</a>
                 </div>
             </div>
         </div>
     </section>
 
     <section id="suggested" class="page">
-        <h2 style="font-size: 2.5rem; margin-bottom: 10px;">Suggested Archive</h2>
-        <p style="color: var(--dim); margin-bottom: 40px;">Interactive signals provided by the community.</p>
-
+        <h2 style="font-size: 2.5rem; margin-bottom: 40px;">Community Suggestions</h2>
         <div class="studio-grid">
             <div class="track-list">
-                <div class="track-card" onclick="playTrack('Tool', 'The Grudge', 'music/suggested_tool.jpg', 's1')">
-                    <img src="music/suggested_tool.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222/0077ff?text=TOOL'">
+                <div class="track-card" onclick="playTrack('Tool', 'The Grudge', 's1')">
+                    <img src="music/tool.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222/0077ff?text=TOOL'">
                     <div style="flex:1">
                         <span class="suggested-badge">REQUESTED BY: Aiden_Admin</span>
                         <h4>The Grudge</h4>
@@ -162,28 +158,28 @@
                     </div>
                     <audio id="s1" src="music/tool.mp3"></audio>
                 </div>
-
-                <div class="track-card" style="opacity: 0.4; cursor: default;">
-                    <div class="album-art" style="background: #111;"></div>
+                
+                <div class="track-card" style="opacity: 0.3;">
+                    <div class="album-art"></div>
                     <div style="flex:1">
-                        <span class="suggested-badge">AWAITING SIGNAL</span>
+                        <span class="suggested-badge">AWAITING DATA</span>
                         <h4>---</h4>
-                        <p style="font-size: 0.75rem; color:var(--dim);">Artist Name // Album Title</p>
+                        <p style="font-size: 0.75rem; color:var(--dim);">Future Suggestion Slot</p>
                     </div>
                 </div>
-            </div>
-            <div style="padding: 30px; border-radius: 20px; background: var(--card); border: 1px dashed var(--border); height: fit-content; text-align: center;">
-                <p style="font-size: 0.8rem; color: var(--dim);">Play suggested tracks to test community vibes. All master controls remain on the right.</p>
             </div>
         </div>
     </section>
 
     <section id="themes" class="page">
-        <h2 style="font-size: 2rem; margin-bottom: 40px;">Skins</h2>
-        <div class="theme-grid" id="theme-host"></div>
+        <h2 style="font-size: 2.5rem; margin-bottom: 10px;">System Aesthetics</h2>
+        <p style="color:var(--dim); margin-bottom: 30px;">Select a custom kernel skin to restyle the UI.</p>
+        <div class="theme-grid" id="theme-host">
+            </div>
     </section>
 
     <script>
+        // THEME DEFINITIONS
         const skins = [
             {n:"Nevermind", c:"#0077ff"}, {n:"Cyberpunk", c:"#ff007f"}, {n:"'Crank The Hog'", c:"#ffcc00"},
             {n:"Matrix", c:"#00ff41"}, {n:"Emo Soul", c:"#1e293b"}, {n:"ColorLess", c:"#ffffff"},
@@ -192,6 +188,7 @@
             {n:"CO2", c:"#222222"}, {n:"The Sun", c:"#ee7e2b"}
         ];
 
+        // TAB NAVIGATION
         function showTab(t) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
@@ -200,18 +197,18 @@
             window.scrollTo(0,0);
         }
 
+        // PLAYER LOGIC
         let activeAudio = null;
-        function playTrack(artist, track, img, id) {
+        function playTrack(artist, track, id) {
             if(activeAudio) { activeAudio.pause(); }
             activeAudio = document.getElementById(id);
             if(activeAudio) {
-                activeAudio.play().catch(e => console.log("Audio file missing? Add it to /music/ folder."));
+                activeAudio.play().catch(() => console.log("Missing Audio File"));
                 document.getElementById('r-artist').innerText = artist.toUpperCase();
                 document.getElementById('r-track').innerText = track;
                 document.querySelectorAll('.track-card').forEach(c => c.classList.remove('playing'));
-                // Handles case where card clicked might be slightly nested
                 let card = event.currentTarget || event.target.closest('.track-card');
-                card.classList.add('playing');
+                if(card) card.classList.add('playing');
 
                 activeAudio.ontimeupdate = () => {
                     const p = (activeAudio.currentTime / activeAudio.duration) * 100;
@@ -223,23 +220,29 @@
         }
 
         function formatTime(s) { let m = Math.floor(s/60), sec = Math.floor(s%60); return m + ":" + (sec<10?"0":"") + sec; }
+        
         function seek(e) {
             if(!activeAudio) return;
             const rect = e.currentTarget.getBoundingClientRect();
             activeAudio.currentTime = ((e.clientX - rect.left) / rect.width) * activeAudio.duration;
         }
 
-        window.onload = () => {
+        // INITIALIZE THEMES
+        window.addEventListener('DOMContentLoaded', () => {
             const host = document.getElementById('theme-host');
             skins.forEach(s => {
-                const d = document.createElement('div');
-                d.className = 'theme-card';
-                d.onclick = () => document.documentElement.style.setProperty('--primary', s.c);
-                d.innerHTML = `<div style="width:10px; height:10px; background:${s.c}; border-radius:50%"></div>
-                               <span style="font-size:0.75rem; font-weight:700; font-family:'JetBrains Mono';">${s.n.toUpperCase()}</span>`;
-                host.appendChild(d);
+                const card = document.createElement('div');
+                card.className = 'theme-card';
+                card.onclick = () => {
+                    document.documentElement.style.setProperty('--primary', s.c);
+                };
+                card.innerHTML = `
+                    <div class="theme-dot" style="background:${s.c}"></div>
+                    <span style="font-weight:700; font-size:0.75rem; font-family:'JetBrains Mono'; text-transform:uppercase;">${s.n}</span>
+                `;
+                host.appendChild(card);
             });
-        };
+        });
     </script>
 </body>
 </html>
