@@ -3,243 +3,287 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker | System v50</title>
+    <title>Aiden Becker | Industrial OS</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #00ff41; /* Classic Matrix/Retro Green */
-            --bg: #0a0a0a; --card: #151515;
-            --text: #ffffff; --dim: #555555;
-            --glass: rgba(0, 255, 65, 0.1);
+            --primary: #00ff41; --bg: #080808; --card: #121212;
+            --text: #ffffff; --dim: #666666; --glass: rgba(0, 255, 65, 0.05);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; cursor: crosshair; }
         body {
             font-family: 'JetBrains Mono', monospace;
             background-color: var(--bg); color: var(--text);
-            overflow-x: hidden;
+            overflow-x: hidden; line-height: 1.4;
         }
 
-        /* RETRO CRT EFFECT */
-        body::before {
+        /* CRT SCANLINE OVERLAY */
+        body::after {
             content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 9999; background-size: 100% 2px, 3px 100%; pointer-events: none;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 9999; background-size: 100% 3px, 3px 100%; pointer-events: none;
         }
 
-        /* HUD & NAVIGATION */
+        /* NAVIGATION */
         nav {
-            position: fixed; top: 0; width: 100%; height: 60px;
+            position: fixed; top: 0; width: 100%; height: 70px;
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 5%; background: #000; border-bottom: 2px solid var(--primary);
-            z-index: 1000;
+            padding: 0 6%; background: #000; border-bottom: 1px solid var(--primary);
+            z-index: 1000; box-shadow: 0 0 20px rgba(0,0,0,1);
         }
+        .logo { font-family: 'Space Grotesk'; font-size: 1.1rem; color: var(--primary); letter-spacing: 2px; }
         .nav-links a { 
-            color: var(--dim); text-decoration: none; font-size: 0.7rem; 
-            margin-left: 30px; transition: 0.2s; 
+            color: var(--dim); text-decoration: none; font-size: 0.75rem; 
+            margin-left: 30px; transition: 0.2s; font-weight: 700;
         }
-        .nav-links a.active, .nav-links a:hover { color: var(--primary); text-shadow: 0 0 8px var(--primary); }
+        .nav-links a.active, .nav-links a:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
 
-        /* STUDIO LAYOUT (REVERTED) */
-        .page { display: none; padding: 120px 5% 60px; min-height: 100vh; }
-        .page.active { display: block; }
-        
-        .studio-layout { display: grid; grid-template-columns: 1fr 400px; gap: 40px; }
+        /* CONTENT LAYOUT */
+        .page { display: none; padding: 130px 6% 100px; min-height: 100vh; }
+        .page.active { display: block; animation: scanIn 0.3s ease-out; }
+        @keyframes scanIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* STUDIO LAYOUT */
+        .studio-container { display: grid; grid-template-columns: 1fr 400px; gap: 50px; }
+        .track-list { display: flex; flex-direction: column; gap: 12px; }
         
         .track-card {
-            background: #000; border: 1px solid var(--dim); padding: 20px;
-            margin-bottom: 15px; display: flex; align-items: center; gap: 20px;
-            transition: 0.2s;
+            background: var(--card); border: 1px solid #222; padding: 15px 20px;
+            display: flex; align-items: center; gap: 20px; transition: 0.2s;
         }
-        .track-card:hover { border-color: var(--primary); background: #080808; }
-        .track-card.playing { border: 1px solid var(--primary); box-shadow: inset 0 0 10px var(--glass); }
+        .track-card:hover { border-color: var(--primary); background: #181818; }
+        .track-card.playing { border: 1px solid var(--primary); background: var(--glass); }
 
-        .album-art { width: 50px; height: 50px; border: 1px solid var(--dim); filter: grayscale(100%); transition: 0.5s; }
-        .playing .album-art { filter: grayscale(0%); border-color: var(--primary); }
+        .album-art { width: 55px; height: 55px; border-radius: 4px; border: 1px solid #333; object-fit: cover; }
+        .playing .album-art { border-color: var(--primary); box-shadow: 0 0 15px var(--primary); }
 
-        /* MASTER RACK (INDUSTRIAL LOOK) */
+        /* THE MASTER RACK */
         .studio-rack {
-            background: #000; border: 2px solid var(--primary); padding: 30px;
-            height: fit-content; position: sticky; top: 100px;
-            box-shadow: 5px 5px 0px var(--primary);
+            background: #000; border: 1px solid var(--primary); padding: 30px;
+            height: fit-content; position: sticky; top: 110px;
+            box-shadow: 8px 8px 0px -1px #000, 8px 8px 0px 0px var(--primary);
         }
+        .rack-header { font-size: 0.6rem; color: var(--primary); border-bottom: 1px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; }
 
-        .btn-ui {
-            background: transparent; border: 1px solid var(--primary); color: var(--primary);
-            padding: 8px 15px; font-family: 'JetBrains Mono'; font-size: 0.6rem;
-            text-transform: uppercase; margin-top: 10px; transition: 0.1s;
-        }
-        .btn-ui:active { background: var(--primary); color: #000; }
-
-        /* SEEKER & METERS */
-        .meter-bar { width: 100%; height: 10px; background: #111; border: 1px solid var(--dim); margin: 10px 0; position: relative; }
-        #seeker-fill { height: 100%; background: var(--primary); width: 0%; }
+        /* METERS & UI */
+        .progress-container { width: 100%; height: 6px; background: #111; border: 1px solid #333; margin: 20px 0; overflow: hidden; }
+        #progress-fill { height: 100%; background: var(--primary); width: 0%; box-shadow: 0 0 10px var(--primary); }
         
-        #gain-meter { display: flex; gap: 2px; height: 15px; margin-top: 5px; }
-        .gain-cell { flex: 1; background: #111; height: 100%; border: 1px solid #222; }
+        .gain-strip { display: flex; gap: 3px; height: 12px; margin-top: 10px; }
+        .gain-node { flex: 1; background: #111; transition: 0.05s; }
 
-        .k-hint { position: fixed; bottom: 20px; right: 20px; font-size: 0.6rem; color: var(--dim); }
+        .btn-retro {
+            background: transparent; border: 1px solid var(--primary); color: var(--primary);
+            padding: 10px 20px; font-family: 'JetBrains Mono'; font-size: 0.65rem;
+            text-transform: uppercase; margin-top: 20px; transition: 0.1s; display: inline-block; text-decoration: none;
+        }
+        .btn-retro:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary); }
+
+        /* THEME GRID */
+        .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+        .theme-card { 
+            background: #111; border: 1px solid #222; padding: 12px; 
+            font-size: 0.65rem; transition: 0.2s; display: flex; align-items: center; gap: 10px;
+        }
+        .theme-card:hover { border-color: var(--primary); transform: translateY(-2px); }
     </style>
 </head>
-<body>
+<body onmousemove="updateMouse(event)">
 
     <nav>
-        <div style="font-weight: 700; color: var(--primary);">AIDEN_SYSTEM_v50.0</div>
+        <div class="logo">AIDEN_OS//v51.0</div>
         <div class="nav-links">
-            <a onclick="showTab('home')" id="l-home" class="active">NEXUS</a>
-            <a onclick="showTab('music')" id="l-music">STUDIO</a>
-            <a onclick="showTab('themes')" id="l-themes">SKINS</a>
+            <a onclick="showTab('home')" id="l-home" class="active">/HOME</a>
+            <a onclick="showTab('music')" id="l-music">/STUDIO</a>
+            <a onclick="showTab('themes')" id="l-themes">/SKINS</a>
         </div>
     </nav>
 
     <section id="home" class="page active">
-        <h1 style="font-family: 'Space Grotesk'; font-size: 4rem; line-height: 1;">CREATIVE <br> ARCHITECT.</h1>
-        <p style="color: var(--dim); margin-top: 20px; max-width: 500px;">Terminal established. Monitoring high-fidelity interface deployment...</p>
-        <button class="btn-ui" style="margin-top: 40px;" onclick="playSound('click')">INITIALIZE_DATA_TRANSFER</button>
+        <span style="color: var(--primary); font-size: 0.7rem;">[ INITIALIZING... OK ]</span>
+        <h1 style="font-family: 'Space Grotesk'; font-size: 4.5rem; line-height: 0.85; margin: 20px 0;">SYSTEM<br>ENGINEER.</h1>
+        <p style="color: var(--dim); max-width: 550px; font-size: 0.9rem;">
+            Professional high-fidelity interface design and sound architecture. 
+            Blending retro-industrial aesthetics with modern web utility.
+        </p>
+        <div style="margin-top: 40px;">
+            <a onclick="showTab('music')" class="btn-retro">ACCESS_STUDIO</a>
+            <a href="https://github.com" class="btn-retro" style="margin-left: 10px;">SOURCE_FILES</a>
+        </div>
     </section>
 
     <section id="music" class="page">
-        <div class="studio-layout">
-            <div class="track-list">
-                <div class="track-card" onclick="playTrack('NIRVANA', 'Nevermind', 'a1')">
-                    <div class="album-art" style="background: #222;"></div>
-                    <div style="flex:1"><h4>Smells Like Teen Spirit</h4><p style="font-size: 0.7rem; color:var(--dim);">NIRVANA</p></div>
-                    <audio id="a1" src="music/nirvana.mp3"></audio>
+        <div class="studio-container">
+            <div class="left-pane">
+                <h2 style="font-family: 'Space Grotesk'; margin-bottom: 30px; font-size: 1.5rem;">AUDIO_ARCHIVE</h2>
+                <div class="track-list">
+                    <div class="track-card" onclick="playTrack('NIRVANA', 'Smells Like Teen Spirit', 'music/nirvana.jpg', 'a1')">
+                        <img src="music/nirvana.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222/00ff41?text=CD'">
+                        <div style="flex:1">
+                            <h4 style="font-size: 0.9rem;">Smells Like Teen Spirit</h4>
+                            <p style="font-size: 0.65rem; color:var(--dim);">NIRVANA // 1991</p>
+                        </div>
+                        <audio id="a1" src="music/nirvana.mp3"></audio>
+                    </div>
+                    <div class="track-card" onclick="playTrack('GREEN DAY', 'American Idiot', 'music/greenday.jpg', 'a2')">
+                        <img src="music/greenday.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222/00ff41?text=CD'">
+                        <div style="flex:1">
+                            <h4 style="font-size: 0.9rem;">American Idiot</h4>
+                            <p style="font-size: 0.65rem; color:var(--dim);">GREEN DAY // 2004</p>
+                        </div>
+                        <audio id="a2" src="music/greenday.mp3"></audio>
+                    </div>
+                    <div class="track-card" onclick="playTrack('GORILLAZ', 'On Melancholy Hill', 'music/gorillaz.jpg', 'a3')">
+                        <img src="music/gorillaz.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222/00ff41?text=CD'">
+                        <div style="flex:1">
+                            <h4 style="font-size: 0.9rem;">On Melancholy Hill</h4>
+                            <p style="font-size: 0.65rem; color:var(--dim);">GORILLAZ // 2010</p>
+                        </div>
+                        <audio id="a3" src="music/gorillaz.mp3"></audio>
+                    </div>
+                    <div class="track-card" onclick="playTrack('BILMURI', 'More Than Hate', 'music/bilmuri.jpg', 'a4')">
+                        <img src="music/bilmuri.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222/00ff41?text=CD'">
+                        <div style="flex:1">
+                            <h4 style="font-size: 0.9rem;">More Than Hate</h4>
+                            <p style="font-size: 0.65rem; color:var(--dim);">BILMURI // 2020</p>
+                        </div>
+                        <audio id="a4" src="music/bilmuri.mp3"></audio>
+                    </div>
                 </div>
-                <div class="track-card" onclick="playTrack('GREEN DAY', 'American Idiot', 'a2')">
-                    <div class="album-art" style="background: #222;"></div>
-                    <div style="flex:1"><h4>American Idiot</h4><p style="font-size: 0.7rem; color:var(--dim);">GREEN DAY</p></div>
-                    <audio id="a2" src="music/greenday.mp3"></audio>
-                </div>
-                <div class="track-card" onclick="playTrack('GORILLAZ', 'Plastic Beach', 'a3')">
-                    <div class="album-art" style="background: #222;"></div>
-                    <div style="flex:1"><h4>On Melancholy Hill</h4><p style="font-size: 0.7rem; color:var(--dim);">GORILLAZ</p></div>
-                    <audio id="a3" src="music/gorillaz.mp3"></audio>
-                </div>
-                <div class="track-card" onclick="playTrack('BILMURI', 'Eggy Pocket', 'a4')">
-                    <div class="album-art" style="background: #222;"></div>
-                    <div style="flex:1"><h4>More Than Hate</h4><p style="font-size: 0.7rem; color:var(--dim);">BILMURI</p></div>
-                    <audio id="a4" src="music/bilmuri.mp3"></audio>
+
+                <div style="margin-top: 50px; border-top: 1px solid #222; padding-top: 30px;">
+                    <h3 style="font-size: 0.8rem; margin-bottom: 15px;">EXTERNAL_DATA_INPUT</h3>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdF7U3qu9mVYDHilxSeunjiXrjRb8YjjB0GN3ZR021CsWyrWA/viewform?usp=publish-editor" target="_blank" class="btn-retro">SUGGEST_NEW_SIGNAL</a>
                 </div>
             </div>
 
             <div class="studio-rack">
-                <span style="font-size: 0.6rem; color: var(--primary);">[ MONITOR_OUT ]</span>
-                <h2 id="r-artist" style="margin-top: 10px;">IDLE</h2>
-                <p id="r-track" style="font-size: 0.7rem; color: var(--dim);">READY_FOR_INPUT</p>
+                <div class="rack-header">MASTER_CHANNEL_OUT</div>
+                <h3 id="rack-artist" style="margin-top: 15px;">STANDBY</h3>
+                <p id="rack-track" style="font-size: 0.7rem; color: var(--dim);">AWAITING_INPUT_SIGNAL...</p>
                 
-                <div class="meter-bar" style="margin-top: 30px;"><div id="seeker-fill"></div></div>
+                <div class="progress-container"><div id="progress-fill"></div></div>
                 
-                <div id="gain-meter">
-                    </div>
+                <div style="display:flex; justify-content:space-between; font-size: 0.6rem; color: var(--primary);">
+                    <span id="c-time">0:00</span><span id="d-time">0:00</span>
+                </div>
 
-                <div style="margin-top: 20px;">
-                    <label style="font-size: 0.5rem; display: block; margin-bottom: 5px;">GAIN_ADJUST</label>
+                <div class="gain-strip" id="gain-strip"></div>
+
+                <div style="margin-top: 30px;">
+                    <label style="font-size: 0.5rem; color: var(--primary); display: block; margin-bottom: 8px;">GAIN_LEVEL</label>
                     <input type="range" min="0" max="1" step="0.01" value="0.7" style="width: 100%; accent-color: var(--primary);" oninput="setVol(this.value)">
+                </div>
+
+                <div style="margin-top: 25px; font-size: 0.55rem; color: var(--dim); border-top: 1px solid #222; padding-top: 15px;">
+                    BITRATE: 320KBPS / LOSSLESS<br>SOURCE: LOCAL_DISK_A
                 </div>
             </div>
         </div>
     </section>
 
     <section id="themes" class="page">
-        <h2 style="margin-bottom: 20px;">SYSTEM_COLOURS</h2>
-        <div id="theme-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;"></div>
+        <h2 style="font-family: 'Space Grotesk'; margin-bottom: 30px;">SYSTEM_COLOUR_SPECTRUM</h2>
+        <div class="theme-grid" id="theme-host"></div>
     </section>
 
-    <div class="k-hint">ACCESS_GRANTED // v50.0</div>
-
     <script>
-        // 1. UI SOUNDS (Synthesized Web Audio)
+        // 1. SOUND ENGINE
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playSound(type) {
+        function playUISound(freq, type) {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            
-            if(type === 'click') {
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.1);
-            } else if (type === 'beep') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.05);
-            }
+            osc.type = type || 'sine';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.1);
+            osc.connect(gain); gain.connect(audioCtx.destination);
             osc.start(); osc.stop(audioCtx.currentTime + 0.1);
         }
 
-        // 2. NAVIGATION
+        // 2. THEME DATA
+        const skins = [
+            {n:"Matrix", c:"#00ff41"}, {n:"Cyber", c:"#ff007f"}, {n:"Amber", c:"#ffb000"},
+            {n:"Bilmuri", c:"#ffcc00"}, {n:"Radar", c:"#00ccff"}, {n:"Blood", c:"#ff0000"},
+            {n:"Nord", c:"#88c0d0"}, {n:"Tokyo", c:"#7000ff"}, {n:"Crimson", c:"#dc2626"},
+            {n:"Emerald", c:"#10b981"}, {n:"Ghost", c:"#ffffff"}, {n:"Midnight", c:"#1e293b"},
+            {n:"Lava", c:"#ff4d00"}, {n:"Mint", c:"#00ffcc"}, {n:"Ocean", c:"#00f2ff"},
+            {n:"Rose", c:"#fb7185"}, {n:"Slate", c:"#475569"}, {n:"Solar", c:"#ee7e2b"},
+            {n:"Forest", c:"#2d5a27"}, {n:"Carbon", c:"#222222"}, {n:"Neon", c:"#ccff00"},
+            {n:"Sky", c:"#7dd3fc"}, {n:"Deep", c:"#7f1d1d"}, {n:"Gold", c:"#d4af37"}
+        ];
+
+        // 3. NAVIGATION
         function showTab(t) {
-            playSound('click');
+            playUISound(600, 'square');
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
             document.getElementById(t).classList.add('active');
             document.getElementById('l-' + t).classList.add('active');
         }
 
-        // 3. AUDIO PLAYER
+        // 4. MUSIC LOGIC
         let activeAudio = null;
-        function playTrack(artist, track, id) {
-            playSound('beep');
-            if(activeAudio) activeAudio.pause();
+        function playTrack(artist, track, img, id) {
+            playUISound(800, 'sine');
+            if(activeAudio) { activeAudio.pause(); activeAudio.currentTime = 0; }
             activeAudio = document.getElementById(id);
             activeAudio.play();
-            
-            document.getElementById('r-artist').innerText = artist;
-            document.getElementById('r-track').innerText = track;
-            
+
+            document.getElementById('rack-artist').innerText = artist;
+            document.getElementById('rack-track').innerText = track;
             document.querySelectorAll('.track-card').forEach(c => c.classList.remove('playing'));
             event.currentTarget.classList.add('playing');
 
             activeAudio.ontimeupdate = () => {
                 const p = (activeAudio.currentTime / activeAudio.duration) * 100;
-                document.getElementById('seeker-fill').style.width = p + "%";
-                updateGainMeter();
+                document.getElementById('progress-fill').style.width = p + "%";
+                document.getElementById('c-time').innerText = formatTime(activeAudio.currentTime);
+                document.getElementById('d-time').innerText = formatTime(activeAudio.duration);
+                updateMeters();
             };
         }
 
         function setVol(v) { if(activeAudio) activeAudio.volume = v; }
+        function formatTime(s) { let m = Math.floor(s/60), sec = Math.floor(s%60); return m + ":" + (sec<10?"0":"") + sec; }
 
-        function updateGainMeter() {
-            const cells = document.querySelectorAll('.gain-cell');
-            cells.forEach(c => {
-                c.style.background = Math.random() > 0.5 ? 'var(--primary)' : '#111';
-                c.style.boxShadow = c.style.background === 'var(--primary)' ? '0 0 5px var(--primary)' : 'none';
+        function updateMeters() {
+            const nodes = document.querySelectorAll('.gain-node');
+            nodes.forEach(n => {
+                n.style.background = Math.random() > 0.6 ? 'var(--primary)' : '#111';
+                n.style.boxShadow = n.style.background !== '#111' ? '0 0 5px var(--primary)' : 'none';
             });
         }
 
-        // 4. INITIALIZATION
+        // 5. INITIALIZE
         window.onload = () => {
-            // Build gain meter
-            const meter = document.getElementById('gain-meter');
-            for(let i=0; i<20; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'gain-cell';
-                meter.appendChild(cell);
-            }
-
-            // Build themes
-            const themes = [
-                {n: 'MATRIX', c: '#00ff41'}, {n: 'AMBER', c: '#ffb000'}, 
-                {n: 'RADAR', c: '#00ccff'}, {n: 'BLOOD', c: '#ff0000'}
-            ];
-            const grid = document.getElementById('theme-grid');
-            themes.forEach(t => {
-                const b = document.createElement('button');
-                b.className = 'btn-ui';
-                b.innerText = t.n;
-                b.onclick = () => { 
-                    document.documentElement.style.setProperty('--primary', t.c);
-                    playSound('beep');
+            const host = document.getElementById('theme-host');
+            skins.forEach(s => {
+                const div = document.createElement('div');
+                div.className = 'theme-card';
+                div.onclick = () => {
+                    document.documentElement.style.setProperty('--primary', s.c);
+                    playUISound(1000, 'sine');
                 };
-                grid.appendChild(b);
+                div.innerHTML = `<div style="width:10px; height:10px; background:${s.c}; border-radius:50%"></div>
+                                 <span>${s.n.toUpperCase()}</span>`;
+                host.appendChild(div);
             });
+
+            const strip = document.getElementById('gain-strip');
+            for(let i=0; i<15; i++) {
+                const node = document.createElement('div');
+                node.className = 'gain-node';
+                strip.appendChild(node);
+            }
         };
+
+        function updateMouse(e) {
+            document.documentElement.style.setProperty('--mx', e.clientX + 'px');
+            document.documentElement.style.setProperty('--my', e.clientY + 'px');
+        }
     </script>
 </body>
 </html>
