@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker | Creative Technologist</title>
+    <title>Aiden Becker | Creative Architect</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -27,77 +27,105 @@
         }
         .boot-text { color: var(--primary); }
 
-        /* 2. ATMOSPHERE */
+        /* 2. HUD & COMMANDS */
+        #system-hud {
+            position: fixed; top: 100px; right: 8%; text-align: right;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+            color: var(--primary); z-index: 900; pointer-events: none; opacity: 0.6;
+        }
+        #command-bar {
+            position: fixed; top: 20%; left: 50%; transform: translate(-50%, -50%) scale(0.9);
+            width: 450px; background: #000; border: 1px solid var(--primary);
+            padding: 25px; border-radius: 12px; z-index: 11000; visibility: hidden; opacity: 0;
+            transition: var(--transition); box-shadow: 0 0 100px rgba(0,0,0,0.9);
+        }
+        #command-bar.open { visibility: visible; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        #cmd-input {
+            width: 100%; background: transparent; border: none; color: #fff;
+            font-family: 'JetBrains Mono'; font-size: 1.1rem; border-bottom: 1px solid var(--glass);
+            padding-bottom: 10px; margin-top: 15px;
+        }
+
+        /* 3. ATMOSPHERE */
         #bg-glow {
             position: fixed; inset: 0; z-index: -1;
             background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), var(--primary) 0%, transparent 60%);
-            opacity: 0.1; transition: opacity 1s; pointer-events: none;
+            opacity: 0.1; transition: opacity 0.5s; pointer-events: none;
         }
+        .pulse { animation: bgPulse 0.4s ease-out; }
+        @keyframes bgPulse { 0% { opacity: 0.1; } 50% { opacity: 0.4; } 100% { opacity: 0.1; } }
 
-        /* 3. NAVIGATION */
+        /* 4. NAVIGATION */
         nav {
             position: fixed; top: 0; width: 100%; height: 80px;
             display: flex; justify-content: space-between; align-items: center;
             padding: 0 8%; background: rgba(5, 5, 5, 0.8);
             backdrop-filter: blur(20px); z-index: 1000; border-bottom: 1px solid var(--glass);
-            transition: 0.3s;
         }
-        .logo { font-family: 'Space Grotesk'; font-weight: 700; font-size: 1.1rem; letter-spacing: 2px; }
+        .logo { font-family: 'Space Grotesk'; font-weight: 700; font-size: 1rem; letter-spacing: 2px; }
         .nav-links { display: flex; gap: 40px; }
         nav a { 
-            text-decoration: none; color: var(--dim); font-size: 0.75rem; 
+            text-decoration: none; color: var(--dim); font-size: 0.7rem; 
             font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
             transition: 0.3s; cursor: pointer;
         }
         nav a:hover, nav a.active { color: var(--primary); }
 
-        /* 4. PAGES */
-        .page { display: none; padding: 140px 8% 100px; min-height: 100vh; }
+        /* 5. PAGES */
+        .page { display: none; padding: 160px 8% 100px; min-height: 100vh; }
         .page.active { display: block; animation: pageReveal 0.8s var(--transition) forwards; }
-        @keyframes pageReveal { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pageReveal { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 5. HOME / PORTFOLIO */
-        .hero-tag { font-family: 'JetBrains Mono'; color: var(--primary); font-size: 0.8rem; margin-bottom: 20px; display: block; }
-        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 60px; }
-        .project-card {
-            background: var(--card); border: 1px solid var(--glass);
-            padding: 30px; border-radius: 12px; transition: var(--transition);
-        }
-        .project-card:hover { border-color: var(--primary); transform: translateY(-5px); }
-        .tech-tag { font-size: 0.6rem; background: var(--glass); padding: 4px 10px; border-radius: 4px; color: var(--dim); margin-right: 5px; }
-
-        /* 6. STUDIO MIXER */
-        .studio-layout { display: grid; grid-template-columns: 1fr 380px; gap: 40px; }
-        .track-list { display: flex; flex-direction: column; gap: 12px; }
+        /* 6. STUDIO RACK */
+        .studio-layout { display: grid; grid-template-columns: 1fr 380px; gap: 60px; }
+        .track-list { display: flex; flex-direction: column; gap: 15px; }
         .track-card {
             background: var(--card); border: 1px solid var(--glass);
             padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 20px;
             transition: 0.3s; cursor: pointer;
         }
         .track-card:hover { border-color: var(--primary); background: #151515; }
-        .track-card.active-track { border-color: var(--primary); background: rgba(255,255,255,0.02); }
+        .track-card.playing { border-color: var(--primary); background: rgba(255,255,255,0.02); }
         .album-art { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; transition: 0.5s; }
         
         .studio-rack {
             background: #000; border: 1px solid var(--primary); border-radius: 16px;
             padding: 30px; height: fit-content; position: sticky; top: 120px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
-        .seeker-container { width: 100%; height: 4px; background: #222; border-radius: 10px; margin: 20px 0; cursor: pointer; overflow: hidden; }
-        #seeker-fill { height: 100%; background: var(--primary); width: 0%; }
-        .mixer-row { display: flex; align-items: center; gap: 15px; margin-top: 15px; background: #111; padding: 12px; border-radius: 8px; }
+        .seeker-container { width: 100%; height: 4px; background: #222; border-radius: 10px; margin: 20px 0; cursor: pointer; }
+        #seeker-fill { height: 100%; background: var(--primary); width: 0%; pointer-events: none; }
+        .mixer-row { display: flex; align-items: center; gap: 15px; margin-top: 20px; background: #111; padding: 15px; border-radius: 8px; }
         input[type=range] { flex: 1; accent-color: var(--primary); cursor: pointer; }
 
-        /* 7. THEMES */
-        .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        .theme-card { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--glass); cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 12px; }
-        .theme-card:hover { border-color: var(--primary); transform: translateY(-3px); }
+        /* 7. PORTFOLIO CARDS */
+        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; }
+        .project-card {
+            background: var(--card); border: 1px solid var(--glass);
+            padding: 35px; border-radius: 12px; transition: var(--transition);
+        }
+        .project-card:hover { border-color: var(--primary); transform: translateY(-8px); background: #121212; }
+        .tech-tag { font-family: 'JetBrains Mono'; font-size: 0.6rem; color: var(--primary); border: 1px solid var(--primary); padding: 2px 8px; border-radius: 4px; margin-right: 8px; }
 
-        .btn { background: var(--primary); color: #fff; padding: 12px 28px; border-radius: 4px; text-decoration: none; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; border: none; cursor: pointer; transition: 0.3s; }
-        .btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); margin-left: 10px; }
+        .k-hint {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            font-size: 0.6rem; color: var(--dim); font-family: 'JetBrains Mono';
+            letter-spacing: 2px; text-transform: uppercase; opacity: 0.4;
+        }
     </style>
 </head>
 <body onmousemove="updateMouse(event)">
+
+    <div id="system-hud">
+        <div id="hud-time">00:00:00</div>
+        <div id="hud-status">STATUS: OPTIMAL</div>
+        <div id="hud-uptime">UPTIME: 0m 0s</div>
+    </div>
+
+    <div id="command-bar">
+        <span style="font-family:'JetBrains Mono'; font-size: 0.6rem; color: var(--primary);">SYSTEM_COMMAND_CENTER</span>
+        <input type="text" id="cmd-input" placeholder="Enter command (e.g. 'studio', 'dark', 'nexus')...">
+        <div style="font-size: 0.5rem; color: var(--dim); margin-top: 15px;">PRESS 'ESC' TO CLOSE ARCHIVE</div>
+    </div>
 
     <div id="boot-loader">
         <div id="boot-log"></div>
@@ -106,7 +134,7 @@
     <div id="bg-glow"></div>
 
     <nav id="navbar">
-        <div class="logo">AIDEN_BECKER<span style="color:var(--primary)">.V46</span></div>
+        <div class="logo">AIDEN_BECKER<span style="color:var(--primary)">.V48</span></div>
         <div class="nav-links">
             <a onclick="showTab('home')" class="nav-link active" id="l-home">Nexus</a>
             <a onclick="showTab('music')" class="nav-link" id="l-music">Studio</a>
@@ -115,29 +143,25 @@
     </nav>
 
     <section id="home" class="page active">
-        <span class="hero-tag">[ SYSTEM_INITIALIZED ]</span>
-        <h1 style="font-size: 4.5rem; font-family: 'Space Grotesk'; letter-spacing: -3px; line-height: 0.9;">
-            Professional <span style="color:var(--primary)">Development</span><br>& Sound Architecture.
+        <p style="font-family:'JetBrains Mono'; color:var(--primary); font-size: 0.7rem; margin-bottom: 20px;">[ ARCHITECT_MODE_ENABLED ]</p>
+        <h1 style="font-size: 4rem; font-family: 'Space Grotesk'; letter-spacing: -3px; line-height: 0.9;">
+            Full-Stack Developer <br>& <span style="color:var(--primary)">Sound Technologist.</span>
         </h1>
+        <p style="color:var(--dim); max-width: 600px; margin: 30px 0 50px; line-height: 1.6;">
+            I build high-fidelity digital interfaces and production-grade audio applications. 
+            Blending engineering discipline with creative sound synthesis.
+        </p>
         
         <div class="portfolio-grid">
             <div class="project-card">
-                <span class="hero-tag">PROJECT_01</span>
-                <h3>Neural Interface UI</h3>
-                <p style="color:var(--dim); font-size: 0.85rem; margin: 15px 0;">High-performance dashboard for data visualization.</p>
-                <div><span class="tech-tag">React</span><span class="tech-tag">WebGL</span></div>
+                <h3 style="margin-bottom: 10px;">Neural Visualizer</h3>
+                <p style="font-size: 0.8rem; color:var(--dim); margin-bottom: 20px;">Real-time audio reactive graphics engine built with Three.js.</p>
+                <div><span class="tech-tag">WebGL</span><span class="tech-tag">AudioAPI</span></div>
             </div>
             <div class="project-card">
-                <span class="hero-tag">PROJECT_02</span>
-                <h3>Audio Synthesis Engine</h3>
-                <p style="color:var(--dim); font-size: 0.85rem; margin: 15px 0;">Digital signal processing for real-time web audio.</p>
-                <div><span class="tech-tag">WebAudio API</span><span class="tech-tag">C++</span></div>
-            </div>
-            <div class="project-card">
-                <span class="hero-tag">PROJECT_03</span>
-                <h3>Secure OS Portal</h3>
-                <p style="color:var(--dim); font-size: 0.85rem; margin: 15px 0;">Cyber-security focused front-end architecture.</p>
-                <div><span class="tech-tag">Next.js</span><span class="tech-tag">Auth.js</span></div>
+                <h3 style="margin-bottom: 10px;">Aiden OS Kernel</h3>
+                <p style="font-size: 0.8rem; color:var(--dim); margin-bottom: 20px;">Custom dashboard architecture with dynamic theme synthesis.</p>
+                <div><span class="tech-tag">React</span><span class="tech-tag">CSS3</span></div>
             </div>
         </div>
     </section>
@@ -145,7 +169,7 @@
     <section id="music" class="page">
         <div class="studio-layout">
             <div class="left-col">
-                <h2 style="font-family:'Space Grotesk'; margin-bottom: 30px;">LOSSLESS ARCHIVE</h2>
+                <h2 style="font-family:'Space Grotesk'; margin-bottom: 40px;">AUDIO_ARCHIVE</h2>
                 <div class="track-list">
                     <div class="track-card" onclick="playTrack('NIRVANA', 'Nevermind', 'music/nirvana.jpg', 'a1')">
                         <img src="music/nirvana.jpg" class="album-art">
@@ -168,26 +192,26 @@
                         <audio id="a4" src="music/bilmuri.mp3"></audio>
                     </div>
                 </div>
-                <div style="margin-top: 40px; border-top: 1px solid var(--glass); padding-top: 30px;">
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdF7U3qu9mVYDHilxSeunjiXrjRb8YjjB0GN3ZR021CsWyrWA/viewform?usp=publish-editor" target="_blank" class="btn btn-outline" style="margin:0;">Suggest Track Addition</a>
+                <div style="margin-top: 50px; border-top: 1px solid var(--glass); padding-top: 30px;">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdF7U3qu9mVYDHilxSeunjiXrjRb8YjjB0GN3ZR021CsWyrWA/viewform?usp=publish-editor" target="_blank" style="color:var(--primary); text-decoration:none; font-family:'JetBrains Mono'; font-size:0.7rem;">+ SUGGEST_NEW_SIGNAL</a>
                 </div>
             </div>
 
             <div class="studio-rack">
-                <span style="font-family:'JetBrains Mono'; font-size: 0.6rem; color:var(--primary);">CONSOLE_MASTER</span>
-                <h3 id="r-artist" style="margin-top: 10px;">STANDBY</h3>
-                <p id="r-album" style="font-size: 0.75rem; color:var(--dim);">Signal waiting...</p>
+                <span style="font-family:'JetBrains Mono'; font-size: 0.6rem; color:var(--primary);">MASTER_BUS_OUT</span>
+                <h3 id="r-artist" style="margin-top: 15px;">STANDBY</h3>
+                <p id="r-album" style="font-size: 0.7rem; color:var(--dim);">Awaiting Input...</p>
                 
                 <div class="seeker-container" onclick="seek(event)">
                     <div id="seeker-fill"></div>
                 </div>
                 
-                <div style="display:flex; justify-content:space-between; font-family:'JetBrains Mono'; font-size: 0.6rem; margin-bottom: 20px;">
+                <div style="display:flex; justify-content:space-between; font-family:'JetBrains Mono'; font-size: 0.6rem; margin-bottom: 25px;">
                     <span id="c-time">0:00</span><span id="d-time">0:00</span>
                 </div>
 
                 <div class="mixer-row">
-                    <span style="font-size: 0.6rem; font-weight: 800;">VOL</span>
+                    <span style="font-size: 0.6rem; font-weight: 800; color:var(--primary);">GAIN</span>
                     <input type="range" min="0" max="1" step="0.01" value="0.7" oninput="setVol(this.value)">
                 </div>
             </div>
@@ -195,41 +219,58 @@
     </section>
 
     <section id="themes" class="page">
-        <h2 style="font-family:'Space Grotesk'; margin-bottom: 30px;">SYSTEM_CORES</h2>
-        <div class="theme-grid" id="theme-host"></div>
+        <h2 style="font-family:'Space Grotesk'; margin-bottom: 30px;">COLOR_PROFILES</h2>
+        <div class="theme-grid" id="theme-host" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px;"></div>
     </section>
 
+    <div class="k-hint">PRESS [ K ] FOR COMMAND PALETTE</div>
+
     <script>
-        // 1. BOOT SEQUENCE
-        const bootLog = [
-            "> INITIALIZING AIDEN_OS...", "> CHECKING HARDWARE...", "> KERNEL_LOAD: 100%", 
-            "> MOUNTING_THEMES: 24_LOADED", "> CONNECTING_STUDIO: ONLINE", "> DECRYPTING_UI...", "> ACCESS_GRANTED"
-        ];
+        // 1. HUD & BOOT
+        const startTime = Date.now();
+        const bootLog = ["> BOOTING AIDEN_OS v48.0...", "> MOUNTING KERNEL...", "> LOADING_AUDIO_ENGINES...", "> CONNECTING_HUD...", "> ACCESS_GRANTED"];
         let logIdx = 0;
+
         function runBoot() {
             const container = document.getElementById('boot-log');
             if(logIdx < bootLog.length) {
                 container.innerHTML += `<div class="boot-text">${bootLog[logIdx]}</div>`;
                 logIdx++;
-                setTimeout(runBoot, 300);
+                setTimeout(runBoot, 200);
             } else {
                 setTimeout(() => document.getElementById('boot-loader').style.display = 'none', 500);
             }
         }
 
-        // 2. THEME DATA
-        const skins = [
-            {n:"Nevermind", c:"#0077ff"}, {n:"Cyberpunk", c:"#ff007f"}, {n:"Bilmuri", c:"#ffcc00"},
-            {n:"Matrix", c:"#00ff41"}, {n:"Midnight", c:"#1e293b"}, {n:"Ghost", c:"#ffffff"},
-            {n:"Crimson", c:"#ff0000"}, {n:"Nord", c:"#88c0d0"}, {n:"Mint", c:"#00ffcc"},
-            {n:"Lava", c:"#ff4d00"}, {n:"Ocean", c:"#00f2ff"}, {n:"Tokyo", c:"#7000ff"},
-            {n:"Emerald", c:"#10b981"}, {n:"Amber", c:"#f59e0b"}, {n:"Rose", c:"#fb7185"},
-            {n:"Dracula", c:"#bd93f9"}, {n:"Forest", c:"#2d5a27"}, {n:"Gold", c:"#d4af37"},
-            {n:"Slate", c:"#475569"}, {n:"Carbon", c:"#222222"}, {n:"Solar", c:"#ee7e2b"},
-            {n:"Neon", c:"#ccff00"}, {n:"Sky", c:"#7dd3fc"}, {n:"Blood", c:"#7f1d1d"}
-        ];
+        function updateHUD() {
+            document.getElementById('hud-time').innerText = new Date().toLocaleTimeString();
+            const uptime = Math.floor((Date.now() - startTime) / 1000);
+            document.getElementById('hud-uptime').innerText = `UPTIME: ${Math.floor(uptime/60)}m ${uptime%60}s`;
+            requestAnimationFrame(updateHUD);
+        }
 
-        // 3. AUDIO LOGIC
+        // 2. COMMAND PALETTE
+        window.addEventListener('keydown', (e) => {
+            if(e.key.toLowerCase() === 'k') {
+                document.getElementById('command-bar').classList.add('open');
+                document.getElementById('cmd-input').focus();
+            }
+            if(e.key === 'Escape') document.getElementById('command-bar').classList.remove('open');
+        });
+
+        document.getElementById('cmd-input').addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') {
+                const cmd = e.target.value.toLowerCase();
+                if(['home','nexus'].includes(cmd)) showTab('home');
+                if(['studio','music'].includes(cmd)) showTab('music');
+                if(['skins','themes'].includes(cmd)) showTab('themes');
+                if(cmd === 'dark') setTheme('#0077ff');
+                e.target.value = '';
+                document.getElementById('command-bar').classList.remove('open');
+            }
+        });
+
+        // 3. AUDIO SYSTEM
         let activeAudio = null;
         function playTrack(artist, album, art, id) {
             if(activeAudio) { activeAudio.pause(); activeAudio.currentTime = 0; }
@@ -238,15 +279,19 @@
 
             document.getElementById('r-artist').innerText = artist;
             document.getElementById('r-album').innerText = album;
-            
-            document.querySelectorAll('.track-card').forEach(c => c.classList.remove('active-track'));
-            event.currentTarget.classList.add('active-track');
+            document.querySelectorAll('.track-card').forEach(c => c.classList.remove('playing'));
+            event.currentTarget.classList.add('playing');
 
             activeAudio.ontimeupdate = () => {
                 const p = (activeAudio.currentTime / activeAudio.duration) * 100;
                 document.getElementById('seeker-fill').style.width = p + "%";
                 document.getElementById('c-time').innerText = formatTime(activeAudio.currentTime);
                 document.getElementById('d-time').innerText = formatTime(activeAudio.duration);
+                // Pulse effect
+                if(Math.floor(activeAudio.currentTime * 2) % 2 === 0) {
+                    document.getElementById('bg-glow').classList.add('pulse');
+                    setTimeout(() => document.getElementById('bg-glow').classList.remove('pulse'), 400);
+                }
             };
         }
 
@@ -259,18 +304,25 @@
         function setVol(v) { if(activeAudio) activeAudio.volume = v; }
         function formatTime(s) { let m = Math.floor(s/60), sec = Math.floor(s%60); return m + ":" + (sec<10?"0":"") + sec; }
 
-        // 4. NAVIGATION & THEMES
+        // 4. THEMES & NAV
+        const skins = [
+            {n:"Nevermind", c:"#0077ff"}, {n:"Cyberpunk", c:"#ff007f"}, {n:"Bilmuri", c:"#ffcc00"},
+            {n:"Matrix", c:"#00ff41"}, {n:"Midnight", c:"#1e293b"}, {n:"Ghost", c:"#ffffff"},
+            {n:"Crimson", c:"#ff0000"}, {n:"Nord", c:"#88c0d0"}, {n:"Mint", c:"#00ffcc"},
+            {n:"Tokyo", c:"#7000ff"}, {n:"Emerald", c:"#10b981"}, {n:"Gold", c:"#d4af37"},
+            {n:"Carbon", c:"#222222"}, {n:"Solar", c:"#ee7e2b"}
+        ];
+
         function showTab(t) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             document.getElementById(t).classList.add('active');
             document.getElementById('l-' + t).classList.add('active');
-            window.scrollTo(0,0);
         }
 
         function setTheme(c) {
             document.documentElement.style.setProperty('--primary', c);
-            localStorage.setItem('a_theme_v46', c);
+            localStorage.setItem('a_theme_v48', c);
         }
 
         function updateMouse(e) {
@@ -280,16 +332,19 @@
 
         window.onload = () => {
             runBoot();
+            updateHUD();
             const host = document.getElementById('theme-host');
             skins.forEach(s => {
                 const div = document.createElement('div');
-                div.className = 'theme-card';
+                div.style = `background:var(--card); padding:15px; border-radius:10px; border:1px solid var(--glass); cursor:pointer; display:flex; align-items:center; gap:10px; transition:0.3s;`;
                 div.onclick = () => setTheme(s.c);
+                div.onmouseover = () => div.style.borderColor = 'var(--primary)';
+                div.onmouseout = () => div.style.borderColor = 'var(--glass)';
                 div.innerHTML = `<div style="width:10px; height:10px; background:${s.c}; border-radius:50%;"></div>
-                                 <span style="font-family:'JetBrains Mono'; font-size:0.7rem;">${s.n.toUpperCase()}</span>`;
+                                 <span style="font-family:'JetBrains Mono'; font-size:0.65rem;">${s.n.toUpperCase()}</span>`;
                 host.appendChild(div);
             });
-            const saved = localStorage.getItem('a_theme_v46');
+            const saved = localStorage.getItem('a_theme_v48');
             if(saved) setTheme(saved);
         };
     </script>
