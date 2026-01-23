@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker | OS v40</title>
+    <title>Aiden Becker | OS v41</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -19,7 +19,7 @@
             overflow: hidden; height: 100vh;
         }
 
-        /* DYNAMIC BG GLOW */
+        /* BACKGROUND ELEMENTS */
         #bg-glow {
             position: fixed; inset: 0; z-index: -1;
             background: radial-gradient(circle at 15% 15%, var(--primary) 0%, transparent 45%);
@@ -40,39 +40,49 @@
         nav a { font-family: 'Space Grotesk'; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; color: var(--dim); transition: 0.3s; font-weight: 700; }
         nav a.active { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
 
+        /* NOW PLAYING NOTIFICATION */
+        #now-playing {
+            position: fixed; top: 30px; right: 30px; background: var(--card);
+            border: 1px solid var(--primary); padding: 15px 25px; border-radius: 20px;
+            display: flex; align-items: center; gap: 15px; transform: translateX(150%);
+            transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 5000;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        #now-playing.active { transform: translateX(0); }
+
         /* CONTAINERS */
         .page { display: none; padding: 80px 10%; height: 100vh; overflow-y: auto; scrollbar-width: none; }
         .page.active { display: block; animation: boot 0.6s ease-out; }
-        @keyframes boot { from { opacity: 0; transform: translateY(20px); filter: blur(5px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
+        @keyframes boot { from { opacity: 0; transform: scale(0.95); filter: blur(10px); } to { opacity: 1; transform: scale(1); filter: blur(0); } }
 
-        /* THEME GRID */
-        .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
-        .theme-card { 
-            background: var(--card); border: 1px solid var(--glass); padding: 15px; 
-            border-radius: 18px; text-align: center; transition: 0.3s;
+        /* THEME LIST */
+        .theme-item { 
+            background: var(--card); border: 1px solid var(--glass); padding: 20px; 
+            border-radius: 20px; display: flex; align-items: center; gap: 20px; 
+            margin-bottom: 12px; transition: 0.3s;
         }
-        .theme-card:hover { border-color: var(--primary); transform: translateY(-5px); }
-        .swatch { width: 100%; height: 40px; border-radius: 10px; margin-bottom: 10px; }
+        .theme-item:hover { border-color: var(--primary); background: rgba(255,255,255,0.03); }
+        .theme-info h4 { font-family: 'Space Grotesk'; color: var(--primary); }
+        .theme-info p { font-size: 0.75rem; color: var(--dim); }
 
-        /* MUSIC CARDS (Interactive) */
+        /* KINETIC MUSIC CARDS */
         .song-card { 
-            background: var(--card); padding: 20px; border-radius: 24px; border: 1px solid var(--glass);
-            display: flex; align-items: center; gap: 20px; margin-bottom: 15px; transition: 0.4s;
-            position: relative; overflow: hidden;
+            background: var(--card); padding: 25px; border-radius: 30px; border: 1px solid var(--glass);
+            display: flex; align-items: center; gap: 25px; margin-bottom: 20px; transition: 0.4s;
+            position: relative; perspective: 1000px;
         }
-        .song-card.playing { border-color: var(--primary); background: rgba(255,255,255,0.02); box-shadow: 0 0 30px rgba(0,0,0,0.3); }
-        .album-art { width: 80px; height: 80px; border-radius: 15px; object-fit: cover; transition: 0.5s; }
-        .playing .album-art { transform: scale(1.1) rotate(3deg); }
-        audio { filter: invert(1) hue-rotate(180deg) brightness(1.5); height: 30px; margin-top: 10px; width: 100%; }
+        .song-card:hover { transform: scale(1.02); border-color: rgba(255,255,255,0.2); }
+        .song-card.playing { border-color: var(--primary); box-shadow: 0 0 40px -10px var(--primary); }
+        .album-art { width: 100px; height: 100px; border-radius: 20px; object-fit: cover; transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .playing .album-art { transform: rotateY(10deg) rotateX(10deg) scale(1.1); box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
+        
+        /* INTERACTIVE VIZ */
+        .viz-wall { display: flex; gap: 4px; height: 40px; align-items: center; }
+        .v-bar { width: 4px; height: 4px; background: var(--primary); border-radius: 10px; transition: 0.2s; }
+        .playing .v-bar { animation: pulseViz 0.6s infinite alternate; }
+        @keyframes pulseViz { 0% { height: 5px; } 100% { height: 35px; opacity: 0.5; } }
 
-        /* VISUALIZER BARS */
-        .viz { display: flex; gap: 3px; height: 20px; align-items: flex-end; opacity: 0; }
-        .playing .viz { opacity: 1; }
-        .v-bar { width: 3px; background: var(--primary); animation: bounce 0.5s infinite alternate; }
-        @keyframes bounce { from { height: 2px; } to { height: 15px; } }
-
-        /* TERMINAL */
-        .term { background: #000; border-radius: 15px; padding: 20px; font-family: monospace; border: 1px solid var(--glass); }
+        audio { filter: invert(1) grayscale(1) contrast(1.5); height: 35px; width: 100%; margin-top: 15px; }
     </style>
 </head>
 <body onmousemove="m(event)">
@@ -81,93 +91,159 @@
     <div id="c-dot"></div>
     <div id="c-ring"></div>
 
+    <div id="now-playing">
+        <img id="notif-img" src="" style="width:50px; height:50px; border-radius:12px; object-fit: cover;">
+        <div>
+            <p style="font-size: 0.6rem; color: var(--primary); font-weight: 800; text-transform: uppercase;">Now Playing</p>
+            <p id="notif-title" style="font-size: 0.9rem; font-weight: 700;"></p>
+        </div>
+    </div>
+
     <nav>
         <a onclick="showTab('home')" id="l-home" class="active">Nexus</a>
         <a onclick="showTab('music')" id="l-music">Archive</a>
         <a onclick="showTab('themes')" id="l-themes">Themes</a>
-        <a onclick="showTab('term-page')" id="l-term-page">Terminal</a>
     </nav>
 
     <div id="home" class="page active">
-        <h1 style="font-size: 4rem; font-family: 'Space Grotesk';">AIDEN <span style="color:var(--primary)">BECKER</span></h1>
-        <p style="color:var(--dim); margin: 20px 0;">v40.0 // Multimedia OS</p>
-        <div class="term" style="max-width: 400px;">
-            <p style="color:var(--primary)">> System: Online</p>
-            <p>> Themes Loaded: 20</p>
-            <p>> Audio Engine: Ready</p>
+        <h1 style="font-size: 4.5rem; font-weight: 700; line-height: 1;">SYSTEM_<span style="color:var(--primary)">AIDEN</span></h1>
+        <p style="color:var(--dim); margin: 20px 0; max-width: 500px;">Adaptive UI v41. Interactive Soundboards and Hardware Synthesis. Running optimal at 60fps.</p>
+        
+        <div style="display:flex; gap:10px; margin-top:30px;">
+            <button class="theme-info" onclick="showTab('music')" style="background:var(--primary); color:#000; padding:12px 25px; border-radius:10px; border:none; font-weight:700; font-family:inherit;">OPEN_ARCHIVE</button>
+            <button onclick="showTab('themes')" style="background:transparent; color:#fff; padding:12px 25px; border-radius:10px; border:1px solid var(--glass); font-weight:700; font-family:inherit;">EDIT_THEME</button>
         </div>
     </div>
 
     <div id="music" class="page">
-        <h2 style="margin-bottom: 30px; letter-spacing: 3px;">SONIC ARCHIVE</h2>
+        <h2 style="margin-bottom: 40px; letter-spacing: 5px;">SONIC ARCHIVE</h2>
         <div id="music-list">
             <div class="song-card">
                 <img src="music/nirvana.jpg" class="album-art">
                 <div style="flex:1">
-                    <div style="display:flex; justify-content:space-between">
-                        <h3>Smells Like Teen Spirit</h3>
-                        <div class="viz"><div class="v-bar"></div><div class="v-bar" style="animation-delay:0.1s"></div><div class="v-bar" style="animation-delay:0.2s"></div></div>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <h3 style="font-size:1.2rem;">Smells Like Teen Spirit</h3>
+                            <p style="font-size:0.7rem; color:var(--dim)">Nirvana // Nevermind</p>
+                        </div>
+                        <div class="viz-wall">
+                            <div class="v-bar"></div><div class="v-bar" style="animation-delay:0.1s"></div><div class="v-bar" style="animation-delay:0.2s"></div><div class="v-bar" style="animation-delay:0.3s"></div>
+                        </div>
                     </div>
-                    <audio controls src="music/nirvana.mp3" onplay="playLogic(this)" onpause="pauseLogic(this)"></audio>
+                    <audio controls src="music/nirvana.mp3" onplay="handlePlay(this, 'Teen Spirit', 'music/nirvana.jpg')" onpause="handlePause(this)"></audio>
+                </div>
+            </div>
+
+            <div class="song-card">
+                <img src="music/greenday.jpg" class="album-art">
+                <div style="flex:1">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <h3 style="font-size:1.2rem;">American Idiot</h3>
+                            <p style="font-size:0.7rem; color:var(--dim)">Green Day // American Idiot</p>
+                        </div>
+                        <div class="viz-wall">
+                            <div class="v-bar"></div><div class="v-bar" style="animation-delay:0.1s"></div><div class="v-bar" style="animation-delay:0.2s"></div><div class="v-bar" style="animation-delay:0.3s"></div>
+                        </div>
+                    </div>
+                    <audio controls src="music/greenday.mp3" onplay="handlePlay(this, 'American Idiot', 'music/greenday.jpg')" onpause="handlePause(this)"></audio>
                 </div>
             </div>
 
             <div class="song-card">
                 <img src="music/gorillaz.jpg" class="album-art">
                 <div style="flex:1">
-                    <div style="display:flex; justify-content:space-between">
-                        <h3>On Melancholy Hill</h3>
-                        <div class="viz"><div class="v-bar"></div><div class="v-bar" style="animation-delay:0.1s"></div><div class="v-bar" style="animation-delay:0.2s"></div></div>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <h3 style="font-size:1.2rem;">On Melancholy Hill</h3>
+                            <p style="font-size:0.7rem; color:var(--dim)">Gorillaz // Plastic Beach</p>
+                        </div>
+                        <div class="viz-wall">
+                            <div class="v-bar"></div><div class="v-bar" style="animation-delay:0.1s"></div><div class="v-bar" style="animation-delay:0.2s"></div><div class="v-bar" style="animation-delay:0.3s"></div>
+                        </div>
                     </div>
-                    <audio controls src="music/gorillaz.mp3" onplay="playLogic(this)" onpause="pauseLogic(this)"></audio>
+                    <audio controls src="music/gorillaz.mp3" onplay="handlePlay(this, 'Melancholy Hill', 'music/gorillaz.jpg')" onpause="handlePause(this)"></audio>
                 </div>
             </div>
+
+            <div class="song-card">
+                <img src="music/bilmuri.jpg" class="album-art">
+                <div style="flex:1">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <h3 style="font-size:1.2rem;">More Than Hate</h3>
+                            <p style="font-size:0.7rem; color:var(--dim)">Bilmuri // Eggy Pocket</p>
+                        </div>
+                        <div class="viz-wall">
+                            <div class="v-bar"></div><div class="v-bar" style="animation-delay:0.1s"></div><div class="v-bar" style="animation-delay:0.2s"></div><div class="v-bar" style="animation-delay:0.3s"></div>
+                        </div>
+                    </div>
+                    <audio controls src="music/bilmuri.mp3" onplay="handlePlay(this, 'More Than Hate', 'music/bilmuri.jpg')" onpause="handlePause(this)"></audio>
+                </div>
             </div>
+        </div>
     </div>
 
     <div id="themes" class="page">
-        <h2 style="margin-bottom: 10px;">SPECTRUM LIBRARY</h2>
-        <p style="color:var(--dim); font-size: 0.8rem; margin-bottom: 30px;">Choose a core frequency to realign the UI.</p>
-        <div class="theme-grid" id="theme-host"></div>
+        <h2 style="margin-bottom: 30px;">THEME ENGINE</h2>
+        <div id="theme-list">
+            </div>
     </div>
 
     <script>
-        const themeList = [
-            {n:"Nevermind", c:"#0077ff"}, {n:"Cyberpunk", c:"#ff007f"}, {n:"Matrix", c:"#00ff41"},
-            {n:"Gold", c:"#ffd700"}, {n:"Vaporwave", c:"#ff71ce"}, {n:"Toxic", c:"#a3ff33"},
-            {n:"Crimson", c:"#ff0000"}, {n:"Royal", c:"#9d00ff"}, {n:"Ocean", c:"#00f2ff"},
-            {n:"Ghost", c:"#ffffff"}, {n:"Burnt", c:"#ff4d00"}, {n:"Tokyo", c:"#7000ff"},
-            {n:"Mint", c:"#00ffcc"}, {n:"Slate", c:"#475569"}, {n:"Rose", c:"#fb7185"},
-            {n:"Amber", c:"#f59e0b"}, {n:"Emerald", c:"#10b981"}, {n:"Indigo", c:"#6366f1"},
-            {n:"Violet", c:"#a855f7"}, {n:"Bilmuri", c:"#ffcc00"}
+        const themes = [
+            {n:"Nevermind", d:"Nirvana-inspired classic blue. Aiden's personal favorite.", c:"#0077ff"},
+            {n:"Cyberpunk", d:"High-contrast pink for the neon-obsessed.", c:"#ff007f"},
+            {n:"Matrix", d:"Digital green rain. Purely functional.", c:"#00ff41"},
+            {n:"Bilmuri", d:"Golden yellow. Inspired by the Eggy Pocket vibes.", c:"#ffcc00"},
+            {n:"Tokyo", d:"Deep violet. Like midnight in Shibuya.", c:"#7000ff"},
+            {n:"Vaporwave", d:"Pastel dreams and 90s nostalgia.", c:"#ff71ce"},
+            {n:"Oceanic", d:"Deep sea serenity for focused coding sessions.", c:"#00f2ff"},
+            {n:"Toxic", d:"Neon lime. Warning: High energy UI.", c:"#a3ff33"},
+            {n:"Crimson", d:"Pure aggression. Use for late-night crunch.", c:"#ff0000"},
+            {n:"Ghost", d:"Clean, white, and clinical.", c:"#ffffff"}
         ];
 
         function init() {
-            const host = document.getElementById('theme-host');
-            themeList.forEach(t => {
+            const host = document.getElementById('theme-list');
+            themes.forEach(t => {
                 const div = document.createElement('div');
-                div.className = 'theme-card';
+                div.className = 'theme-item';
                 div.onclick = () => setTheme(t.c);
-                div.innerHTML = `<div class="swatch" style="background:${t.c}"></div><span style="font-size:0.6rem; font-weight:700">${t.n.toUpperCase()}</span>`;
+                div.innerHTML = `
+                    <div style="width:40px; height:40px; border-radius:10px; background:${t.c}"></div>
+                    <div class="theme-info">
+                        <h4>${t.n.toUpperCase()}</h4>
+                        <p>${t.d}</p>
+                    </div>
+                `;
                 host.appendChild(div);
             });
             const saved = localStorage.getItem('a_theme');
             if(saved) setTheme(saved);
         }
 
+        function handlePlay(el, title, img) {
+            document.querySelectorAll('audio').forEach(a => { if(a !== el) a.pause(); });
+            document.querySelectorAll('.song-card').forEach(c => c.classList.remove('playing'));
+            el.closest('.song-card').classList.add('playing');
+            
+            // Notification
+            const notif = document.getElementById('now-playing');
+            document.getElementById('notif-title').innerText = title;
+            document.getElementById('notif-img').src = img;
+            notif.classList.add('active');
+            setTimeout(() => notif.classList.remove('active'), 4000);
+        }
+
+        function handlePause(el) {
+            el.closest('.song-card').classList.remove('playing');
+        }
+
         function setTheme(c) {
             document.documentElement.style.setProperty('--primary', c);
             document.getElementById('bg-glow').style.background = `radial-gradient(circle at 15% 15%, ${c} 0%, transparent 45%)`;
             localStorage.setItem('a_theme', c);
-        }
-
-        function playLogic(el) {
-            document.querySelectorAll('audio').forEach(a => { if(a !== el) a.pause(); });
-            el.closest('.song-card').classList.add('playing');
-        }
-
-        function pauseLogic(el) {
-            el.closest('.song-card').classList.remove('playing');
         }
 
         function showTab(t) {
@@ -183,6 +259,14 @@
             const ring = document.getElementById('c-ring');
             ring.style.left = (e.clientX - 15) + 'px';
             ring.style.top = (e.clientY - 15) + 'px';
+            
+            // Subtle 3D tilt for cards
+            document.querySelectorAll('.song-card.playing').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+                card.style.transform = `scale(1.02) rotateY(${x * 5}deg) rotateX(${y * -5}deg)`;
+            });
         }
 
         window.onload = init;
