@@ -3,306 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker | OS v42</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>Aiden Becker | Developer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #0077ff; --bg: #050505; --card: #0f0f0f;
-            --text: #ffffff; --dim: #a1a1aa; --glass: rgba(255, 255, 255, 0.05);
-            --transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --primary: #0077ff; --bg: #0b0b0b; --card: #141414;
+            --text: #ffffff; --dim: #888888; --glass: rgba(255, 255, 255, 0.05);
+            --transition: 0.5s cubic-bezier(0.2, 1, 0.2, 1);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; cursor: none !important; }
+        /* RESET & SCROLLING */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg); color: var(--text);
-            overflow: hidden; height: 100vh; perspective: 1000px;
+            overflow-x: hidden; scroll-behavior: smooth;
         }
 
-        /* 1. THE PARTICLE LAYER (Hundreds of Interactive Elements) */
-        #particle-canvas { position: fixed; inset: 0; z-index: -1; }
-
-        /* 2. THE ATMOSPHERE */
+        /* PROFESSIONAL BACKGROUND GLOW */
         #bg-glow {
-            position: fixed; inset: 0; z-index: -2;
-            background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), var(--primary) 0%, transparent 60%);
-            opacity: 0.12; transition: opacity 0.5s;
+            position: fixed; inset: 0; z-index: -1;
+            background: radial-gradient(circle at var(--mx, 20%) var(--my, 20%), var(--primary) 0%, transparent 50%);
+            opacity: 0.08; transition: opacity 1s;
         }
 
-        /* 3. CURSOR ENGINE */
-        #c-dot { width: 4px; height: 4px; background: #fff; position: fixed; border-radius: 50%; pointer-events: none; z-index: 10000; }
-        #c-ring { 
-            width: 40px; height: 40px; border: 1px solid var(--primary); position: fixed; 
-            border-radius: 50%; pointer-events: none; z-index: 9999; 
-            transition: width 0.3s, height 0.3s, transform 0.1s ease-out;
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        /* 4. OS NAV */
+        /* NAVIGATION BAR */
         nav {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(20px);
-            padding: 10px 30px; border-radius: 100px; border: 1px solid var(--glass);
-            display: flex; gap: 35px; z-index: 1000; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            position: fixed; top: 0; width: 100%; height: 80px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 8%; background: rgba(11, 11, 11, 0.8);
+            backdrop-filter: blur(20px); z-index: 1000;
+            border-bottom: 1px solid var(--glass);
         }
-        nav a { font-family: 'Space Grotesk'; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; color: var(--dim); transition: 0.3s; font-weight: 700; }
-        nav a:hover { color: var(--primary); transform: scale(1.1); }
-        nav a.active { color: var(--primary); text-shadow: 0 0 15px var(--primary); }
-
-        /* 5. PAGES & CARDS */
-        .page { display: none; padding: 80px 10%; height: 100vh; overflow-y: auto; scrollbar-width: none; }
-        .page.active { display: block; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(50px) rotateX(-5deg); } to { opacity: 1; transform: translateY(0); } }
-
-        .song-card, .theme-item { 
-            background: var(--card); border: 1px solid var(--glass); padding: 25px; 
-            border-radius: 25px; margin-bottom: 20px; transition: var(--transition);
-            position: relative; overflow: hidden; transform-style: preserve-3d;
+        .logo { font-family: 'Space Grotesk'; font-weight: 700; letter-spacing: -1px; font-size: 1.4rem; }
+        .nav-links { display: flex; gap: 40px; }
+        nav a { 
+            text-decoration: none; color: var(--dim); font-size: 0.85rem; 
+            font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            transition: var(--transition); cursor: pointer;
         }
-        .song-card:hover, .theme-item:hover { border-color: var(--primary); background: rgba(255,255,255,0.02); }
+        nav a:hover, nav a.active { color: var(--primary); }
 
-        /* NOW PLAYING TOAST */
+        /* PAGE ENGINE */
+        .page { display: none; padding: 140px 8% 100px; min-height: 100vh; }
+        .page.active { display: block; animation: fadeIn 0.8s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* THEME GRID */
+        .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .theme-item { 
+            background: var(--card); padding: 25px; border-radius: 12px; 
+            border: 1px solid var(--glass); cursor: pointer; transition: var(--transition);
+        }
+        .theme-item:hover { transform: translateY(-5px); border-color: var(--primary); background: #1a1a1a; }
+
+        /* MUSIC SECTIONS */
+        .music-section { margin-bottom: 60px; }
+        .section-header { 
+            display: flex; justify-content: space-between; align-items: flex-end;
+            margin-bottom: 30px; border-left: 4px solid var(--primary); padding-left: 20px;
+        }
+        .music-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 20px; }
+        
+        .song-card { 
+            background: var(--card); border: 1px solid var(--glass); padding: 20px;
+            border-radius: 15px; display: flex; gap: 20px; align-items: center;
+            transition: var(--transition); position: relative;
+        }
+        .song-card:hover { border-color: var(--primary); transform: translateX(5px); }
+        .album-art { width: 70px; height: 70px; border-radius: 8px; object-fit: cover; }
+
+        /* NOW PLAYING HUD */
         #now-playing {
-            position: fixed; top: 30px; right: 30px; background: #111;
-            border: 1px solid var(--primary); padding: 15px 25px; border-radius: 20px;
-            display: flex; align-items: center; gap: 15px; transform: translateX(200%);
-            transition: 0.7s cubic-bezier(0.19, 1, 0.22, 1); z-index: 5000;
+            position: fixed; bottom: 30px; right: 30px; background: var(--card);
+            border: 1px solid var(--primary); padding: 12px 25px; border-radius: 50px;
+            display: flex; align-items: center; gap: 15px; transform: translateY(150%);
+            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); z-index: 5000; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        #now-playing.active { transform: translateX(0); }
+        #now-playing.active { transform: translateY(0); }
 
-        /* VIZUALIZER */
-        .viz-box { display: flex; gap: 3px; height: 30px; align-items: center; }
-        .v-bar { width: 3px; background: var(--primary); height: 4px; border-radius: 10px; }
-        .playing .v-bar { animation: barPulse 0.5s infinite alternate; }
-        @keyframes barPulse { from { height: 4px; } to { height: 25px; } }
+        /* INTERACTIVE BUTTONS */
+        .btn {
+            background: var(--primary); color: #fff; padding: 12px 28px;
+            border-radius: 6px; text-decoration: none; font-weight: 700;
+            font-size: 0.8rem; text-transform: uppercase; border: none;
+            cursor: pointer; transition: 0.3s; display: inline-block;
+        }
+        .btn:hover { filter: brightness(1.2); transform: scale(1.05); }
+        .btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
 
-        /* GRID FOR THEMES */
-        .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
+        audio { width: 100%; height: 30px; filter: invert(1) hue-rotate(180deg) opacity(0.5); margin-top: 10px; }
     </style>
 </head>
-<body onmousemove="handleGlobalMove(event)">
+<body onmousemove="updateMouse(event)">
 
-    <canvas id="particle-canvas"></canvas>
     <div id="bg-glow"></div>
-    <div id="c-dot"></div>
-    <div id="c-ring"></div>
-
-    <div id="now-playing">
-        <img id="np-img" src="" style="width:50px; height:50px; border-radius:10px;">
-        <div>
-            <p style="font-size: 0.6rem; color: var(--primary); font-weight: 900;">LIVE BROADCAST</p>
-            <p id="np-title" style="font-weight: 700;"></p>
-        </div>
-    </div>
 
     <nav>
-        <a onclick="showTab('home')" id="l-home" class="active">Nexus</a>
-        <a onclick="showTab('music')" id="l-music">Archive</a>
-        <a onclick="showTab('themes')" id="l-themes">Spectrum</a>
+        <div class="logo">AIDEN_BECKER<span style="color:var(--primary)">.OS</span></div>
+        <div class="nav-links">
+            <a onclick="showTab('home')" id="l-home" class="active">Nexus</a>
+            <a onclick="showTab('music')" id="l-music">Music</a>
+            <a onclick="showTab('themes')" id="l-themes">Spectrum</a>
+        </div>
     </nav>
 
+    <div id="now-playing">
+        <div style="width:10px; height:10px; background:var(--primary); border-radius:50%; animation: pulse 1s infinite;"></div>
+        <p id="np-text" style="font-size: 0.85rem; font-weight: 600;"></p>
+    </div>
+
     <div id="home" class="page active">
-        <h1 style="font-size: 5rem; font-weight: 700; line-height: 0.9;">AIDEN_<br><span id="glitch-text" style="color:var(--primary)">OS_V42</span></h1>
-        <p style="color:var(--dim); margin-top: 20px; max-width: 500px;">
-            Interaction density: <span style="color:var(--primary)">MAXIMUM</span>. 
-            All particles respond to cursor proximity. Hover over any element to engage 3D tilt.
+        <h1 style="font-size: 4.5rem; font-family: 'Space Grotesk'; letter-spacing: -2px; margin-bottom: 20px;">
+            Professional <span style="color:var(--primary)">Synthesis</span><br>of Design & Code.
+        </h1>
+        <p style="color:var(--dim); max-width: 600px; font-size: 1.1rem; line-height: 1.6; margin-bottom: 40px;">
+            Full-stack developer focused on creating high-fidelity, interactive digital environments. 
+            Currently optimizing workflow systems and audio-visual interfaces.
         </p>
-        
-        <div style="margin-top: 50px; display:flex; gap: 15px;">
-            <div class="theme-item" style="flex:1; margin:0;" onclick="showTab('music')">
-                <h3 style="color:var(--primary)">[ LOAD_SONICS ]</h3>
-                <p style="font-size: 0.7rem;">Access 4 High-Fidelity Tracks</p>
-            </div>
-            <div class="theme-item" style="flex:1; margin:0;" onclick="showTab('themes')">
-                <h3 style="color:var(--primary)">[ SHIFT_REALITY ]</h3>
-                <p style="font-size: 0.7rem;">Explore 20+ Digital Skins</p>
-            </div>
-        </div>
+        <button class="btn" onclick="showTab('music')">Enter Audio Archive</button>
+        <button class="btn btn-outline" style="margin-left: 15px;" onclick="showTab('themes')">UI Spectrum</button>
     </div>
 
     <div id="music" class="page">
-        <h2 style="margin-bottom: 40px; font-family: 'Space Grotesk';">SONIC REPOSITORY</h2>
-        <div id="music-list">
-            <div class="song-card" onmouseover="expandRing()" onmouseleave="shrinkRing()">
-                <div style="display:flex; gap:25px; align-items:center;">
-                    <img src="music/nirvana.jpg" class="album-art" style="width:80px; height:80px; border-radius:15px;">
+        <div class="music-section">
+            <div class="section-header">
+                <div>
+                    <h2 style="font-family:'Space Grotesk'; font-size: 2rem;">AIDEN'S FAVORITES</h2>
+                    <p style="color:var(--dim); font-size: 0.9rem;">Core tracks that define the OS atmosphere.</p>
+                </div>
+            </div>
+            <div class="music-grid">
+                <div class="song-card">
+                    <img src="music/nirvana.jpg" class="album-art">
                     <div style="flex:1">
-                        <div style="display:flex; justify-content:space-between">
-                            <h3>Smells Like Teen Spirit</h3>
-                            <div class="viz-box"><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div></div>
-                        </div>
-                        <audio controls src="music/nirvana.mp3" onplay="playEngine(this, 'Teen Spirit', 'music/nirvana.jpg')"></audio>
+                        <h4 style="font-size: 1rem;">Smells Like Teen Spirit</h4>
+                        <p style="font-size: 0.75rem; color:var(--dim)">Nirvana</p>
+                        <audio controls src="music/nirvana.mp3" onplay="notify('Nirvana - Teen Spirit')"></audio>
+                    </div>
+                </div>
+                <div class="song-card">
+                    <img src="music/greenday.jpg" class="album-art">
+                    <div style="flex:1">
+                        <h4 style="font-size: 1rem;">American Idiot</h4>
+                        <p style="font-size: 0.75rem; color:var(--dim)">Green Day</p>
+                        <audio controls src="music/greenday.mp3" onplay="notify('Green Day - American Idiot')"></audio>
+                    </div>
+                </div>
+                <div class="song-card">
+                    <img src="music/gorillaz.jpg" class="album-art">
+                    <div style="flex:1">
+                        <h4 style="font-size: 1rem;">On Melancholy Hill</h4>
+                        <p style="font-size: 0.75rem; color:var(--dim)">Gorillaz</p>
+                        <audio controls src="music/gorillaz.mp3" onplay="notify('Gorillaz - Melancholy Hill')"></audio>
+                    </div>
+                </div>
+                <div class="song-card">
+                    <img src="music/bilmuri.jpg" class="album-art">
+                    <div style="flex:1">
+                        <h4 style="font-size: 1rem;">More Than Hate</h4>
+                        <p style="font-size: 0.75rem; color:var(--dim)">Bilmuri</p>
+                        <audio controls src="music/bilmuri.mp3" onplay="notify('Bilmuri - More Than Hate')"></audio>
                     </div>
                 </div>
             </div>
-            <div class="song-card">
-                <div style="display:flex; gap:25px; align-items:center;">
-                    <img src="music/greenday.jpg" class="album-art" style="width:80px; height:80px; border-radius:15px;">
-                    <div style="flex:1">
-                        <div style="display:flex; justify-content:space-between">
-                            <h3>American Idiot</h3>
-                            <div class="viz-box"><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div></div>
-                        </div>
-                        <audio controls src="music/greenday.mp3" onplay="playEngine(this, 'American Idiot', 'music/greenday.jpg')"></audio>
-                    </div>
+        </div>
+
+        <div class="music-section">
+            <div class="section-header">
+                <div>
+                    <h2 style="font-family:'Space Grotesk'; font-size: 2rem;">OTHER PEOPLE'S FAVORITES</h2>
+                    <p style="color:var(--dim); font-size: 0.9rem;">Community suggested tracks and curated vibes.</p>
                 </div>
+                <a href="https://forms.google.com" target="_blank" class="btn btn-outline" style="padding: 8px 15px; font-size: 0.7rem;">Suggest a Song</a>
             </div>
-            <div class="song-card">
-                <div style="display:flex; gap:25px; align-items:center;">
-                    <img src="music/gorillaz.jpg" class="album-art" style="width:80px; height:80px; border-radius:15px;">
-                    <div style="flex:1">
-                        <div style="display:flex; justify-content:space-between">
-                            <h3>On Melancholy Hill</h3>
-                            <div class="viz-box"><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div></div>
-                        </div>
-                        <audio controls src="music/gorillaz.mp3" onplay="playEngine(this, 'Melancholy Hill', 'music/gorillaz.jpg')"></audio>
-                    </div>
-                </div>
-            </div>
-            <div class="song-card">
-                <div style="display:flex; gap:25px; align-items:center;">
-                    <img src="music/bilmuri.jpg" class="album-art" style="width:80px; height:80px; border-radius:15px;">
-                    <div style="flex:1">
-                        <div style="display:flex; justify-content:space-between">
-                            <h3>More Than Hate</h3>
-                            <div class="viz-box"><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div></div>
-                        </div>
-                        <audio controls src="music/bilmuri.mp3" onplay="playEngine(this, 'More Than Hate', 'music/bilmuri.jpg')"></audio>
-                    </div>
-                </div>
+            <div style="background: var(--card); padding: 40px; border-radius: 15px; text-align: center; border: 1px dashed var(--glass);">
+                <p style="color:var(--dim);">Archive is currently empty. Be the first to suggest a track.</p>
             </div>
         </div>
     </div>
 
     <div id="themes" class="page">
-        <h2 style="margin-bottom: 30px;">SPECTRUM_ENGINE</h2>
+        <h2 style="font-family:'Space Grotesk'; font-size: 2.5rem; margin-bottom: 40px;">THEME SPECTRUM</h2>
         <div class="theme-grid" id="theme-host"></div>
     </div>
 
     <script>
-        // 1. DATA
         const themeData = [
-            {n:"Nevermind", d:"Aiden's #1 favorite. Nirvana Blue.", c:"#0077ff"},
-            {n:"Cyberpunk", d:"Neon pink. High energy.", c:"#ff007f"},
-            {n:"Matrix", d:"Digital rain green.", c:"#00ff41"},
-            {n:"Bilmuri", d:"Golden yellow Eggy Pocket vibes.", c:"#ffcc00"},
+            {n:"Nevermind", d:"Nirvana-inspired blue. Aiden's top choice.", c:"#0077ff"},
+            {n:"Cyberpunk", d:"Vibrant magenta. High energy aesthetic.", c:"#ff007f"},
+            {n:"Matrix", d:"Monochrome green logic.", c:"#00ff41"},
+            {n:"Bilmuri", d:"Golden Eggy Pocket yellow.", c:"#ffcc00"},
             {n:"Tokyo", d:"Shibuya midnight violet.", c:"#7000ff"},
-            {n:"Vaporwave", d:"90s palm tree aesthetics.", c:"#ff71ce"},
-            {n:"Emerald", d:"Clean green for code clarity.", c:"#10b981"},
-            {n:"Crimson", d:"Deep aggressive red.", c:"#ff0000"},
-            {n:"Ghost", d:"Clean white studio vibes.", c:"#ffffff"},
-            {n:"Ocean", d:"Relaxing deep sea teal.", c:"#00f2ff"},
-            {n:"Amber", d:"Warm sunset orange.", c:"#f59e0b"},
-            {n:"Slate", d:"Professional workstation grey.", c:"#475569"},
-            {n:"Rose", d:"Soft aesthetic pink.", c:"#fb7185"},
-            {n:"Midnight", d:"Deep space dark blue.", c:"#1e293b"},
-            {n:"Toxic", d:"Hazardous lime green.", c:"#a3ff33"},
-            {n:"Lava", d:"Flowing molten orange.", c:"#ff4d00"},
-            {n:"Royal", d:"Majestic deep purple.", c:"#9d00ff"},
-            {n:"Mint", d:"Refreshing bright menthol.", c:"#00ffcc"},
-            {n:"Nord", d:"Frosty arctic blue.", c:"#88c0d0"},
-            {n:"Dracula", d:"Gothic dark purple.", c:"#bd93f9"}
+            {n:"Emerald", d:"Professional development green.", c:"#10b981"},
+            {n:"Crimson", d:"Aggressive deep workstation red.", c:"#ff0000"},
+            {n:"Ghost", d:"Clean, minimal studio white.", c:"#ffffff"},
+            {n:"Oceanic", d:"Teal focused serene blue.", c:"#00f2ff"},
+            {n:"Nord", d:"Arctic frost inspired blue-grey.", c:"#88c0d0"},
+            {n:"Midnight", d:"Deep space navy for dark environments.", c:"#1e293b"},
+            {n:"Toxic", d:"Hazardous high-energy neon lime.", c:"#a3ff33"},
+            {n:"Lava", d:"Molten orange for bold designs.", c:"#ff4d00"},
+            {n:"Rose", d:"Soft aesthetic pink for clean layouts.", c:"#fb7185"}
         ];
 
-        // 2. PARTICLE ENGINE (Hundreds of Interactive Elements)
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let mouse = { x: -100, y: -100 };
-
-        window.onresize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
-        window.onresize();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.baseX = this.x;
-                this.baseY = this.y;
-                this.size = 1.5;
-                this.density = (Math.random() * 30) + 1;
-            }
-            draw() {
-                ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary');
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-            update() {
-                let dx = mouse.x - this.x;
-                let dy = mouse.y - this.y;
-                let distance = Math.sqrt(dx * dx + dy * dy);
-                let forceDirectionX = dx / distance;
-                let forceDirectionY = dy / distance;
-                let maxDistance = 150;
-                let force = (maxDistance - distance) / maxDistance;
-                let directionX = forceDirectionX * force * this.density;
-                let directionY = forceDirectionY * force * this.density;
-
-                if (distance < maxDistance) {
-                    this.x -= directionX;
-                    this.y -= directionY;
-                } else {
-                    if (this.x !== this.baseX) {
-                        let dx = this.x - this.baseX;
-                        this.x -= dx / 10;
-                    }
-                    if (this.y !== this.baseY) {
-                        let dy = this.y - this.baseY;
-                        this.y -= dy / 10;
-                    }
-                }
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < 250; i++) particles.push(new Particle());
-        }
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animate);
-        }
-        initParticles(); animate();
-
-        // 3. CORE LOGIC
-        function initThemes() {
+        function init() {
             const host = document.getElementById('theme-host');
             themeData.forEach(t => {
                 const div = document.createElement('div');
                 div.className = 'theme-item';
                 div.onclick = () => setTheme(t.c);
                 div.innerHTML = `
-                    <div style="display:flex; align-items:center; gap:15px;">
-                        <div style="width:30px; height:30px; border-radius:50%; background:${t.c}; box-shadow:0 0 10px ${t.c}"></div>
+                    <div style="display:flex; align-items:center; gap:20px;">
+                        <div style="width:12px; height:12px; background:${t.c}; border-radius:50%; box-shadow:0 0 10px ${t.c}"></div>
                         <div>
-                            <h4 style="font-family:'Space Grotesk'; font-size:0.9rem;">${t.n.toUpperCase()}</h4>
-                            <p style="font-size:0.65rem; color:var(--dim)">${t.d}</p>
+                            <h4 style="font-family:'Space Grotesk'; margin-bottom:4px;">${t.n.toUpperCase()}</h4>
+                            <p style="font-size:0.75rem; color:var(--dim)">${t.d}</p>
                         </div>
                     </div>
                 `;
                 host.appendChild(div);
             });
-            const saved = localStorage.getItem('a42_theme');
+            const saved = localStorage.getItem('a_pro_theme');
             if(saved) setTheme(saved);
         }
 
         function setTheme(c) {
             document.documentElement.style.setProperty('--primary', c);
-            localStorage.setItem('a42_theme', c);
+            localStorage.setItem('a_pro_theme', c);
         }
 
-        function playEngine(el, title, img) {
-            document.querySelectorAll('audio').forEach(a => { if(a !== el) a.pause(); });
-            document.querySelectorAll('.song-card').forEach(c => c.classList.remove('playing'));
-            el.closest('.song-card').classList.add('playing');
-            
+        function notify(text) {
             const toast = document.getElementById('now-playing');
-            document.getElementById('np-title').innerText = title;
-            document.getElementById('np-img').src = img;
+            document.getElementById('np-text').innerText = text;
             toast.classList.add('active');
-            setTimeout(() => toast.classList.remove('active'), 5000);
+            setTimeout(() => toast.classList.remove('active'), 4000);
         }
 
         function showTab(t) {
@@ -310,33 +244,17 @@
             document.getElementById(t).classList.add('active');
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
             document.getElementById('l-'+t).classList.add('active');
+            window.scrollTo(0,0);
         }
 
-        function handleGlobalMove(e) {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-            document.getElementById('c-dot').style.left = e.clientX + 'px';
-            document.getElementById('c-dot').style.top = e.clientY + 'px';
-            const ring = document.getElementById('c-ring');
-            ring.style.left = (e.clientX - 20) + 'px';
-            ring.style.top = (e.clientY - 20) + 'px';
-
+        function updateMouse(e) {
             document.documentElement.style.setProperty('--mx', e.clientX + 'px');
             document.documentElement.style.setProperty('--my', e.clientY + 'px');
-
-            // 3D Tilt for ALL cards
-            document.querySelectorAll('.song-card, .theme-item').forEach(card => {
-                const rect = card.getBoundingClientRect();
-                const x = (e.clientX - rect.left) / rect.width - 0.5;
-                const y = (e.clientY - rect.top) / rect.height - 0.5;
-                card.style.transform = `perspective(1000px) rotateY(${x * 10}deg) rotateX(${y * -10}deg)`;
-            });
         }
 
-        function expandRing() { document.getElementById('c-ring').style.transform = 'scale(1.5)'; }
-        function shrinkRing() { document.getElementById('c-ring').style.transform = 'scale(1)'; }
+        @keyframes pulse { 0% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0.5; transform: scale(1); } }
 
-        window.onload = initThemes;
+        window.onload = init;
     </script>
 </body>
 </html>
