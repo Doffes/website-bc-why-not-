@@ -9,92 +9,65 @@
         :root {
             --primary: #0077ff; --bg: #030303; --card: #0f0f0f;
             --text: #ffffff; --dim: #94a3b8; --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.08);
-            --transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            --success: #10b981;
+            --border: rgba(255, 255, 255, 0.1);
+            --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg); color: var(--text);
-            overflow-x: hidden; line-height: 1.6;
-            min-height: 100vh;
+            overflow-x: hidden; line-height: 1.6; min-height: 100vh;
         }
 
-        /* MOUSE GLOW ENGINE */
         #glow {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle 600px at var(--x, 50%) var(--y, 50%), rgba(0, 119, 255, 0.1), transparent 80%);
             pointer-events: none; z-index: 0; transition: background 0.3s ease;
         }
 
-        /* LOGO */
-        .logo { 
-            font-weight: 700; font-size: 1.1rem; letter-spacing: -0.5px; cursor: pointer;
-            background: linear-gradient(120deg, #fff 0%, #fff 40%, var(--primary) 50%, #fff 60%, #fff 100%);
-            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: shine 5s linear infinite; position: relative; z-index: 10;
-        }
-        .logo span { -webkit-text-fill-color: var(--primary); }
-        @keyframes shine { to { background-position: 200% center; } }
-
         nav {
-            position: fixed; top: 0; width: 100%; height: 80px;
+            position: fixed; top: 0; width: 100%; height: 70px;
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 8%; background: rgba(3, 3, 3, 0.7);
+            padding: 0 5%; background: rgba(3, 3, 3, 0.8);
             backdrop-filter: blur(20px); z-index: 1000; border-bottom: 1px solid var(--border);
         }
-        .nav-links { display: flex; gap: 30px; }
-        .nav-link { text-decoration: none; color: var(--dim); font-size: 0.8rem; font-weight: 500; transition: var(--transition); cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
-        .nav-link:hover, .nav-link.active { color: #fff; }
+        .nav-links { display: flex; gap: 20px; }
+        .nav-link { text-decoration: none; color: var(--dim); font-size: 0.75rem; font-weight: 600; transition: var(--transition); cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-link:hover, .nav-link.active { color: var(--primary); }
 
-        .page { display: none; padding: 160px 8% 100px; min-height: 100vh; position: relative; z-index: 1; }
-        .page.active { display: block; animation: fadeIn 0.8s var(--transition); }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .page { display: none; padding: 120px 5% 100px; min-height: 100vh; position: relative; z-index: 1; }
+        .page.active { display: block; animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* HOME SPECIFIC */
-        .spec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 50px; max-width: 900px; }
-        .spec-card { background: var(--glass); border: 1px solid var(--border); padding: 20px; border-radius: 12px; }
-        .spec-label { font-family: 'JetBrains Mono'; font-size: 0.6rem; color: var(--dim); text-transform: uppercase; margin-bottom: 5px; display: block; }
-        .spec-value { font-family: 'JetBrains Mono'; font-size: 0.9rem; color: var(--primary); font-weight: 700; }
+        /* GRID LAYOUTS */
+        .grid-2 { display: grid; grid-template-columns: 1fr 350px; gap: 30px; }
+        .work-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
 
-        .terminal {
-            background: #000; border: 1px solid var(--border); border-radius: 12px;
-            padding: 20px; font-family: 'JetBrains Mono'; font-size: 0.75rem;
-            color: var(--success); max-width: 500px; margin-top: 30px;
-            position: relative; overflow: hidden;
-        }
-        .terminal::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px); pointer-events: none; }
-
-        /* LISTS */
-        .track-list { display: flex; flex-direction: column; gap: 12px; }
+        /* CARDS */
+        .card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 16px; }
         .track-card {
             background: var(--card); border: 1px solid var(--border); padding: 15px;
-            border-radius: 14px; display: flex; align-items: center; gap: 15px;
-            transition: var(--transition); cursor: pointer;
+            border-radius: 12px; display: flex; align-items: center; gap: 15px;
+            transition: var(--transition); cursor: pointer; margin-bottom: 10px;
         }
-        .track-card:hover:not(.placeholder) { border-color: var(--primary); background: rgba(255,255,255,0.02); transform: scale(1.02); }
-        .track-card.playing { border-color: var(--primary); background: rgba(0, 119, 255, 0.05); }
-        .album-art { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: #1a1a1a; }
+        .track-card:hover { border-color: var(--primary); background: rgba(255,255,255,0.02); }
+        .track-card.playing { border-color: var(--primary); background: rgba(0, 119, 255, 0.05); box-shadow: 0 0 20px rgba(0, 119, 255, 0.1); }
+        
+        /* TOOLS */
+        textarea { width: 100%; height: 150px; background: #000; border: 1px solid var(--border); color: #fff; padding: 15px; border-radius: 8px; font-family: 'JetBrains Mono'; resize: none; margin-top: 10px; }
+        .timer-display { font-size: 3rem; font-family: 'JetBrains Mono'; font-weight: 700; color: var(--primary); margin: 10px 0; }
 
-        .master-rack {
-            background: #080808; border: 1px solid var(--border); border-radius: 20px;
-            padding: 30px; height: fit-content; position: sticky; top: 120px;
-        }
-        .progress-bar { width: 100%; height: 4px; background: #1e1e1e; border-radius: 10px; margin: 20px 0; cursor: pointer; overflow: hidden; }
-        #progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.1s linear; }
+        /* THEMES */
+        .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
+        .theme-card { background: var(--card); border: 1px solid var(--border); padding: 15px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
+        .theme-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+        .theme-meta { font-size: 0.65rem; color: var(--dim); margin-top: 4px; display: block; }
 
-        .btn { background: var(--primary); color: #fff; padding: 12px 24px; border-radius: 10px; font-weight: 600; cursor: pointer; border: none; font-size: 0.85rem; transition: 0.3s; }
-        .btn:hover { filter: brightness(1.2); transform: translateY(-2px); }
+        .btn { background: var(--primary); color: #fff; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; font-size: 0.8rem; }
+        .btn-ghost { background: transparent; border: 1px solid var(--border); color: #fff; }
 
-        .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; max-height: 50vh; overflow-y: auto; padding-right: 10px; }
-        .theme-card { background: var(--card); border: 1px solid var(--border); padding: 14px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; }
-        .theme-card:hover { border-color: var(--primary); background: #151515; }
-
-        .changelog { border-left: 1px solid var(--border); padding-left: 25px; margin-top: 20px; }
-        .change-item { margin-bottom: 25px; position: relative; }
-        .change-item::before { content: ""; position: absolute; left: -31px; top: 8px; width: 11px; height: 11px; border-radius: 50%; background: var(--primary); border: 3px solid var(--bg); }
+        #progress-fill { height: 4px; background: var(--primary); width: 0%; transition: width 0.1s linear; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -102,100 +75,94 @@
     <div id="glow"></div>
 
     <nav>
-        <div class="logo" onclick="showTab('home')">AIDEN BECKER<span>.</span></div>
+        <div style="font-weight:800; letter-spacing:-1px; cursor:pointer" onclick="showTab('home')">AIDEN<span style="color:var(--primary)">OS</span></div>
         <div class="nav-links">
             <a onclick="showTab('home')" id="l-home" class="nav-link active">Home</a>
+            <a onclick="showTab('work')" id="l-work" class="nav-link">Workstation</a>
             <a onclick="showTab('music')" id="l-music" class="nav-link">Studio</a>
-            <a onclick="showTab('suggested')" id="l-suggested" class="nav-link">Queue</a>
             <a onclick="showTab('themes')" id="l-themes" class="nav-link">Skins</a>
-            <a onclick="showTab('system')" id="l-system" class="nav-link">System</a>
         </div>
     </nav>
 
     <section id="home" class="page active">
-        <h1 style="font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 700; letter-spacing: -2px; line-height: 1;">Aiden Becker <br><span style="color:var(--primary)">Digital Architect</span></h1>
+        <h1 style="font-size: 4rem; font-weight: 800; letter-spacing: -3px; line-height: 0.9;">System <br><span style="color:var(--primary)">Optimized.</span></h1>
+        <p style="color:var(--dim); margin: 20px 0 40px; max-width: 500px;">Welcome to your creative command center. Integrated with production tools, session tracking, and custom UI modules.</p>
         
-        <div class="terminal">
-            <div id="log-text">> Booting Aiden_OS v68.0...</div>
+        <div class="card" style="max-width: 500px;">
+            <div style="font-family:'JetBrains Mono'; font-size: 0.7rem; color: var(--primary); margin-bottom: 10px;">> SESSION_LOG_ACTIVE</div>
+            <div id="log-text" style="font-family:'JetBrains Mono'; font-size: 0.8rem;">Initializing kernel...</div>
         </div>
+    </section>
 
-        <div class="spec-grid">
-            <div class="spec-card">
-                <span class="spec-label">Access ID</span>
-                <span class="spec-value" id="user-id">USR-8429</span>
+    <section id="work" class="page">
+        <h2 style="margin-bottom: 30px;">Workstation</h2>
+        <div class="work-grid">
+            <div class="card">
+                <h3>Quick Notes</h3>
+                <p style="font-size: 0.7rem; color: var(--dim);">Saved locally to your browser.</p>
+                <textarea id="notes" placeholder="Type thoughts here..." oninput="localStorage.setItem('aiden_notes', this.value)"></textarea>
             </div>
-            <div class="spec-card">
-                <span class="spec-label">Current Time</span>
-                <span class="spec-value" id="current-time">00:00:00</span>
+            <div class="card">
+                <h3>Focus Timer</h3>
+                <div class="timer-display" id="timer">25:00</div>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn" onclick="toggleTimer()">Start / Pause</button>
+                    <button class="btn btn-ghost" onclick="resetTimer()">Reset</button>
+                </div>
             </div>
-            <div class="spec-card">
-                <span class="spec-label">System Load</span>
-                <span class="spec-value">2.4% Optimal</span>
+            <div class="card">
+                <h3>System Status</h3>
+                <div style="font-family:'JetBrains Mono'; font-size: 0.75rem; margin-top: 15px; color: var(--dim);">
+                    <p>OS: Aiden_OS v72.0</p>
+                    <p id="browser-info">Loading...</p>
+                    <p id="net-info">Latency: 14ms (Stable)</p>
+                </div>
             </div>
-        </div>
-
-        <div style="margin-top: 50px; display: flex; gap: 15px;">
-            <button class="btn" onclick="showTab('music')">Enter Studio</button>
-            <button class="btn" style="background: var(--glass); border: 1px solid var(--border);" onclick="showTab('system')">View Changelog</button>
         </div>
     </section>
 
     <section id="music" class="page">
-        <div style="display: grid; grid-template-columns: 1fr 350px; gap: 40px;">
+        <div class="grid-2">
             <div>
                 <h2 style="margin-bottom: 30px;">Production Archive</h2>
                 <div class="track-list">
-                    <div class="track-card" onclick="playTrack('Nirvana', 'Teen Spirit', 'a1')">
-                        <img src="music/nirvana.jpg" class="album-art">
-                        <div style="flex:1"><h4>Smells Like Teen Spirit</h4><p style="font-size: 0.7rem; color:var(--dim);">NIRVANA // NEVERMIND</p></div>
+                    <div class="track-card" onclick="playTrack('Nirvana', 'Smells Like Teen Spirit', 'a1')">
+                        <div style="width:10px; height:10px; background:var(--primary); border-radius:50%"></div>
+                        <div style="flex:1"><h4>Smells Like Teen Spirit</h4><p style="font-size: 0.65rem; color:var(--dim);">NEVERMIND // 1991</p></div>
                         <audio id="a1" src="music/nirvana.mp3"></audio>
                     </div>
                     <div class="track-card" onclick="playTrack('Bilmuri', 'More Than Hate', 'a2')">
-                        <img src="music/bilmuri.jpg" class="album-art">
-                        <div style="flex:1"><h4>More Than Hate</h4><p style="font-size: 0.7rem; color:var(--dim);">BILMURI // EGGY POCKET</p></div>
+                        <div style="width:10px; height:10px; background:var(--primary); border-radius:50%"></div>
+                        <div style="flex:1"><h4>More Than Hate</h4><p style="font-size: 0.65rem; color:var(--dim);">EGGY POCKET // 2020</p></div>
                         <audio id="a2" src="music/bilmuri.mp3"></audio>
+                    </div>
+                    <div class="track-card" onclick="playTrack('Green Day', 'American Idiot', 'a3')">
+                        <div style="width:10px; height:10px; background:var(--primary); border-radius:50%"></div>
+                        <div style="flex:1"><h4>American Idiot</h4><p style="font-size: 0.65rem; color:var(--dim);">AMERICAN IDIOT // 2004</p></div>
+                        <audio id="a3" src="music/greenday.mp3"></audio>
+                    </div>
+                    <div class="track-card" onclick="playTrack('Bilmuri', 'Lords Mobile', 'a4')">
+                        <div style="width:10px; height:10px; background:var(--primary); border-radius:50%"></div>
+                        <div style="flex:1"><h4>Lords Mobile</h4><p style="font-size: 0.65rem; color:var(--dim);">BILMURI // 2021</p></div>
+                        <audio id="a4" src="music/lords.mp3"></audio>
                     </div>
                 </div>
             </div>
-            <div class="master-rack">
-                <p style="font-size: 0.6rem; color: var(--primary); font-weight: 800;">OUTPUT MONITOR</p>
+            <div class="card" style="height:fit-content; position:sticky; top:100px;">
+                <p style="font-size: 0.6rem; color: var(--primary); font-weight: 800;">MASTER MONITOR</p>
                 <h3 id="r-track" style="margin-top: 10px;">Standby</h3>
-                <p id="r-artist" style="font-size: 0.8rem; color: var(--dim);">No Signal Detected</p>
-                <div class="progress-bar" onclick="seek(event)"><div id="progress-fill"></div></div>
-                <button class="btn" style="width: 100%;" onclick="window.open('https://docs.google.com')">Request Track</button>
-            </div>
-        </div>
-    </section>
-
-    <section id="system" class="page">
-        <h2 style="margin-bottom: 40px;">System History</h2>
-        <div class="changelog">
-            <div class="change-item">
-                <h4 style="color:var(--primary)">v68.0 - The Logic Patch</h4>
-                <p style="font-size: 0.9rem; color: var(--dim);">Removed identity-specific greetings for universal compatibility. Added live clock and session ID generator to Home. Improved Skin-Glow reactivity.</p>
-            </div>
-            <div class="change-item">
-                <h4>v65.0 - The Pun Update</h4>
-                <p style="font-size: 0.9rem; color: var(--dim);">Implemented 30+ new pun-based themes and Minecraft-inspired color palettes.</p>
-            </div>
-            <div class="change-item">
-                <h4>v60.0 - OS Foundation</h4>
-                <p style="font-size: 0.9rem; color: var(--dim);">Established the "Glassmorphism" UI and the central Master Rack audio player.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="suggested" class="page">
-        <h2 style="margin-bottom: 30px;">Queue Signals</h2>
-        <div class="track-list" style="max-width: 600px;">
-            <div class="track-card placeholder" style="border-style:dashed; opacity:0.3;">
-                <div style="flex:1"><h4 style="color: var(--dim);">Looking for requests...</h4></div>
+                <p id="r-artist" style="font-size: 0.8rem; color: var(--dim);">Ready for playback</p>
+                <div style="height:4px; width:100%; background:#1a1a1a; margin: 20px 0; border-radius:10px;">
+                    <div id="progress-fill"></div>
+                </div>
+                <button class="btn" style="width: 100%;" onclick="window.open('https://docs.google.com')">Request Addition</button>
             </div>
         </div>
     </section>
 
     <section id="themes" class="page">
-        <h2 style="margin-bottom: 20px;">System Skins</h2>
+        <h2 style="margin-bottom: 10px;">UI Skins</h2>
+        <p style="color:var(--dim); font-size: 0.8rem; margin-bottom: 30px;">Select a core system color profile.</p>
         <div class="theme-grid" id="theme-host"></div>
     </section>
 
@@ -206,86 +173,90 @@
             document.documentElement.style.setProperty('--y', e.clientY + 'px');
         });
 
-        // SYSTEM STATS
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('current-time').innerText = now.toLocaleTimeString();
-        }
-        setInterval(updateClock, 1000);
-        document.getElementById('user-id').innerText = "USR-" + Math.floor(1000 + Math.random() * 9000);
-
-        // TERMINAL LOGS
-        const logs = [
-            "> Initializing Aiden OS...",
-            "> Fetching local_server_node...",
-            "> Security layer: STABLE",
-            "> System Status: OPTIMIZED",
-            "> Ready for production."
-        ];
-        let logIdx = 0;
-        function updateLog() {
-            document.getElementById('log-text').innerHTML = logs[logIdx];
-            logIdx = (logIdx + 1) % logs.length;
-            setTimeout(updateLog, 4500);
-        }
-        updateLog();
-
-        // THEMES
-        const skins = [
-            {n:"Nevermind", c:"#0077ff"}, {n:"Hmmmm...", c:"#795548"}, {n:"Cyberpunk", c:"#ff007f"},
-            {n:"Minty Fresh", c:"#00ffcc"}, {n:"Gold Digger", c:"#d4af37"}, {n:"Blue Screen", c:"#0000aa"},
-            {n:"Null Pointer", c:"#333333"}, {n:"Compiled", c:"#00ff00"}, {n:"Creeper?", c:"#00aa00"},
-            {n:"Obsidian", c:"#2e003e"}, {n:"Redstone", c:"#ff0000"}, {n:"Diamond Ore", c:"#b9f2ff"},
-            {n:"Vaporwave", c:"#ff71ce"}, {n:"The Nether", c:"#7a0000"}, {n:"Matrix", c:"#003b00"}
-        ];
-
+        // TABS
         function showTab(t) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             document.getElementById(t).classList.add('active');
             document.getElementById('l-' + t).classList.add('active');
-            window.scrollTo(0,0);
         }
 
+        // WORKSTATION LOGIC
+        document.getElementById('notes').value = localStorage.getItem('aiden_notes') || "";
+        document.getElementById('browser-info').innerText = "Platform: " + navigator.platform;
+
+        let timeLeft = 1500;
+        let timerId = null;
+        function toggleTimer() {
+            if(timerId) { clearInterval(timerId); timerId = null; return; }
+            timerId = setInterval(() => {
+                timeLeft--;
+                let m = Math.floor(timeLeft / 60);
+                let s = timeLeft % 60;
+                document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+                if(timeLeft <= 0) clearInterval(timerId);
+            }, 1000);
+        }
+        function resetTimer() { timeLeft = 1500; document.getElementById('timer').innerText = "25:00"; clearInterval(timerId); timerId = null; }
+
+        // AUDIO
         let activeAudio = null;
         function playTrack(artist, track, id) {
             if(activeAudio) activeAudio.pause();
             activeAudio = document.getElementById(id);
-            if(activeAudio) {
-                activeAudio.play();
-                document.getElementById('r-artist').innerText = artist.toUpperCase();
-                document.getElementById('r-track').innerText = track;
-                document.querySelectorAll('.track-card').forEach(c => c.classList.remove('playing'));
-                event.currentTarget.classList.add('playing');
-                activeAudio.ontimeupdate = () => {
-                    const p = (activeAudio.currentTime / activeAudio.duration) * 100;
-                    document.getElementById('progress-fill').style.width = p + "%";
-                };
-            }
+            activeAudio.play();
+            document.getElementById('r-artist').innerText = artist;
+            document.getElementById('r-track').innerText = track;
+            activeAudio.ontimeupdate = () => {
+                const p = (activeAudio.currentTime / activeAudio.duration) * 100;
+                document.getElementById('progress-fill').style.width = p + "%";
+            };
         }
 
-        function seek(e) {
-            if(!activeAudio) return;
-            const rect = e.currentTarget.getBoundingClientRect();
-            activeAudio.currentTime = ((e.clientX - rect.left) / rect.width) * activeAudio.duration;
-        }
+        // EXTENDED THEMES
+        const skins = [
+            {n:"Nevermind", c:"#0077ff", desc:"Aiden's Personal Favorite"},
+            {n:"Villager", c:"#795548", desc:"Hrrmmm... (Trading Enabled)"},
+            {n:"Cyberpunk", c:"#ff007f", desc:"Wake up, Samurai."},
+            {n:"Minty", c:"#00ffcc", desc:"Fresh & Clean Interface"},
+            {n:"Gold", c:"#d4af37", desc:"Premium Studio Access"},
+            {n:"Creeper", c:"#00aa00", desc:"That's a nice site you have there..."},
+            {n:"Redstone", c:"#ff0000", desc:"Maximum Signal Strength"},
+            {n:"Obsidian", c:"#2e003e", desc:"Industrial Strength Hardness"},
+            {n:"Vaporwave", c:"#ff71ce", desc:"Aesthetic Production"},
+            {n:"Matrix", c:"#003b00", desc:"I know Kung Fu."},
+            {n:"Diamond", c:"#b9f2ff", desc:"Rarest UI Palette"},
+            {n:"Nether", c:"#7a0000", desc:"Warning: High Temperature"},
+            {n:"Enderman", c:"#a000ff", desc:"Don't look directly at it."},
+            {n:"Mono", c:"#ffffff", desc:"Minimalist Architect"},
+            {n:"Crimson", c:"#dc2626", desc:"Aggressive Creative Flow"}
+        ];
 
         window.addEventListener('DOMContentLoaded', () => {
-            updateClock();
             const host = document.getElementById('theme-host');
             skins.forEach(s => {
                 const card = document.createElement('div');
                 card.className = 'theme-card';
                 card.onclick = () => {
                     document.documentElement.style.setProperty('--primary', s.c);
-                    // Instant Glow Update
-                    document.getElementById('glow').style.background = `radial-gradient(circle 600px at var(--x, 50%) var(--y, 50%), ${s.c}33, transparent 80%)`;
+                    document.getElementById('glow').style.background = `radial-gradient(circle 600px at var(--x, 50%) var(--y, 50%), ${s.c}20, transparent 80%)`;
                 };
-                card.innerHTML = `<div style="width:10px; height:10px; border-radius:50%; background:${s.c}"></div>
-                                  <span style="font-family:'JetBrains Mono'; font-size:0.7rem; font-weight:700;">${s.n.toUpperCase()}</span>`;
+                card.innerHTML = `<div style="display:flex; align-items:center; gap:10px;">
+                                    <div style="width:12px; height:12px; border-radius:50%; background:${s.c}"></div>
+                                    <span style="font-weight:700; font-size:0.8rem;">${s.n.toUpperCase()}</span>
+                                  </div>
+                                  <span class="theme-meta">${s.desc}</span>`;
                 host.appendChild(card);
             });
         });
+
+        // TERMINAL LOGS
+        const logs = ["> Booting Aiden_OS...", "> Local storage synced.", "> Audio engine: READY", "> Welcome to the Workstation."];
+        let lIdx = 0;
+        setInterval(() => {
+            document.getElementById('log-text').innerText = logs[lIdx];
+            lIdx = (lIdx + 1) % logs.length;
+        }, 3000);
     </script>
 </body>
 </html>
