@@ -63,20 +63,29 @@
         .progress-bar { width: 100%; height: 6px; background: #1e1e1e; border-radius: 10px; margin: 20px 0; cursor: pointer; }
         #progress-fill { height: 100%; background: var(--primary); width: 0%; border-radius: 10px; transition: 0.1s linear; }
 
-        /* SUGGESTIONS TABLE */
+        /* TABLE UI */
         .suggest-table { width: 100%; border-collapse: collapse; margin-top: 30px; }
         .suggest-table th { text-align: left; padding: 15px; font-size: 0.75rem; color: var(--dim); text-transform: uppercase; border-bottom: 1px solid var(--border); }
         .suggest-table td { padding: 20px 15px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-        .placeholder-row { opacity: 0.3; font-style: italic; }
+        .placeholder-row { opacity: 0.35; }
+
+        /* THEME CARDS */
+        .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .theme-card {
+            background: var(--card); border: 1px solid var(--border); padding: 20px;
+            border-radius: 12px; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 15px;
+        }
+        .theme-card:hover { border-color: var(--primary); background: #111; }
+        .theme-dot { width: 12px; height: 12px; border-radius: 50%; }
 
         /* BUTTONS */
         .btn {
             background: var(--primary); color: #fff; padding: 14px 28px; border-radius: 12px;
             font-weight: 600; text-decoration: none; display: inline-block; transition: var(--transition);
-            border: none; cursor: pointer; font-size: 0.9rem;
+            border: none; cursor: pointer; font-size: 0.9rem; text-align: center;
         }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 119, 255, 0.3); }
-        .btn-outline { background: transparent; border: 1px solid var(--border); }
     </style>
 </head>
 <body>
@@ -94,101 +103,101 @@
     <section id="home" class="page active">
         <h1 style="font-size: 4.5rem; font-weight: 700; letter-spacing: -3px; line-height: 1;">Aiden Becker.</h1>
         <p style="color: var(--dim); font-size: 1.2rem; margin: 20px 0 40px; max-width: 600px;">
-            Creative Technologist and Systems Architect. Bridging the gap between high-performance code and professional audio production.
+            Creative Technologist and Systems Architect. High-fidelity developer specializing in professional audio experiences and custom digital kernels.
         </p>
-        <button class="btn" onclick="showTab('music')">Enter Studio</button>
+        <button class="btn" onclick="showTab('music')">Access Studio</button>
     </section>
 
     <section id="music" class="page">
         <div class="studio-grid">
             <div class="left-col">
-                <h2 style="font-size: 2rem; margin-bottom: 40px; letter-spacing: -1px;">Production Archive</h2>
+                <h2 style="font-size: 2rem; margin-bottom: 40px; letter-spacing: -1px;">Audio Archive</h2>
                 <div class="track-list">
-                    <div class="track-card" onclick="playTrack('Nirvana', 'Smells Like Teen Spirit', 'a1')">
-                        <img src="music/nirvana.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/64/222/666?text=Art'">
-                        <div style="flex:1">
-                            <h4 style="font-size: 1rem;">Smells Like Teen Spirit</h4>
-                            <p style="font-size: 0.75rem; color:var(--dim);">NIRVANA // NEVERMIND</p>
-                        </div>
+                    <div class="track-card" onclick="playTrack('Nirvana', 'Smells Like Teen Spirit', 'music/nirvana.jpg', 'a1')">
+                        <img src="music/nirvana.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/64/222/666?text=Track'">
+                        <div style="flex:1"><h4>Smells Like Teen Spirit</h4><p style="font-size: 0.75rem; color:var(--dim);">NIRVANA // NEVERMIND</p></div>
                         <audio id="a1" src="music/nirvana.mp3"></audio>
                     </div>
-                    <div class="track-card" onclick="playTrack('Green Day', 'American Idiot', 'a2')">
-                        <img src="music/greenday.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/64/222/666?text=Art'">
-                        <div style="flex:1">
-                            <h4 style="font-size: 1rem;">American Idiot</h4>
-                            <p style="font-size: 0.75rem; color:var(--dim);">GREEN DAY // AMERICAN IDIOT</p>
-                        </div>
+                    <div class="track-card" onclick="playTrack('Green Day', 'American Idiot', 'music/greenday.jpg', 'a2')">
+                        <img src="music/greenday.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/64/222/666?text=Track'">
+                        <div style="flex:1"><h4>American Idiot</h4><p style="font-size: 0.75rem; color:var(--dim);">GREEN DAY // AMERICAN IDIOT</p></div>
                         <audio id="a2" src="music/greenday.mp3"></audio>
+                    </div>
+                    <div class="track-card" onclick="playTrack('Gorillaz', 'On Melancholy Hill', 'music/gorillaz.jpg', 'a3')">
+                        <img src="music/gorillaz.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/64/222/666?text=Track'">
+                        <div style="flex:1"><h4>On Melancholy Hill</h4><p style="font-size: 0.75rem; color:var(--dim);">GORILLAZ // PLASTIC BEACH</p></div>
+                        <audio id="a3" src="music/gorillaz.mp3"></audio>
                     </div>
                 </div>
             </div>
 
             <div class="right-col">
                 <div class="master-rack">
-                    <p style="font-size: 0.7rem; color: var(--primary); font-weight: 700; text-transform: uppercase;">Channel Monitor</p>
-                    <h3 id="r-track" style="margin-top: 15px; font-size: 1.2rem;">Ready</h3>
-                    <p id="r-artist" style="font-size: 0.85rem; color: var(--dim);">Select a track...</p>
+                    <p style="font-size: 0.7rem; color: var(--primary); font-weight: 700; text-transform: uppercase;">Signal Output</p>
+                    <h3 id="r-track" style="margin-top: 15px; font-size: 1.2rem;">System Idle</h3>
+                    <p id="r-artist" style="font-size: 0.85rem; color: var(--dim);">Select a record...</p>
                     
                     <div class="progress-bar" onclick="seek(event)"><div id="progress-fill"></div></div>
-                    
                     <div style="display:flex; justify-content:space-between; font-size: 0.7rem; color: var(--dim); font-family: 'JetBrains Mono'; margin-bottom: 30px;">
                         <span id="c-time">0:00</span><span id="d-time">0:00</span>
                     </div>
 
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdF7U3qu9mVYDHilxSeunjiXrjRb8YjjB0GN3ZR021CsWyrWA/viewform?usp=publish-editor" target="_blank" class="btn" style="width: 100%; text-align: center;">Suggest a Song</a>
+                    <a href="https://docs.google.com" target="_blank" class="btn" style="width: 100%;">Suggest a Song</a>
                 </div>
             </div>
         </div>
     </section>
 
     <section id="suggested" class="page">
-        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px;">
-            <div>
-                <h2 style="font-size: 2.5rem; letter-spacing: -1px;">Suggested Signals</h2>
-                <p style="color: var(--dim);">Tracks requested by the community for future integration.</p>
-            </div>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdF7U3qu9mVYDHilxSeunjiXrjRb8YjjB0GN3ZR021CsWyrWA/viewform" target="_blank" class="btn btn-outline" style="font-size: 0.75rem;">Submit New</a>
-        </div>
-
+        <h2 style="font-size: 2.5rem; letter-spacing: -1px; margin-bottom: 10px;">Community Suggestions</h2>
+        <p style="color: var(--dim); margin-bottom: 40px;">Incoming audio signals requested for the archive.</p>
+        
         <table class="suggest-table">
             <thead>
                 <tr>
-                    <th>Song Name</th>
                     <th>Artist</th>
                     <th>Album</th>
+                    <th>Song Name</th>
                     <th>Suggested By</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="suggestion-body">
                 <tr>
-                    <td><strong>Lateralus</strong></td>
                     <td>Tool</td>
                     <td>Lateralus</td>
-                    <td>System_Admin</td>
+                    <td><strong>The Grudge</strong></td>
+                    <td>Aiden_Admin</td>
                 </tr>
                 <tr class="placeholder-row">
+                    <td>[Artist Name]</td>
+                    <td>[Album Title]</td>
+                    <td><strong>[Song Name]</strong></td>
                     <td>Awaiting Signal...</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>User_01</td>
                 </tr>
                 <tr class="placeholder-row">
+                    <td>[Artist Name]</td>
+                    <td>[Album Title]</td>
+                    <td><strong>[Song Name]</strong></td>
                     <td>Awaiting Signal...</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>User_02</td>
                 </tr>
             </tbody>
         </table>
     </section>
 
     <section id="themes" class="page">
-        <h2 style="font-size: 2rem; margin-bottom: 40px;">UI Aesthetics</h2>
-        <div id="theme-host" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;"></div>
+        <h2 style="font-size: 2.5rem; letter-spacing: -1px; margin-bottom: 40px;">System Skins</h2>
+        <div class="theme-grid" id="theme-host"></div>
     </section>
 
     <script>
-        // TAB LOGIC
+        const skins = [
+            {n:"Nevermind", c:"#0077ff"}, {n:"Cyberpunk", c:"#ff007f"}, {n:"'Crank The Hog'", c:"#ffcc00"},
+            {n:"Matrix", c:"#00ff41"}, {n:"Emo Soul", c:"#1e293b"}, {n:"ColorLess", c:"#ffffff"},
+            {n:"Bloody Theme", c:"#ff0000"}, {n:"NordVPN", c:"#88c0d0"}, {n:"Mint", c:"#00ffcc"},
+            {n:"Tokyo", c:"#7000ff"}, {n:"Hmmph", c:"#10b981"}, {n:"Midas", c:"#d4af37"},
+            {n:"CO2", c:"#222222"}, {n:"The Sun", c:"#ee7e2b"}
+        ];
+
         function showTab(t) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
@@ -197,9 +206,8 @@
             window.scrollTo(0,0);
         }
 
-        // AUDIO LOGIC
         let activeAudio = null;
-        function playTrack(artist, track, id) {
+        function playTrack(artist, track, img, id) {
             if(activeAudio) { activeAudio.pause(); activeAudio.currentTime = 0; }
             activeAudio = document.getElementById(id);
             activeAudio.play();
@@ -214,15 +222,14 @@
         }
         function formatTime(s) { let m = Math.floor(s/60), sec = Math.floor(s%60); return m + ":" + (sec<10?"0":"") + sec; }
 
-        // THEME INIT
         window.onload = () => {
             const host = document.getElementById('theme-host');
-            const skins = [{n:"Electric Blue", c:"#0077ff"}, {n:"Crimson", c:"#e11d48"}, {n:"Nordic", c:"#88c0d0"}, {n:"Emerald", c:"#10b981"}];
             skins.forEach(s => {
                 const d = document.createElement('div');
-                d.style = `background:var(--card); padding:20px; border-radius:15px; border:1px solid var(--border); cursor:pointer;`;
+                d.className = 'theme-card';
                 d.onclick = () => document.documentElement.style.setProperty('--primary', s.c);
-                d.innerHTML = `<span style="color:${s.c}; font-weight:700;">●</span> ${s.n}`;
+                d.innerHTML = `<div class="theme-dot" style="background:${s.c}"></div>
+                               <span style="font-weight:600; font-size:0.85rem; font-family:'JetBrains Mono';">${s.n.toUpperCase()}</span>`;
                 host.appendChild(d);
             });
         };
