@@ -22,21 +22,18 @@
             min-height: 100vh;
         }
 
-        /* MOUSE GLOW ENGINE */
         #glow {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle 600px at var(--x, 50%) var(--y, 50%), rgba(0, 119, 255, 0.08), transparent 80%);
             pointer-events: none; z-index: 0; transition: background 0.2s ease;
         }
 
-        /* LOGO */
         .logo { 
             font-weight: 700; font-size: 1.1rem; letter-spacing: -0.5px; cursor: pointer;
             background: linear-gradient(120deg, #fff 0%, #fff 40%, var(--primary) 50%, #fff 60%, #fff 100%);
             background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             animation: shine 5s linear infinite; position: relative; z-index: 10;
         }
-        .logo:hover { letter-spacing: 1px; }
         .logo span { -webkit-text-fill-color: var(--primary); }
         @keyframes shine { to { background-position: 200% center; } }
 
@@ -47,26 +44,19 @@
             backdrop-filter: blur(20px); z-index: 1000; border-bottom: 1px solid var(--border);
         }
         .nav-links { display: flex; gap: 40px; }
-        .nav-link { 
-            text-decoration: none; color: var(--dim); font-size: 0.85rem; 
-            font-weight: 500; transition: var(--transition); cursor: pointer;
-        }
+        .nav-link { text-decoration: none; color: var(--dim); font-size: 0.85rem; font-weight: 500; transition: var(--transition); cursor: pointer; }
         .nav-link:hover, .nav-link.active { color: #fff; }
 
         .page { display: none; padding: 160px 8% 100px; min-height: 100vh; position: relative; z-index: 1; }
         .page.active { display: block; animation: fadeIn 0.8s var(--transition); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* SYSTEM TERMINAL */
         .terminal {
             background: #000; border: 1px solid var(--border); border-radius: 12px;
             padding: 20px; font-family: 'JetBrains Mono'; font-size: 0.75rem;
             color: var(--success); max-width: 400px; margin-top: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
-        .terminal-header { color: var(--dim); margin-bottom: 10px; display: flex; justify-content: space-between; }
 
-        /* TRACK CARDS */
         .track-list { display: flex; flex-direction: column; gap: 12px; }
         .track-card {
             background: var(--card); border: 1px solid var(--border); padding: 15px;
@@ -77,9 +67,6 @@
         .track-card.playing { border-color: var(--primary); background: rgba(0, 119, 255, 0.05); }
         .album-art { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: #1a1a1a; }
 
-        .placeholder { border-style: dashed; opacity: 0.4; cursor: default; }
-
-        /* MASTER PLAYER */
         .master-rack {
             background: #080808; border: 1px solid var(--border); border-radius: 20px;
             padding: 30px; height: fit-content; position: sticky; top: 120px;
@@ -87,13 +74,27 @@
         .progress-bar { width: 100%; height: 4px; background: #1e1e1e; border-radius: 10px; margin: 20px 0; cursor: pointer; overflow: hidden; }
         #progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.1s linear; }
 
-        .btn {
-            background: var(--primary); color: #fff; padding: 12px 24px; border-radius: 10px;
-            font-weight: 600; text-decoration: none; cursor: pointer; border: none; font-size: 0.85rem;
-        }
+        .btn { background: var(--primary); color: #fff; padding: 12px 24px; border-radius: 10px; font-weight: 600; cursor: pointer; border: none; font-size: 0.85rem; }
 
-        .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
-        .theme-card { background: var(--card); border: 1px solid var(--border); padding: 12px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; }
+        /* UPDATED THEME GRID */
+        .theme-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+            gap: 15px; 
+            max-height: 60vh; 
+            overflow-y: auto; 
+            padding-right: 10px;
+        }
+        .theme-grid::-webkit-scrollbar { width: 4px; }
+        .theme-grid::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+        .theme-card { 
+            background: var(--card); border: 1px solid var(--border); 
+            padding: 14px; border-radius: 12px; cursor: pointer; 
+            display: flex; align-items: center; gap: 12px; 
+            transition: 0.2s;
+        }
+        .theme-card:hover { border-color: var(--primary); background: #151515; }
     </style>
 </head>
 <body>
@@ -112,12 +113,9 @@
 
     <section id="home" class="page active">
         <h1 style="font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 700; letter-spacing: -2px; line-height: 1;">Aiden Becker <br><span style="color:var(--primary)">Creative Technologist</span></h1>
-        
         <div class="terminal">
-            <div class="terminal-header"><span>SYSTEM_LOG_v6.4</span> <span>● ● ●</span></div>
             <div id="log-text">> Initializing Aiden OS...</div>
         </div>
-
         <div style="margin-top: 40px; display: flex; gap: 15px;">
             <button class="btn" onclick="showTab('music')">Open Production Archive</button>
             <button class="btn" style="background: var(--glass); border: 1px solid var(--border);" onclick="showTab('themes')">UI Skins</button>
@@ -139,19 +137,19 @@
                         <div style="flex:1"><h4>More Than Hate</h4><p style="font-size: 0.7rem; color:var(--dim);">BILMURI // EGGY POCKET</p></div>
                         <audio id="a2" src="music/bilmuri.mp3"></audio>
                     </div>
-                         <div class="track-card" onclick="playTrack('Green Day', 'AMERICAN IDIOT', 'a3')">
+                    <div class="track-card" onclick="playTrack('Green Day', 'American Idiot', 'a3')">
                         <img src="music/greenday.jpg" class="album-art">
-                        <div style="flex:1"><h4>AMERICAN IDIOT</h4><p style="font-size: 0.7rem; color:var(--dim);">GREEN DAY // AMERICAN IDIOT</p></div>
+                        <div style="flex:1"><h4>American Idiot</h4><p style="font-size: 0.7rem; color:var(--dim);">GREEN DAY // AMERICAN IDIOT</p></div>
                         <audio id="a3" src="music/greenday.mp3"></audio>
                     </div>
                 </div>
             </div>
             <div class="master-rack">
-                <p style="font-size: 0.6rem; color: var(--primary); font-weight: 800; letter-spacing: 1px;">CHANNEL 01</p>
+                <p style="font-size: 0.6rem; color: var(--primary); font-weight: 800;">CHANNEL 01</p>
                 <h3 id="r-track" style="margin-top: 10px;">Idle</h3>
                 <p id="r-artist" style="font-size: 0.8rem; color: var(--dim);">System Standby</p>
                 <div class="progress-bar" onclick="seek(event)"><div id="progress-fill"></div></div>
-                <button class="btn" style="width: 100%; margin-top: 10px;" onclick="window.open('https://docs.google.com')">Request Track</button>
+                <button class="btn" style="width: 100%;" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSdF7U3qu9mVYDHilxSeunjiXrjRb8YjjB0GN3ZR021CsWyrWA/viewform?usp=publish-editor')">Request Track</button>
             </div>
         </div>
     </section>
@@ -161,10 +159,7 @@
         <div class="track-list" style="max-width: 600px;">
             <div class="track-card placeholder">
                 <div class="album-art" style="background: repeating-linear-gradient(45deg, #111, #111 5px, #1a1a1a 5px, #1a1a1a 10px);"></div>
-                <div style="flex:1">
-                    <h4 style="color: var(--dim);">Scanning for signals...</h4>
-                    <p style="font-size: 0.7rem; color: var(--dim);">IN REVIEW</p>
-                </div>
+                <div style="flex:1"><h4 style="color: var(--dim);">Scanning for signals...</h4><p style="font-size: 0.7rem; color: var(--dim);">IN REVIEW</p></div>
             </div>
         </div>
     </section>
@@ -175,20 +170,12 @@
     </section>
 
     <script>
-        // MOUSE GLOW LOGIC
         window.addEventListener('mousemove', e => {
             document.documentElement.style.setProperty('--x', e.clientX + 'px');
             document.documentElement.style.setProperty('--y', e.clientY + 'px');
         });
 
-        // TERMINAL LOGIC
-        const logs = [
-            "> Initializing Aiden OS...",
-            "> Connection established: 127.0.0.1",
-            "> Audio buffers clearing...",
-            "> System Status: OPTIMIZED",
-            "> Welcome back, Becker."
-        ];
+        const logs = ["> Initializing Aiden OS...", "> Connection established...", "> System Status: OPTIMIZED", "> Welcome back, Becker."];
         let logIdx = 0;
         function updateLog() {
             document.getElementById('log-text').innerHTML = logs[logIdx];
@@ -197,10 +184,21 @@
         }
         updateLog();
 
-        // CORE SYSTEM FUNCTIONS
         const skins = [
-            {n:"Nevermind", c:"#0077ff"}, {n:"Cyberpunk", c:"#ff007f"}, {n:"Mint", c:"#00ffcc"},
-            {n:"Gold", c:"#d4af37"}, {n:"Crimson", c:"#ff4444"}, {n:"Mono", c:"#ffffff"}
+            // ORIGINAL PUNS
+            {n:"Nevermind", c:"#0077ff"}, {n:"Hmmmm...", c:"#795548"}, {n:"Cyberpunk", c:"#ff007f"},
+            {n:"Minty Fresh", c:"#00ffcc"}, {n:"Gold Digger", c:"#d4af37"}, {n:"Boring", c:"#ffffff"},
+            // NEW PUNNY & TECH THEMES
+            {n:"Blue Screen", c:"#0000aa"}, {n:"Null Pointer", c:"#333333"}, {n:"Compiled", c:"#00ff00"},
+            {n:"404 Found", c:"#ff5500"}, {n:"Git Push", c:"#f05032"}, {n:"Vaporwave", c:"#ff71ce"},
+            {n:"Creeper?", c:"#00aa00"}, {n:"Aw Man", c:"#55ff55"}, {n:"Obsidian", c:"#2e003e"},
+            {n:"Redstone", c:"#ff0000"}, {n:"Diamond Ore", c:"#b9f2ff"}, {n:"The Nether", c:"#7a0000"},
+            {n:"Matrix", c:"#003b00"}, {n:"Lava Bucket", c:"#ff8c00"}, {n:"Water Bucket", c:"#0099ff"},
+            {n:"Enderman", c:"#a000ff"}, {n:"Bedrock", c:"#1a1a1a"}, {n:"Pumpkin Pie", c:"#ff7518"},
+            {n:"Skeleton", c:"#d1d1d1"}, {n:"Slime Ball", c:"#88ff88"}, {n:"Sticky Piston", c:"#5e7c16"},
+            {n:"Crafting Table", c:"#4a321f"}, {n:"Zombie Pig", c:"#ff99aa"}, {n:"Wither", c:"#111111"},
+            {n:"Enchanted", c:"#bf5fff"}, {n:"Totem", c:"#e4d00a"}, {n:"Ender Pearl", c:"#0b4d42"},
+            {n:"Blaze Rod", c:"#ffd300"}, {n:"Ghast Tear", c:"#f0f0f0"}, {n:"Sea Lantern", c:"#00eedd"}
         ];
 
         function showTab(t) {
