@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden Becker | Creative Technologist</title>
+    <title>Aiden Becker | Studio OS v55</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -40,152 +40,146 @@
         .page.active { display: block; animation: fadeIn 0.8s var(--transition); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* STUDIO LAYOUT */
+        /* STUDIO & SUGGESTED LAYOUT */
         .studio-grid { display: grid; grid-template-columns: 1fr 400px; gap: 60px; }
         .track-list { display: flex; flex-direction: column; gap: 15px; }
         
         .track-card {
-            background: var(--card); border: 1px solid var(--border); padding: 20px;
+            background: var(--card); border: 1px solid var(--border); padding: 18px;
             border-radius: 16px; display: flex; align-items: center; gap: 20px;
             transition: var(--transition); cursor: pointer;
         }
         .track-card:hover { border-color: var(--primary); background: #151515; transform: translateX(10px); }
         .track-card.playing { border-color: var(--primary); background: rgba(0, 119, 255, 0.05); }
 
-        .album-art { width: 64px; height: 64px; border-radius: 10px; object-fit: cover; background: #222; }
+        .album-art { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; background: #222; }
 
-        /* MASTER RACK */
+        /* MASTER RACK (FIXED PLAYER) */
         .master-rack {
             background: #000; border: 1px solid var(--border); border-radius: 24px;
             padding: 35px; height: fit-content; position: sticky; top: 120px;
             box-shadow: 0 40px 80px rgba(0,0,0,0.5);
         }
         .progress-bar { width: 100%; height: 6px; background: #1e1e1e; border-radius: 10px; margin: 20px 0; cursor: pointer; }
-        #progress-fill { height: 100%; background: var(--primary); width: 0%; border-radius: 10px; transition: 0.1s linear; }
-
-        /* TABLE UI */
-        .suggest-table { width: 100%; border-collapse: collapse; margin-top: 30px; }
-        .suggest-table th { text-align: left; padding: 15px; font-size: 0.75rem; color: var(--dim); text-transform: uppercase; border-bottom: 1px solid var(--border); }
-        .suggest-table td { padding: 20px 15px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-        .placeholder-row { opacity: 0.35; }
+        #progress-fill { height: 100%; background: var(--primary); width: 0%; border-radius: 10px; }
 
         /* THEME CARDS */
         .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         .theme-card {
-            background: var(--card); border: 1px solid var(--border); padding: 20px;
+            background: var(--card); border: 1px solid var(--border); padding: 15px;
             border-radius: 12px; cursor: pointer; transition: 0.3s;
             display: flex; align-items: center; gap: 15px;
         }
-        .theme-card:hover { border-color: var(--primary); background: #111; }
-        .theme-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .theme-card:hover { border-color: var(--primary); }
 
-        /* BUTTONS */
         .btn {
             background: var(--primary); color: #fff; padding: 14px 28px; border-radius: 12px;
             font-weight: 600; text-decoration: none; display: inline-block; transition: var(--transition);
             border: none; cursor: pointer; font-size: 0.9rem; text-align: center;
         }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 119, 255, 0.3); }
+
+        .suggested-badge { font-family: 'JetBrains Mono'; font-size: 0.6rem; color: var(--primary); border: 1px solid var(--primary); padding: 2px 6px; border-radius: 4px; margin-bottom: 5px; display: inline-block; }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo">AIDEN BECKER<span style="color:var(--primary)">.</span></div>
+        <div class="logo">AIDEN_STUDIO<span style="color:var(--primary)">.</span></div>
         <div class="nav-links">
             <a onclick="showTab('home')" id="l-home" class="nav-link active">Nexus</a>
-            <a onclick="showTab('music')" id="l-music" class="nav-link">Studio</a>
-            <a onclick="showTab('suggested')" id="l-suggested" class="nav-link">Suggested</a>
+            <a onclick="showTab('music')" id="l-music" class="nav-link">Archive</a>
+            <a onclick="showTab('suggested')" id="l-suggested" class="nav-link">Suggestions</a>
             <a onclick="showTab('themes')" id="l-themes" class="nav-link">Skins</a>
         </div>
     </nav>
 
     <section id="home" class="page active">
-        <h1 style="font-size: 4.5rem; font-weight: 700; letter-spacing: -3px; line-height: 1;">Aiden Becker.</h1>
-        <p style="color: var(--dim); font-size: 1.2rem; margin: 20px 0 40px; max-width: 600px;">
-            Creative Technologist and Systems Architect. High-fidelity developer specializing in professional audio experiences and custom digital kernels.
+        <h1 style="font-size: 5rem; font-weight: 700; letter-spacing: -3px; line-height: 1;">Architecting <br>Sound.</h1>
+        <p style="color: var(--dim); font-size: 1.25rem; margin: 25px 0 45px; max-width: 650px;">
+            Aiden Becker: Creative Technologist. High-fidelity developer bridging the gap between systems engineering and professional audio production.
         </p>
-        <button class="btn" onclick="showTab('music')">Access Studio</button>
+        <button class="btn" onclick="showTab('music')">Enter Archive</button>
     </section>
 
     <section id="music" class="page">
         <div class="studio-grid">
             <div class="left-col">
-                <h2 style="font-size: 2rem; margin-bottom: 40px; letter-spacing: -1px;">Audio Archive</h2>
+                <h2 style="font-size: 2rem; margin-bottom: 40px; letter-spacing: -1px;">Studio Master</h2>
                 <div class="track-list">
                     <div class="track-card" onclick="playTrack('Nirvana', 'Smells Like Teen Spirit', 'music/nirvana.jpg', 'a1')">
-                        <img src="music/nirvana.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/64/222/666?text=Track'">
+                        <img src="music/nirvana.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222?text=CD'">
                         <div style="flex:1"><h4>Smells Like Teen Spirit</h4><p style="font-size: 0.75rem; color:var(--dim);">NIRVANA // NEVERMIND</p></div>
                         <audio id="a1" src="music/nirvana.mp3"></audio>
                     </div>
                     <div class="track-card" onclick="playTrack('Green Day', 'American Idiot', 'music/greenday.jpg', 'a2')">
-                        <img src="music/greenday.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/64/222/666?text=Track'">
+                        <img src="music/greenday.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222?text=CD'">
                         <div style="flex:1"><h4>American Idiot</h4><p style="font-size: 0.75rem; color:var(--dim);">GREEN DAY // AMERICAN IDIOT</p></div>
                         <audio id="a2" src="music/greenday.mp3"></audio>
                     </div>
-                    <div class="track-card" onclick="playTrack('Gorillaz', 'On Melancholy Hill', 'music/gorillaz.jpg', 'a3')">
-                        <img src="music/gorillaz.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/64/222/666?text=Track'">
+                    <div class="track-card" onclick="playTrack('Bilmuri', 'More Than Hate', 'music/bilmuri.jpg', 'a3')">
+                        <img src="music/bilmuri.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222?text=CD'">
+                        <div style="flex:1"><h4>More Than Hate</h4><p style="font-size: 0.75rem; color:var(--dim);">BILMURI // EGGY POCKET</p></div>
+                        <audio id="a3" src="music/bilmuri.mp3"></audio>
+                    </div>
+                    <div class="track-card" onclick="playTrack('Gorillaz', 'On Melancholy Hill', 'music/gorillaz.jpg', 'a4')">
+                        <img src="music/gorillaz.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222?text=CD'">
                         <div style="flex:1"><h4>On Melancholy Hill</h4><p style="font-size: 0.75rem; color:var(--dim);">GORILLAZ // PLASTIC BEACH</p></div>
-                        <audio id="a3" src="music/gorillaz.mp3"></audio>
+                        <audio id="a4" src="music/gorillaz.mp3"></audio>
                     </div>
                 </div>
             </div>
 
             <div class="right-col">
                 <div class="master-rack">
-                    <p style="font-size: 0.7rem; color: var(--primary); font-weight: 700; text-transform: uppercase;">Signal Output</p>
-                    <h3 id="r-track" style="margin-top: 15px; font-size: 1.2rem;">System Idle</h3>
-                    <p id="r-artist" style="font-size: 0.85rem; color: var(--dim);">Select a record...</p>
+                    <p style="font-size: 0.7rem; color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Live Monitor</p>
+                    <h3 id="r-track" style="margin-top: 15px; font-size: 1.2rem;">Idle</h3>
+                    <p id="r-artist" style="font-size: 0.85rem; color: var(--dim);">Ready for Signal...</p>
                     
                     <div class="progress-bar" onclick="seek(event)"><div id="progress-fill"></div></div>
                     <div style="display:flex; justify-content:space-between; font-size: 0.7rem; color: var(--dim); font-family: 'JetBrains Mono'; margin-bottom: 30px;">
                         <span id="c-time">0:00</span><span id="d-time">0:00</span>
                     </div>
 
-                    <a href="https://docs.google.com" target="_blank" class="btn" style="width: 100%;">Suggest a Song</a>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdF7U3qu9mVYDHilxSeunjiXrjRb8YjjB0GN3ZR021CsWyrWA/viewform?usp=publish-editor" target="_blank" class="btn" style="width: 100%;">Suggest a Song</a>
                 </div>
             </div>
         </div>
     </section>
 
     <section id="suggested" class="page">
-        <h2 style="font-size: 2.5rem; letter-spacing: -1px; margin-bottom: 10px;">Community Suggestions</h2>
-        <p style="color: var(--dim); margin-bottom: 40px;">Incoming audio signals requested for the archive.</p>
-        
-        <table class="suggest-table">
-            <thead>
-                <tr>
-                    <th>Artist</th>
-                    <th>Album</th>
-                    <th>Song Name</th>
-                    <th>Suggested By</th>
-                </tr>
-            </thead>
-            <tbody id="suggestion-body">
-                <tr>
-                    <td>Tool</td>
-                    <td>Lateralus</td>
-                    <td><strong>The Grudge</strong></td>
-                    <td>Aiden_Admin</td>
-                </tr>
-                <tr class="placeholder-row">
-                    <td>[Artist Name]</td>
-                    <td>[Album Title]</td>
-                    <td><strong>[Song Name]</strong></td>
-                    <td>Awaiting Signal...</td>
-                </tr>
-                <tr class="placeholder-row">
-                    <td>[Artist Name]</td>
-                    <td>[Album Title]</td>
-                    <td><strong>[Song Name]</strong></td>
-                    <td>Awaiting Signal...</td>
-                </tr>
-            </tbody>
-        </table>
+        <h2 style="font-size: 2.5rem; margin-bottom: 10px;">Suggested Archive</h2>
+        <p style="color: var(--dim); margin-bottom: 40px;">Interactive signals provided by the community.</p>
+
+        <div class="studio-grid">
+            <div class="track-list">
+                <div class="track-card" onclick="playTrack('Tool', 'The Grudge', 'music/suggested_tool.jpg', 's1')">
+                    <img src="music/suggested_tool.jpg" class="album-art" onerror="this.src='https://via.placeholder.com/60/222/0077ff?text=TOOL'">
+                    <div style="flex:1">
+                        <span class="suggested-badge">REQUESTED BY: Aiden_Admin</span>
+                        <h4>The Grudge</h4>
+                        <p style="font-size: 0.75rem; color:var(--dim);">TOOL // LATERALUS</p>
+                    </div>
+                    <audio id="s1" src="music/tool.mp3"></audio>
+                </div>
+
+                <div class="track-card" style="opacity: 0.4; cursor: default;">
+                    <div class="album-art" style="background: #111;"></div>
+                    <div style="flex:1">
+                        <span class="suggested-badge">AWAITING SIGNAL</span>
+                        <h4>---</h4>
+                        <p style="font-size: 0.75rem; color:var(--dim);">Artist Name // Album Title</p>
+                    </div>
+                </div>
+            </div>
+            <div style="padding: 30px; border-radius: 20px; background: var(--card); border: 1px dashed var(--border); height: fit-content; text-align: center;">
+                <p style="font-size: 0.8rem; color: var(--dim);">Play suggested tracks to test community vibes. All master controls remain on the right.</p>
+            </div>
+        </div>
     </section>
 
     <section id="themes" class="page">
-        <h2 style="font-size: 2.5rem; letter-spacing: -1px; margin-bottom: 40px;">System Skins</h2>
+        <h2 style="font-size: 2rem; margin-bottom: 40px;">Skins</h2>
         <div class="theme-grid" id="theme-host"></div>
     </section>
 
@@ -208,19 +202,32 @@
 
         let activeAudio = null;
         function playTrack(artist, track, img, id) {
-            if(activeAudio) { activeAudio.pause(); activeAudio.currentTime = 0; }
+            if(activeAudio) { activeAudio.pause(); }
             activeAudio = document.getElementById(id);
-            activeAudio.play();
-            document.getElementById('r-artist').innerText = artist.toUpperCase();
-            document.getElementById('r-track').innerText = track;
-            activeAudio.ontimeupdate = () => {
-                const p = (activeAudio.currentTime / activeAudio.duration) * 100;
-                document.getElementById('progress-fill').style.width = p + "%";
-                document.getElementById('c-time').innerText = formatTime(activeAudio.currentTime);
-                document.getElementById('d-time').innerText = formatTime(activeAudio.duration);
-            };
+            if(activeAudio) {
+                activeAudio.play().catch(e => console.log("Audio file missing? Add it to /music/ folder."));
+                document.getElementById('r-artist').innerText = artist.toUpperCase();
+                document.getElementById('r-track').innerText = track;
+                document.querySelectorAll('.track-card').forEach(c => c.classList.remove('playing'));
+                // Handles case where card clicked might be slightly nested
+                let card = event.currentTarget || event.target.closest('.track-card');
+                card.classList.add('playing');
+
+                activeAudio.ontimeupdate = () => {
+                    const p = (activeAudio.currentTime / activeAudio.duration) * 100;
+                    document.getElementById('progress-fill').style.width = p + "%";
+                    document.getElementById('c-time').innerText = formatTime(activeAudio.currentTime);
+                    document.getElementById('d-time').innerText = formatTime(activeAudio.duration);
+                };
+            }
         }
+
         function formatTime(s) { let m = Math.floor(s/60), sec = Math.floor(s%60); return m + ":" + (sec<10?"0":"") + sec; }
+        function seek(e) {
+            if(!activeAudio) return;
+            const rect = e.currentTarget.getBoundingClientRect();
+            activeAudio.currentTime = ((e.clientX - rect.left) / rect.width) * activeAudio.duration;
+        }
 
         window.onload = () => {
             const host = document.getElementById('theme-host');
@@ -228,8 +235,8 @@
                 const d = document.createElement('div');
                 d.className = 'theme-card';
                 d.onclick = () => document.documentElement.style.setProperty('--primary', s.c);
-                d.innerHTML = `<div class="theme-dot" style="background:${s.c}"></div>
-                               <span style="font-weight:600; font-size:0.85rem; font-family:'JetBrains Mono';">${s.n.toUpperCase()}</span>`;
+                d.innerHTML = `<div style="width:10px; height:10px; background:${s.c}; border-radius:50%"></div>
+                               <span style="font-size:0.75rem; font-weight:700; font-family:'JetBrains Mono';">${s.n.toUpperCase()}</span>`;
                 host.appendChild(d);
             });
         };
